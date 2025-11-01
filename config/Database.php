@@ -1,5 +1,9 @@
 <?php
 
+namespace config;
+
+use mysqli;
+
 class Database
 {
     private static $host = 'localhost';

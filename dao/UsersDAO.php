@@ -2,9 +2,11 @@
 
 namespace dao;
 
-use Database;
-use http\Client\Curl\User;
 use model\Users;
+use config\Database; // <- IMPORTANTE
+
+require_once __DIR__ . '/../config/Database.php';
+require_once __DIR__ . '/../model/Users.php';
 
 class UsersDAO
 {

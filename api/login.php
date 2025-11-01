@@ -1,11 +1,13 @@
 <?php
 
 session_start();
-
 header('Content-Type: application/json');
 
+require_once __DIR__ . '/../config/Database.php';
+require_once __DIR__ . '/../model/Users.php';
+require_once __DIR__ . '/../dao/UsersDAO.php';
+
 use dao\UsersDAO;
-use dto\UsersDTO;
 
 //Lê tudo o que está na request http
 $arquivo = file_get_contents('php://input');
