@@ -19,7 +19,7 @@ class UsersDAO
         return $sql->execute();
     }
 
-    public static function authenticate(string $email, string $password): ?User {
+    public static function authenticate(string $email, string $password): ?Users {
         $conn = Database::connect();
         $sql = $conn->prepare("SELECT * FROM users WHERE email=?");
         $sql->bind_param("s",$email);
