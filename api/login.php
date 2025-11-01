@@ -6,6 +6,7 @@ header('Content-Type: application/json');
 require_once __DIR__ . '/../config/Database.php';
 require_once __DIR__ . '/../model/Users.php';
 require_once __DIR__ . '/../dao/UsersDAO.php';
+require_once __DIR__ . '/../dto/UsersDTO.php';
 
 use dao\UsersDAO;
 use dto\UsersDTO;
@@ -42,11 +43,10 @@ if ($user) {
 
     // Usa DTO para saída (esconder a senha)
     $userDTO = new UsersDTO($user);
-    // user $userDTO->toArray()
 
-    //http_response_code(200);
+    http_response_code(200);
     echo json_encode([
-        // response
+        $userDTO->toArray()
     ]);
     exit;
 } else {
