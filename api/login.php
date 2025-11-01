@@ -22,7 +22,7 @@ if (!is_array($conteudo)) {
 if (empty($conteudo['email']) || empty($conteudo['password'])) {
     //http_response_code(400);
     echo json_encode([
-        //
+        //response
     ]);
     exit;
 }
