@@ -1,6 +1,6 @@
 <?php
 
-namespace model;
+namespace backend\model;
 
 class Users
 {

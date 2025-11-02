@@ -1,0 +1,3 @@
+<?php
+
+// DELETE /leagues/{id}

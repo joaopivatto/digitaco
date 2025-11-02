@@ -1,6 +1,6 @@
 <?php
 
-namespace dto;
+namespace backend\dto;
 
 class UsersDTO
 {

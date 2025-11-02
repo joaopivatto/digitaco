@@ -1,7 +1,6 @@
 <?php
 
-use dao\UsersDAO;
-
+use backend\dao\UsersDAO;
 
 require_once __DIR__ . '/../config/Database.php';
 require_once __DIR__ . '/../model/Users.php';

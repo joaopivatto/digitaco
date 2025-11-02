@@ -1,9 +1,11 @@
 <?php
 
-namespace dao;
+namespace backend\dao;
 
-use model\Users;
-use config\Database; // <- IMPORTANTE
+use backend\config\Database;
+use backend\model\Users;
+
+// <- IMPORTANTE
 
 require_once __DIR__ . '/../config/Database.php';
 require_once __DIR__ . '/../model/Users.php';

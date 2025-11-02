@@ -8,8 +8,8 @@ require_once __DIR__ . '/../model/Users.php';
 require_once __DIR__ . '/../dao/UsersDAO.php';
 require_once __DIR__ . '/../dto/UsersDTO.php';
 
-use dao\UsersDAO;
-use dto\UsersDTO;
+use backend\dao\UsersDAO;
+use backend\dto\UsersDTO;
 
 //Lê tudo o que está na request http
 $arquivo = file_get_contents('php://input');

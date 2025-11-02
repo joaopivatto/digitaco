@@ -1,6 +1,6 @@
 <?php
 
-namespace dao;
+namespace backend\dao;
 
 class MatchesDAO
 {
