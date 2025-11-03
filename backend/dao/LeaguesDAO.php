@@ -171,7 +171,8 @@ class LeaguesDAO
             $sql = $conn->prepare("
                 SELECT 
                     users.name AS user,
-                    SUM(matches.points) AS points
+                    SUM(matches.points) AS points,
+                    COUNT(matches.id) AS matches
                 FROM matches
                 INNER JOIN users ON users.id = matches.user_id
                 WHERE matches.league_id = ?
@@ -185,7 +186,7 @@ class LeaguesDAO
             $points = [];
             if ($res) {
                 while ($row = $res->fetch_assoc()) {
-                    $point = new UsersPointsDTO($row['user'], $row['points']);
+                    $point = new UsersPointsDTO($row['user'], $row['points'], $row['matches']);
                     $points[] = $point->jsonSerialize();
                 }
             }
@@ -201,7 +202,8 @@ class LeaguesDAO
             $sql = $conn->prepare("
                 SELECT 
                     users.name AS user,
-                    SUM(matches.points) AS points
+                    SUM(matches.points) AS points,
+                    COUNT(matches.id) AS matches
                 FROM matches
                 INNER JOIN users ON users.id = matches.user_id
                 WHERE 
@@ -217,7 +219,7 @@ class LeaguesDAO
             $points = [];
             if ($res) {
                 while ($row = $res->fetch_assoc()) {
-                    $point = new UsersPointsDTO($row['user'], $row['points']);
+                    $point = new UsersPointsDTO($row['user'], $row['points'], $row['matches']);
                     $points[] = $point->jsonSerialize();
                 }
             }
