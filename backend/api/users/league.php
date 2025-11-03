@@ -10,9 +10,7 @@ header('Content-Type: application/json');
 $arquivo = file_get_contents('php://input');
 $conteudo = json_decode($arquivo, true);
 
-$uri = $_SERVER['REQUEST_URI'];
-$parts = explode('/', $uri);
-$idLeague = end($parts);
+$idLeague = $_GET['leagueId'];
 
 if (empty($idLeague))
 {
