@@ -6,10 +6,10 @@ header('Content-Type: application/json');
 require_once __DIR__ . '/../config/Database.php';
 require_once __DIR__ . '/../model/Users.php';
 require_once __DIR__ . '/../dao/UsersDAO.php';
-require_once __DIR__ . '/../dto/UsersDTO.php';
+require_once __DIR__ . '/../dto/users/UsersDTO.php';
 
 use backend\dao\UsersDAO;
-use backend\dto\UsersDTO;
+use dto\users\UsersDTO;
 
 //Lê tudo o que está na request http
 $arquivo = file_get_contents('php://input');

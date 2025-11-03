@@ -1,7 +1,7 @@
 <?php
 
 session_start();
-// GET /leagues/points-weekly?id={id}
+// GET /leagues?name={name}
 
 require_once __DIR__ . '/../../dao/LeaguesDAO.php';
 require_once __DIR__ . '/../../dto/MessageResponseDTO.php';
@@ -13,7 +13,7 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
 
-$id = $_GET['id'] ?? null;
+$name = $_GET['name'] ?? null;
 $userId = $_SESSION['userId'] ?? null;
 
 if ($userId === null) {
@@ -24,7 +24,7 @@ if ($userId === null) {
 }
 
 try {
-    $list = LeaguesDAO::getWeekTablePoints($id);
+    $list = LeaguesDAO::findAllByName($userId, $name);
     http_response_code($list->getStatusCode());
     echo json_encode($list->jsonSerialize());
 } catch (Throwable $e) {

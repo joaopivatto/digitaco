@@ -8,6 +8,32 @@
 
 ---
 
+## 📚 Sumário
+
+- [📋 Sobre o Projeto](#-sobre-o-projeto)
+- [🚀 Funcionalidades](#-funcionalidades)
+- [📡 API Documentation](#-api-documentation)
+  - [👥 Users](#-users)
+    - [📝 POST /users/sign-up](#-post-userssign-up)
+    - [🔑 POST /users/sign-in](#-post-userssign-in)
+    - [🔒 PATCH /users/change-password](#-patch-userschange-password)
+    - [🤝 POST /usersleagueleagueid](#-post-usersleagueleagueid)
+    - [❌ DELETE /usersleagueleagueid](#-delete-usersleagueleagueid)
+  - [🏆 Leagues](#-leagues)
+    - [➕ POST /api/leagues/createphp](#-post-apileaguescreatephp)
+    - [📝 GET /api/leagues/find-allphp?name{name}](#-get-apileaguesfind-allphpnamename)
+    - [🔍 GET /api/leagues/find-by-idphp?id{id}](#-get-apileaguesfind-by-idphpidid)
+    - [👨‍💼 GET /api/leagues/creatorphp](#-get-apileaguescreatorphp)
+    - [👤 GET /api/leagues/includedphp](#-get-apileaguesincludedphp)
+    - [🗑️ DELETE /api/leagues/deletephp?id{id}](#-delete-apileaguesdeletephpidid)
+    - [🏅 GET /api/leagues/pointsphp?id{id}](#-get-apileaguespointsphpidid)
+    - [📊 GET /api/leagues/points-weeklyphp?id{id}](#-get-apileaguespoints-weeklyphpidid)
+  - [🎯 Matches](#-matches)
+    - [🎮 POST /matches](#-post-matches)
+    - [📋 GET /matches](#-get-matches)
+
+---
+
 ## 📋 Sobre o Projeto
 
 O **Digitaço** é um jogo de digitação interativo que permite aos usuários competirem em ligas, acompanhar suas pontuações e melhorar suas habilidades de digitação de forma gamificada.
@@ -26,7 +52,7 @@ O **Digitaço** é um jogo de digitação interativo que permite aos usuários c
 ### 👥 Users
 
 #### 📝 POST /users/sign-up
-```
+```json
 REQUEST
 {
     "name": "name",
@@ -35,7 +61,7 @@ REQUEST
 }
 ```
 
-```
+```json
 RESPONSE 201 (Created)
 {
     "message": "Usuário criado com sucesso!"
@@ -55,14 +81,14 @@ RESPONSE 422 (Unprocessable Entity)
 ```
 
 #### 🔑 POST /users/sign-in
-```
+```json
 REQUEST
 {
     "email": "user@email.com",
     "password": "!Password123"
 }
 ```
-```
+```json
 RESPONSE 200 (OK)
 {
     "message": "Login realizado com sucesso!"
@@ -82,7 +108,7 @@ RESPONSE 422 (Unprocessable Entity)
 ```
 
 #### 🔒 PATCH /users/change-password
-```
+```json
 REQUEST
 {
     "email": "user@email.com",
@@ -90,7 +116,7 @@ REQUEST
     "confirmPassword": "!Password123"
 }
 ```
-```
+```json
 RESPONSE 200 (OK)
 {
     "message": "Senha alterada com sucesso!"
@@ -113,7 +139,7 @@ RESPONSE 422 (Unprocessable Entity)
 ```
 
 #### 🤝 POST /users/league/{leagueId}
-```
+```json
 RESPONSE 200 (OK)
 {
     "message": "Bem-vindo a {leagueName}!"
@@ -126,7 +152,7 @@ RESPONSE 404 (NOT FOUND)
 ```
 
 #### ❌ DELETE /users/league/{leagueId}
-```
+```json
 RESPONSE 200 (OK)
 {
     "message": "Você saiu da liga: {leagueName}!"
@@ -140,8 +166,10 @@ RESPONSE 404 (NOT FOUND)
 
 ### 🏆 Leagues
 
-#### ➕ POST /leagues
-```
+**Sempre que tivermos 'id' neste setor, faz referência ao id de leagues.**
+
+#### ➕ POST /api/leagues/create.php
+```json
 REQUEST
 {
     "name": "League Name",
@@ -149,142 +177,192 @@ REQUEST
 } 
 ```
 
-```
+```json
+// Salvar Ligas
+
 RESPONSE 201 (Created)
 {
-    "message": "Liga criada com sucesso!"
+    "message": "Liga criada com sucesso!",
+    "statusCode": 201
 }
 
 RESPONSE 409 (Conflict)
 {
-    "message": "Esta liga já existe!"
+    "message": "Esta liga já existe!",
+    "statusCode": 409
 }
 
 RESPONSE 422 (Unprocessable Entity)
 {
-    "message": "Campos Inválidos!"
+    "message": "Campos Inválidos!",
+    "statusCode": 422
 }
 ```
 
-#### 📝 GET /leagues?name="League"
-- Todas as Ligas
-```
+#### 📝 GET /api/leagues/find-all.php?name={name}
+```json
+// Retorna todas as ligas
+// Name é opcional (usado para filtro)
+// O campo included refere-se às ligas que o user faz parte
+
 RESPONSE 200 (OK)
 {
-    "message": "Ligas encontradas!"
-    [
-        { "name": "League One" },
-        { "name": "League Two" },
-        { "name": "League Three" }
+    "message": "Ligas encontradas!",
+    "statusCode": 200,
+    "data": [
+        {
+            "id": 3,
+            "name": "League One",
+            "included": false
+        },
+        {
+            "id": 4,
+            "name": "League Two",
+            "included": false
+        },
+        {
+            "id": 5,
+            "name": "League Three",
+            "included": false
+        }
     ]
 } 
 ```
 
-#### 🔍 GET /leagues/{id}
-```
+#### 🔍 GET /api/leagues/find-by-id.php?id={id}
+```json
+// Retorna Liga pelo id
+
 RESPONSE 200 (OK)
 {
-    "message": "Liga encontrada!"
-    "name": "League One"
+    "message": "Liga encontrada!",
+    "statusCode": 200,
+    "league": {
+        "id": 8,
+        "name": "League Five"
+    }
 }
 
 RESPONSE 404 (NOT FOUND)
 {
-    "message": "Liga não encontrada!"
+    "message": "Liga não encontrada!",
+    "statusCode": 404
 }
 ```
 
-#### 👨‍💼 GET /leagues/creator
-- Ligas que criou
-```
+#### 👨‍💼 GET /api/leagues/creator.php
+```json
+// Ligas que Criou
+
 RESPONSE 200 (OK)
 {
-    "message": "Ligas encontradas!"
-    [
-        { "name": "League One" },
-        { "name": "League Two" },
-        { "name": "League Three" }
+    "message": "Ligas encontradas!",
+    "statusCode": 200,
+    "data": [
+        {
+            "id": 3,
+            "name": "League One"
+        },
+        {
+            "id": 4,
+            "name": "League Two"
+        }
     ]
-} 
+}
 ```
 
-#### 👤 GET /leagues/included
-- Ligas que está incluso
-```
+#### 👤 GET /api/leagues/included.php
+```json
+// Ligas que o user participa
+
 RESPONSE 200 (OK)
 {
-    "message": "Ligas encontradas!"
-    [
-        { "name": "League One" },
-        { "name": "League Two" },
-        { "name": "League Three" }
+    "message": "Ligas encontradas!",
+    "statusCode": 200,
+    "data": [
+        {
+            "id": 5,
+            "name": "League Five"
+        }
     ]
-} 
+}
 ```
 
-#### 🗑️ DELETE /leagues/{id}
-```
+#### 🗑️ DELETE /api/leagues/delete.php?id={id}
+```json
+// Excluir liga
+
 RESPONSE 200 (OK)
 {
-    "message": "Liga excluída com sucesso!"
-} 
+    "message": "Liga excluída com sucesso!",
+    "statusCode": 200
+}
 
 RESPONSE 404 (NOT FOUND)
 {
-    "message": "Liga não encontrada!"
+    "message": "Liga não encontrada!",
+    "statusCode": 404
 }
 ```
 
-#### 🏅 GET /leagues/{id}/points
-- Ordenar DESC
-```
+#### 🏅 GET /api/leagues/points.php?id={id}
+```json
+// Buscar tabela de pontuação da liga
+
 RESPONSE 200 (OK)
 {
-    "message": "Pontuação Geral da Liga!"
-    [
-        { 
-            "user": {
-                "name": "User One"
-            },
-            "points: 564  
+    "message": "Pontuação Geral da Liga!",
+    "statusCode": 200,
+    "data": [
+        {
+            "name": "pivatto",
+            "points": 260
         },
         {
-            "user": {
-                "name": "User Two"
-            },
-            "points: 365  
-        },
+            "name": "samuel",
+            "points": 240
+        }
     ]
+}
+
+RESPONSE 404 (NOT FOUND)
+{
+    "message": "Liga não encontrada!",
+    "statusCode": 404
 }
 ```
 
-#### 📊 GET /leagues/{id}/points-weekly
-- Ordenar DESC
-```
+#### 📊 GET /api/leagues/points-weekly.php?id={id}
+```json
+// Buscar tabela de pontuação semanal da liga
+
 RESPONSE 200 (OK)
 {
-    "message": "Pontuação Semanal da Liga!"
-    [
-        { 
-            "user": {
-                "name": "User One"
-            },
-            "points: 564  
+    "message": "Pontuação Geral da Liga!",
+    "statusCode": 200,
+    "data": [
+        {
+            "name": "pivatto",
+            "points": 260
         },
         {
-            "user": {
-                "name": "User Two"
-            },
-            "points: 365  
-        },
+            "name": "samuel",
+            "points": 160
+        }
     ]
+}
+
+RESPONSE 404 (NOT FOUND)
+{
+    "message": "Liga não encontrada!",
+    "statusCode": 404
 }
 ```
 
 ### 🎯 Matches
 
 #### 🎮 POST /matches
-```
+```json
 REQUEST
 {
     "points": 120,
@@ -292,7 +370,7 @@ REQUEST
 }
 ```
 
-```
+```json
 RESPONSE
 {
     "message": "Partida finalizada!"
@@ -302,7 +380,7 @@ RESPONSE
 
 
 #### 📋 GET /matches
-```
+```json
 RESPONSE
 {
     "message": "Partidas!"

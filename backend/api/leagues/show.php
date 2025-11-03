@@ -1,3 +1,0 @@
-<?php
-
-// GET /leagues/{id}
