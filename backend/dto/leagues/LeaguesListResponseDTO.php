@@ -1,0 +1,64 @@
+<?php
+
+namespace dto\leagues;
+
+class LeaguesListResponseDTO
+{
+
+    private int $id;
+
+    private string $name;
+
+    private bool $included;
+
+    /**
+     * @param int $id
+     * @param string $name
+     */
+    public function __construct(int $id, string $name, bool $included)
+    {
+        $this->id = $id;
+        $this->name = $name;
+        $this->included = $included;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            "id" => $this->id,
+            "name" => $this->name,
+            "included" => $this->included
+        ];
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): void
+    {
+        $this->name = $name;
+    }
+
+    public function isIncluded(): bool
+    {
+        return $this->included;
+    }
+
+    public function setIncluded(bool $included): void
+    {
+        $this->included = $included;
+    }
+
+}
