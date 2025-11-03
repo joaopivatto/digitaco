@@ -8,6 +8,7 @@ require_once __DIR__ . '/../dto/leagues/LeaguesResponseDTO.php';
 require_once __DIR__ . '/../dto/leagues/LeaguesListResponseDTO.php';
 require_once __DIR__ . '/../dto/leagues/LeaguesSimpleListResponse.php';
 require_once __DIR__ . '/../dto/ArrayResponseDTO.php';
+require_once __DIR__ . '/../dto/users/UsersPointsDTO.php';
 
 use backend\config\Database;
 use dto\ArrayResponseDTO;
@@ -184,7 +185,8 @@ class LeaguesDAO
             $points = [];
             if ($res) {
                 while ($row = $res->fetch_assoc()) {
-                    $points[] = new UsersPointsDTO($row['name'], $row['points']);
+                    $point = new UsersPointsDTO($row['user'], $row['points']);
+                    $points[] = $point->jsonSerialize();
                 }
             }
 
@@ -215,7 +217,8 @@ class LeaguesDAO
             $points = [];
             if ($res) {
                 while ($row = $res->fetch_assoc()) {
-                    $points[] = new UsersPointsDTO($row['name'], $row['points']);
+                    $point = new UsersPointsDTO($row['user'], $row['points']);
+                    $points[] = $point->jsonSerialize();
                 }
             }
 

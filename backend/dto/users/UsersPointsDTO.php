@@ -20,6 +20,14 @@ class UsersPointsDTO
         $this->points = $points;
     }
 
+    public function jsonSerialize(): array
+    {
+        return [
+            "name" => $this->name,
+            "points" => $this->points
+        ];
+    }
+
 
     public function getName(): string
     {
