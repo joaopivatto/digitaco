@@ -2,18 +2,19 @@
 
 namespace dto\leagues;
 
-use dto\MessageResponseDTO;
-
-class LeaguesResponseDTO extends MessageResponseDTO
+class LeaguesListResponseDTO
 {
 
     private int $id;
 
     private string $name;
 
-    public function __construct(string $message, int $statusCode, int $id, string $name)
+    /**
+     * @param int $id
+     * @param string $name
+     */
+    public function __construct(int $id, string $name)
     {
-        parent::__construct($message, $statusCode);
         $this->id = $id;
         $this->name = $name;
     }
@@ -37,4 +38,5 @@ class LeaguesResponseDTO extends MessageResponseDTO
     {
         $this->name = $name;
     }
+
 }

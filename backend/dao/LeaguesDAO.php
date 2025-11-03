@@ -4,6 +4,7 @@ namespace backend\dao;
 
 use backend\config\Database;
 use dto\ArrayResponseDTO;
+use dto\leagues\LeaguesListResponseDTO;
 use dto\MessageResponseDTO;
 use dto\leagues\LeaguesResponseDTO;
 use dto\users\UsersPointsDTO;
@@ -44,7 +45,7 @@ class LeaguesDAO
         $leagues = [];
         if ($res) {
             while ($row = $res->fetch_assoc()) {
-                $leagues[] = new LeaguesResponseDTO($row['name']);
+                $leagues[] = new LeaguesListResponseDTO($row['id'], $row['name']);
             }
         }
 
@@ -58,12 +59,12 @@ class LeaguesDAO
         $sql->execute();
         $res = $sql->get_result();
         if ($res && $row=$res->fetch_assoc()) {
-            return new LeaguesResponseDTO("Liga encontrada!", 200, $row['name']);
+            return new LeaguesResponseDTO("Liga encontrada!", 200, $row['id'], $row['name']);
         }
         return new MessageResponseDTO("Liga não encontrada!", 404);
     }
 
-    public static function findAllByCreatorId($creatorId): array {
+    public static function findAllByCreatorId($creatorId): MessageResponseDTO {
         $conn = Database::connect();
         $sql = $conn->prepare("SELECT * FROM leagues WHERE creator_id = ?");
         $sql->bind_param("i", $creatorId);
@@ -73,14 +74,14 @@ class LeaguesDAO
         $leagues = [];
         if ($res) {
             while ($row = $res->fetch_assoc()) {
-                $leagues[] = new LeaguesResponseDTO($row['name']);
+                $leagues[] = new LeaguesListResponseDTO($row['id'], $row['name']);
             }
         }
 
         return new ArrayResponseDTO("Ligas encontradas!", 200, $leagues);
     }
 
-    public static function findAllByIncludedId($includedId): array {
+    public static function findAllByIncludedId($includedId): MessageResponseDTO {
         $conn = Database::connect();
         $sql = $conn->prepare("
             SELECT * FROM leagues
@@ -94,7 +95,7 @@ class LeaguesDAO
         $leagues = [];
         if ($res) {
             while ($row = $res->fetch_assoc()) {
-                $leagues[] = new LeaguesResponseDTO($row['name']);
+                $leagues[] = new LeaguesListResponseDTO($row['id'], $row['name']);
             }
         }
 
@@ -133,14 +134,14 @@ class LeaguesDAO
             $sql->execute();
             $res = $sql->get_result();
 
-            $leagues = [];
+            $points = [];
             if ($res) {
                 while ($row = $res->fetch_assoc()) {
-                    $leagues[] = new UsersPointsDTO($row['name'], $row['points']);
+                    $points[] = new UsersPointsDTO($row['name'], $row['points']);
                 }
             }
 
-            return new ArrayResponseDTO("Pontuação Geral da Liga!", 200, $leagues);
+            return new ArrayResponseDTO("Pontuação Geral da Liga!", 200, $points);
         }
         return new MessageResponseDTO("Liga não encontrada!", 404);
     }
@@ -164,14 +165,14 @@ class LeaguesDAO
             $sql->execute();
             $res = $sql->get_result();
 
-            $leagues = [];
+            $points = [];
             if ($res) {
                 while ($row = $res->fetch_assoc()) {
-                    $leagues[] = new UsersPointsDTO($row['name'], $row['points']);
+                    $points[] = new UsersPointsDTO($row['name'], $row['points']);
                 }
             }
 
-            return new ArrayResponseDTO("Pontuação Geral da Liga!", 200, $leagues);
+            return new ArrayResponseDTO("Pontuação Geral da Liga!", 200, $points);
         }
         return new MessageResponseDTO("Liga não encontrada!", 404);
     }
