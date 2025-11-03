@@ -2,6 +2,8 @@
 
 use backend\dao\LeagueDAO;
 
+require_once __DIR__ . "/../../dao/LeagueDAO.php";
+
 session_start();
 header('Content-Type: application/json');
 
