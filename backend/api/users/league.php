@@ -2,7 +2,7 @@
 
 use backend\dao\LeagueDAO;
 
-require_once __DIR__ . "/../../dao/LeagueDAO.php";
+require_once __DIR__ . '/../../dao/LeagueDAO.php';
 
 session_start();
 header('Content-Type: application/json');
@@ -21,25 +21,25 @@ if (empty($idLeague))
     exit;
 }
 
-$delete = LeagueDAO::deleteUserLeague($idLeague);
+$insert = LeagueDAO::insertUserLeague($idLeague);
 
 try {
-    if (!$delete['success'])
+    if (!$insert['success'])
     {
-        switch ($delete['reason'])
+        switch ($insert['reason'])
         {
             case "league_not_found":
                 http_response_code(404);
                 echo json_encode(["message" => "Liga não encontrada!"]);
                 break;
-            case "user_not_already_in_league":
+            case "user_already_in_league":
                 http_response_code(409);
-                echo json_encode(["message" => "Usuário não está na liga!"]);
+                echo json_encode(["message" => "Usuário já está na liga!"]);
                 break;
         }
     } else {
         http_response_code(200);
-        echo json_encode(["message" => "Você saiu da liga: " . $delete['leagueName'] . "!"]);
+        echo json_encode(["message" => "Bem-vindo à liga" . $insert['leagueName'] . "!"]);
     }
 } catch (Throwable $e)
 {
