@@ -146,6 +146,13 @@ class LeaguesDAO
         if (self::findByIdBoolean($id)) {
             $conn = Database::connect();
             $sql = $conn->prepare("
+                DELETE FROM league_user
+                WHERE league_id = ?
+            ");
+            $sql->bind_param("i", $id);
+            $sql->execute();
+
+            $sql = $conn->prepare("
                 DELETE FROM leagues
                 WHERE id = ?
             ");
@@ -223,10 +230,8 @@ class LeaguesDAO
         $sql->bind_param("i", $id);
         $sql->execute();
         $res = $sql->get_result();
-        if ($res) {
-            return true;
-        }
-        return false;
+
+        return $res && $res->num_rows > 0;
     }
     public static function findByNameBoolean($name): bool {
         $conn = Database::connect();
