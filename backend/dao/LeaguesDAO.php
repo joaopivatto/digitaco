@@ -6,11 +6,13 @@ require_once __DIR__ . '/../config/Database.php';
 require_once __DIR__ . '/../dto/MessageResponseDTO.php';;
 require_once __DIR__ . '/../dto/leagues/LeaguesResponseDTO.php';
 require_once __DIR__ . '/../dto/leagues/LeaguesListResponseDTO.php';
+require_once __DIR__ . '/../dto/leagues/LeaguesSimpleListResponse.php';
 require_once __DIR__ . '/../dto/ArrayResponseDTO.php';
 
 use backend\config\Database;
 use dto\ArrayResponseDTO;
 use dto\leagues\LeaguesListResponseDTO;
+use dto\leagues\LeaguesSimpleListResponse;
 use dto\MessageResponseDTO;
 use dto\leagues\LeaguesResponseDTO;
 use dto\users\UsersPointsDTO;
@@ -105,7 +107,8 @@ class LeaguesDAO
         $leagues = [];
         if ($res) {
             while ($row = $res->fetch_assoc()) {
-                $leagues[] = new LeaguesListResponseDTO($row['id'], $row['name']);
+                $league = new LeaguesSimpleListResponse($row['id'], $row['name']);
+                $leagues[] = $league->jsonSerialize();
             }
         }
 
@@ -126,7 +129,7 @@ class LeaguesDAO
         $leagues = [];
         if ($res) {
             while ($row = $res->fetch_assoc()) {
-                $leagues[] = new LeaguesListResponseDTO($row['id'], $row['name']);
+                $leagues[] = new LeaguesSimpleListResponse($row['id'], $row['name']);
             }
         }
 
