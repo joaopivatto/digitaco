@@ -2,15 +2,15 @@
 
 namespace dto\leagues;
 
-use backend\dto\MessageResponse;
+use backend\dto\MessageResponseDTO;
 
-class LeaguesResponseDTO extends MessageResponse
+class LeaguesResponseDTO extends MessageResponseDTO
 {
     private string $name;
 
-    public function __construct($message, $name)
+    public function __construct(string $message, int $statusCode, string $name)
     {
-        parent::__construct($message);
+        parent::__construct($message, $statusCode);
         $this->name = $name;
     }
 

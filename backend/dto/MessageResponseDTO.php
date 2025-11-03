@@ -1,28 +1,41 @@
 <?php
 
-namespace backend\dto;
+namespace dto;
 
-class MessageResponse
+class MessageResponseDTO
 {
 
-    private string $text;
+    private string $message;
+
+    private int $statusCode;
 
     /**
-     * @param string $text
+     * @param string $message
      */
-    public function __construct(string $text)
+    public function __construct(string $message, int $statusCode)
     {
-        $this->text = $text;
+        $this->message = $message;
+        $this->statusCode = $statusCode;
     }
 
-    public function getText(): string
+    public function getMessage(): string
     {
-        return $this->text;
+        return $this->message;
     }
 
-    public function setText(string $text): void
+    public function setMessage(string $message): void
     {
-        $this->text = $text;
+        $this->message = $message;
+    }
+
+    public function getStatusCode(): int
+    {
+        return $this->statusCode;
+    }
+
+    public function setStatusCode(int $statusCode): void
+    {
+        $this->statusCode = $statusCode;
     }
 
 }
