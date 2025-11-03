@@ -33,6 +33,11 @@ class LeaguesDAO
         $sql->bind_param("ssi", $name, $hash, $creatorId);
         $sql->execute();
 
+        $leagueId = $conn->insert_id;
+        $sql = $conn->prepare("INSERT INTO league_user (league_id, user_id) VALUES (?,?)");
+        $sql->bind_param("ii", $leagueId, $creatorId);
+        $sql->execute();
+
         return new MessageResponseDTO("Liga criada com sucesso!", 200);
     }
 
