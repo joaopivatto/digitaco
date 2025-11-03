@@ -16,6 +16,15 @@ class ArrayResponseDTO extends MessageResponseDTO
         $this->data = $data;
     }
 
+    public function jsonSerialize(): array
+    {
+        $parentData = parent::jsonSerialize();
+        $childData = [
+            'data' => $this->data
+        ];
+        return array_merge($parentData, $childData);
+    }
+
     public function getData(): array
     {
         return $this->data;
