@@ -8,17 +8,6 @@
 
 ---
 
-## 📋 Sobre o Projeto
-
-O **Digitaço** é um jogo de digitação interativo que permite aos usuários competirem em ligas, acompanhar suas pontuações e melhorar suas habilidades de digitação de forma gamificada.
-
-## 🚀 Funcionalidades
-
-- 👤 **Sistema de Usuários**: Cadastro, login e gerenciamento de perfil
-- 🏆 **Sistema de Ligas**: Criação e participação em ligas competitivas  
-- 🎯 **Sistema de Pontuação**: Ranking geral e semanal
-- 🎮 **Partidas**: Registro e histórico de jogos
-
 ## 📚 Sumário
 
 - [📋 Sobre o Projeto](#-sobre-o-projeto)
@@ -42,6 +31,19 @@ O **Digitaço** é um jogo de digitação interativo que permite aos usuários c
   - [🎯 Matches](#-matches)
     - [🎮 POST /matches](#-post-matches)
     - [📋 GET /matches](#-get-matches)
+
+---
+
+## 📋 Sobre o Projeto
+
+O **Digitaço** é um jogo de digitação interativo que permite aos usuários competirem em ligas, acompanhar suas pontuações e melhorar suas habilidades de digitação de forma gamificada.
+
+## 🚀 Funcionalidades
+
+- 👤 **Sistema de Usuários**: Cadastro, login e gerenciamento de perfil
+- 🏆 **Sistema de Ligas**: Criação e participação em ligas competitivas  
+- 🎯 **Sistema de Pontuação**: Ranking geral e semanal
+- 🎮 **Partidas**: Registro e histórico de jogos
 
 ---
 
