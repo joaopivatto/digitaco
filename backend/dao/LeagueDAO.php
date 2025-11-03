@@ -74,4 +74,34 @@ class LeagueDAO
             "leagueName" => $nameLeague
         ];
     }
+
+    public static function deleteUserLeague($idLeague)
+    {
+        $conn = Database::connect();
+        $nameLeague = self::validateExistentLeague($idLeague);
+        if (!$nameLeague)
+        {
+            return [
+                "success" => false,
+                "reason" => "league_not_found"
+            ];
+        }
+
+        if (!self::validateExistentUserLeague($idLeague))
+        {
+            return [
+                "success" => false,
+                "reason" => "user_not_already_in_league"
+            ];
+        }
+
+        $sql = $conn->prepare("DELETE FROM league_user WHERE league_id = ? AND user_id = ?");
+        $sql->bind_param("ii", $idLeague, $_SESSION['userId']);
+        $sql->execute();
+
+        return [
+            "success" => true,
+            "leagueName" => $nameLeague
+        ];
+    }
 }
