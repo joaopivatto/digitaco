@@ -14,9 +14,9 @@ header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
 
 $name = $_GET['name'] ?? null;
-$creatorId = $_SESSION['userId'] ?? null;
+$userId = $_SESSION['userId'] ?? null;
 
-if ($creatorId === null) {
+if ($userId === null) {
     http_response_code(401);
     $response = new MessageResponseDTO("Não autorizado!", 401);
     echo json_encode($response->jsonSerialize());
@@ -24,7 +24,7 @@ if ($creatorId === null) {
 }
 
 try {
-    $list = LeaguesDAO::findAllByName($name);
+    $list = LeaguesDAO::findAllByName($userId, $name);
     http_response_code($list->getStatusCode());
     echo json_encode($list->jsonSerialize());
 } catch (Throwable $e) {

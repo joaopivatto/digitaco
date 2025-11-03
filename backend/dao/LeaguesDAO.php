@@ -34,16 +34,39 @@ class LeaguesDAO
         return new MessageResponseDTO("Liga criada com sucesso!", 200);
     }
 
-    public static function findAllByName(?string $name = null): MessageResponseDTO
+    public static function findAllByName(int $id, ?string $name = null): MessageResponseDTO
     {
         $conn = Database::connect();
 
         if ($name) {
-            $sql = $conn->prepare("SELECT * FROM leagues WHERE name LIKE ?");
+            $sql = $conn->prepare("
+                SELECT 
+                    leagues.*, 
+                    CASE 
+                        WHEN league_user.user_id IS NOT NULL THEN TRUE 
+                        ELSE FALSE 
+                    END AS included
+                FROM leagues
+                LEFT JOIN league_user 
+                    ON leagues.id = league_user.league_id 
+                    AND league_user.user_id = ?
+                WHERE leagues.name LIKE ?
+            ");
             $param = "%$name%";
-            $sql->bind_param("s", $param);
+            $sql->bind_param("is", $id, $param);
         } else {
-            $sql = $conn->prepare("SELECT * FROM leagues");
+            $sql = $conn->prepare("
+                SELECT 
+                    leagues.*, 
+                    CASE 
+                        WHEN league_user.user_id IS NOT NULL THEN TRUE 
+                        ELSE FALSE 
+                    END AS included
+                FROM leagues
+                LEFT JOIN league_user 
+                    ON leagues.id = league_user.league_id 
+                    AND league_user.user_id = ?");
+            $sql->bind_param("i", $id);
         }
 
         $sql->execute();
@@ -52,7 +75,7 @@ class LeaguesDAO
         $leagues = [];
         if ($res) {
             while ($row = $res->fetch_assoc()) {
-                $league = new LeaguesListResponseDTO($row['id'], $row['name']);
+                $league = new LeaguesListResponseDTO($row['id'], $row['name'], $row['included']);
                 $leagues[] = $league->jsonSerialize();
             }
         }
