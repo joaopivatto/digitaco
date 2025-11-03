@@ -39,7 +39,7 @@ class LeaguesDAO
         $sql->bind_param("ii", $leagueId, $creatorId);
         $sql->execute();
 
-        return new MessageResponseDTO("Liga criada com sucesso!", 200);
+        return new MessageResponseDTO("Liga criada com sucesso!", 201);
     }
 
     public static function findAllByName(int $id, ?string $name = null): MessageResponseDTO
