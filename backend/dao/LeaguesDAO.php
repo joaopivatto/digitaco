@@ -129,7 +129,8 @@ class LeaguesDAO
         $leagues = [];
         if ($res) {
             while ($row = $res->fetch_assoc()) {
-                $leagues[] = new LeaguesSimpleListResponse($row['id'], $row['name']);
+                $league = new LeaguesSimpleListResponse($row['id'], $row['name']);
+                $leagues[] = $league->jsonSerialize();
             }
         }
 
