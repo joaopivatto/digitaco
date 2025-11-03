@@ -24,6 +24,10 @@ class LeaguesDAO
     public static function create($name, $password, $creatorId): MessageResponseDTO
     {
 
+        if(!UsersDAO::validateExistentUser($creatorId)) {
+            return new MessageResponseDTO("Usuário não encontrado!", 404);
+        }
+
         if (self::findByNameBoolean($name)) {
             return new MessageResponseDTO("Esta liga já existe!", 409);
         }
@@ -104,6 +108,11 @@ class LeaguesDAO
     }
 
     public static function findAllByCreatorId($creatorId): MessageResponseDTO {
+
+        if(!UsersDAO::validateExistentUser($creatorId)) {
+            return new MessageResponseDTO("Usuário não encontrado!", 404);
+        }
+
         $conn = Database::connect();
         $sql = $conn->prepare("SELECT * FROM leagues WHERE creator_id = ?");
         $sql->bind_param("i", $creatorId);
@@ -122,6 +131,11 @@ class LeaguesDAO
     }
 
     public static function findAllByIncludedId($includedId): MessageResponseDTO {
+
+        if(!UsersDAO::validateExistentUser($includedId)) {
+            return new MessageResponseDTO("Usuário não encontrado!", 404);
+        }
+
         $conn = Database::connect();
         $sql = $conn->prepare("
             SELECT * FROM leagues
