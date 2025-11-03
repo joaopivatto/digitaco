@@ -2,6 +2,12 @@
 
 namespace backend\dao;
 
+require_once __DIR__ . '/../config/Database.php';
+require_once __DIR__ . '/../dto/MessageResponseDTO.php';;
+require_once __DIR__ . '/../dto/leagues/LeaguesResponseDTO.php';
+require_once __DIR__ . '/../dto/leagues/LeaguesListResponseDTO.php';
+require_once __DIR__ . '/../dto/ArrayResponseDTO.php';
+
 use backend\config\Database;
 use dto\ArrayResponseDTO;
 use dto\leagues\LeaguesListResponseDTO;
@@ -16,15 +22,16 @@ class LeaguesDAO
     {
 
         if (self::findByNameBoolean($name)) {
-            $conn = Database::connect();
-            $sql = $conn->prepare("INSERT INTO leagues (name, password, creator_id) VALUES (?,?,?)");
-            $hash = password_hash($password, PASSWORD_DEFAULT);
-            $sql->bind_param("ssi", $name, $hash, $creatorId);
-            $sql->execute();
-
-            return new MessageResponseDTO("Liga criada com sucesso!", 200);
+            return new MessageResponseDTO("Esta liga já existe!", 409);
         }
-        return new MessageResponseDTO("Esta liga já existe!", 409);
+
+        $conn = Database::connect();
+        $sql = $conn->prepare("INSERT INTO leagues (name, password, creator_id) VALUES (?,?,?)");
+        $hash = password_hash($password, PASSWORD_DEFAULT);
+        $sql->bind_param("ssi", $name, $hash, $creatorId);
+        $sql->execute();
+
+        return new MessageResponseDTO("Liga criada com sucesso!", 200);
     }
 
     public static function findAllByName(?string $name = null): MessageResponseDTO
@@ -194,10 +201,8 @@ class LeaguesDAO
         $sql->bind_param("s", $name);
         $sql->execute();
         $res = $sql->get_result();
-        if ($res) {
-            return true;
-        }
-        return false;
+
+        return $res && $res->num_rows > 0;
     }
 
 

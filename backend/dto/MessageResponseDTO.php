@@ -18,6 +18,13 @@ class MessageResponseDTO
         $this->statusCode = $statusCode;
     }
 
+    public function jsonSerialize(): array {
+        return [
+            'message' => $this->message,
+            'statusCode' => $this->statusCode
+        ];
+    }
+
     public function getMessage(): string
     {
         return $this->message;
