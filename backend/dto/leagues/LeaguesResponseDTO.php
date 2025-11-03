@@ -18,6 +18,18 @@ class LeaguesResponseDTO extends MessageResponseDTO
         $this->name = $name;
     }
 
+    public function jsonSerialize(): array
+    {
+        $parentData = parent::jsonSerialize();
+        $childData = [
+            'league' => [
+                'id' => $this->id,
+                'name' => $this->name
+            ]
+        ];
+        return array_merge($parentData, $childData);
+    }
+
     public function getId(): int
     {
         return $this->id;
