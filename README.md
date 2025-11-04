@@ -182,20 +182,17 @@ REQUEST
 
 RESPONSE 201 (Created)
 {
-    "message": "Liga criada com sucesso!",
-    "statusCode": 201
+    "message": "Liga criada com sucesso!"
 }
 
 RESPONSE 409 (Conflict)
 {
-    "message": "Esta liga já existe!",
-    "statusCode": 409
+    "message": "Esta liga já existe!"
 }
 
 RESPONSE 422 (Unprocessable Entity)
 {
-    "message": "Campos Inválidos!",
-    "statusCode": 422
+    "message": "Campos Inválidos!"
 }
 ```
 
@@ -208,7 +205,6 @@ RESPONSE 422 (Unprocessable Entity)
 RESPONSE 200 (OK)
 {
     "message": "Ligas encontradas!",
-    "statusCode": 200,
     "data": [
         {
             "id": 3,
@@ -239,7 +235,6 @@ RESPONSE 200 (OK)
 RESPONSE 200 (OK)
 {
     "message": "Liga encontrada!",
-    "statusCode": 200,
     "league": {
         "id": 8,
         "name": "League Five",
@@ -249,8 +244,7 @@ RESPONSE 200 (OK)
 
 RESPONSE 404 (NOT FOUND)
 {
-    "message": "Liga não encontrada!",
-    "statusCode": 404
+    "message": "Liga não encontrada!"
 }
 ```
 
@@ -261,7 +255,6 @@ RESPONSE 404 (NOT FOUND)
 RESPONSE 200 (OK)
 {
     "message": "Ligas encontradas!",
-    "statusCode": 200,
     "data": [
         {
             "id": 3,
@@ -285,7 +278,6 @@ RESPONSE 200 (OK)
 RESPONSE 200 (OK)
 {
     "message": "Ligas encontradas!",
-    "statusCode": 200,
     "data": [
         {
             "id": 5,
@@ -302,14 +294,12 @@ RESPONSE 200 (OK)
 
 RESPONSE 200 (OK)
 {
-    "message": "Liga excluída com sucesso!",
-    "statusCode": 200
+    "message": "Liga excluída com sucesso!"
 }
 
 RESPONSE 404 (NOT FOUND)
 {
-    "message": "Liga não encontrada!",
-    "statusCode": 404
+    "message": "Liga não encontrada!"
 }
 ```
 
@@ -320,7 +310,6 @@ RESPONSE 404 (NOT FOUND)
 RESPONSE 200 (OK)
 {
     "message": "Pontuação Geral da Liga!",
-    "statusCode": 200,
     "data": [
         {
             "name": "pivatto",
@@ -339,8 +328,7 @@ RESPONSE 200 (OK)
 
 RESPONSE 404 (NOT FOUND)
 {
-    "message": "Liga não encontrada!",
-    "statusCode": 404
+    "message": "Liga não encontrada!"
 }
 ```
 
@@ -351,7 +339,6 @@ RESPONSE 404 (NOT FOUND)
 RESPONSE 200 (OK)
 {
     "message": "Pontuação Semanal da Liga!",
-    "statusCode": 200,
     "data": [
         {
             "name": "pivatto",
@@ -370,8 +357,7 @@ RESPONSE 200 (OK)
 
 RESPONSE 404 (NOT FOUND)
 {
-    "message": "Liga não encontrada!",
-    "statusCode": 404
+    "message": "Liga não encontrada!"
 }
 ```
 
@@ -392,8 +378,7 @@ REQUEST
 ```json
 RESPONSE 201 (Created)
 {
-    "message": "Partida finalizada!",
-    "statusCode": 201
+    "message": "Partida finalizada!"
 }
 ```
 
@@ -405,7 +390,6 @@ RESPONSE 201 (Created)
 RESPONSE 200 (OK)
 {
     "message": "Histórico de Partidas!",
-    "statusCode": 200,
     "userPerformance": {
         "totalMatches": 9,
         "totalWords": 1219,
@@ -430,7 +414,6 @@ RESPONSE 200 (OK)
 RESPONSE 200 (OK)
 {
     "message": "Ranking Geral!",
-    "statusCode": 200,
     "data": [
         {
             "name": "pivatto",
@@ -455,7 +438,6 @@ RESPONSE 200 (OK)
 RESPONSE 200 (OK)
 {
     "message": "Ranking Geral Semanal!",
-    "statusCode": 200,
     "data": [
         {
             "name": "pivatto",
