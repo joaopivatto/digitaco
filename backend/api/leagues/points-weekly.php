@@ -24,7 +24,7 @@ if ($userId === null) {
 }
 
 try {
-    $list = LeaguesDAO::getWeekTablePoints($id);
+    $list = LeaguesDAO::getWeekRating($id);
     http_response_code($list->getStatusCode());
     echo json_encode($list->jsonSerialize());
 } catch (Throwable $e) {

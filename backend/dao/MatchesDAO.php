@@ -108,4 +108,62 @@ class MatchesDAO
         return new ArrayResponseDTO("Ranking Geral!", 200, $rating);
     }
 
+    public static function getLeagueRating(int $leagueId) {
+        $conn = Database::connect();
+        $sql = $conn->prepare("
+                SELECT 
+                    users.name AS user,
+                    SUM(matches.points) AS points,
+                    COUNT(matches.id) AS matches
+                FROM matches
+                INNER JOIN users ON users.id = matches.user_id
+                WHERE matches.league_id = ?
+                GROUP BY users.id, users.name
+                ORDER BY points DESC;
+            ");
+        $sql->bind_param("i", $leagueId);
+        $sql->execute();
+        $res = $sql->get_result();
+
+        $points = [];
+        if ($res) {
+            while ($row = $res->fetch_assoc()) {
+                $point = new UsersPointsDTO($row['user'], $row['points'], $row['matches']);
+                $points[] = $point->jsonSerialize();
+            }
+        }
+
+        return new ArrayResponseDTO("Pontuação Geral da Liga!", 200, $points);
+    }
+
+    public static function getLeagueRatingWeekly(int $leagueId) {
+        $conn = Database::connect();
+        $sql = $conn->prepare("
+                SELECT 
+                    users.name AS user,
+                    SUM(matches.points) AS points,
+                    COUNT(matches.id) AS matches
+                FROM matches
+                INNER JOIN users ON users.id = matches.user_id
+                WHERE 
+                    matches.league_id = ?
+                    AND matches.played_at >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+                GROUP BY users.id, users.name
+                ORDER BY points DESC;
+            ");
+        $sql->bind_param("i", $leagueId);
+        $sql->execute();
+        $res = $sql->get_result();
+
+        $points = [];
+        if ($res) {
+            while ($row = $res->fetch_assoc()) {
+                $point = new UsersPointsDTO($row['user'], $row['points'], $row['matches']);
+                $points[] = $point->jsonSerialize();
+            }
+        }
+
+        return new ArrayResponseDTO("Pontuação Geral da Liga!", 200, $points);
+    }
+
 }

@@ -10,6 +10,7 @@ require_once __DIR__ . '/../dto/leagues/LeaguesSimpleListResponse.php';
 require_once __DIR__ . '/../dto/ArrayResponseDTO.php';
 require_once __DIR__ . '/../dto/users/UsersPointsDTO.php';
 require_once __DIR__ . '/UsersDAO.php';
+require_once __DIR__ . '/MatchesDAO.php';
 
 use backend\config\Database;
 use dto\ArrayResponseDTO;
@@ -180,66 +181,16 @@ class LeaguesDAO
         return new MessageResponseDTO("Liga não encontrada!", 404);
     }
 
-    public static function getTablePoints($id): MessageResponseDTO {
+    public static function getRating($id): MessageResponseDTO {
         if (self::findByIdBoolean($id)) {
-            $conn = Database::connect();
-            $sql = $conn->prepare("
-                SELECT 
-                    users.name AS user,
-                    SUM(matches.points) AS points,
-                    COUNT(matches.id) AS matches
-                FROM matches
-                INNER JOIN users ON users.id = matches.user_id
-                WHERE matches.league_id = ?
-                GROUP BY users.id, users.name
-                ORDER BY points DESC;
-            ");
-            $sql->bind_param("i", $id);
-            $sql->execute();
-            $res = $sql->get_result();
-
-            $points = [];
-            if ($res) {
-                while ($row = $res->fetch_assoc()) {
-                    $point = new UsersPointsDTO($row['user'], $row['points'], $row['matches']);
-                    $points[] = $point->jsonSerialize();
-                }
-            }
-
-            return new ArrayResponseDTO("Pontuação Geral da Liga!", 200, $points);
+            return MatchesDAO::getLeagueRating($id);
         }
         return new MessageResponseDTO("Liga não encontrada!", 404);
     }
 
-    public static function getWeekTablePoints($id): MessageResponseDTO {
+    public static function getWeekRating($id): MessageResponseDTO {
         if (self::findByIdBoolean($id)) {
-            $conn = Database::connect();
-            $sql = $conn->prepare("
-                SELECT 
-                    users.name AS user,
-                    SUM(matches.points) AS points,
-                    COUNT(matches.id) AS matches
-                FROM matches
-                INNER JOIN users ON users.id = matches.user_id
-                WHERE 
-                    matches.league_id = ?
-                    AND matches.played_at >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
-                GROUP BY users.id, users.name
-                ORDER BY points DESC;
-            ");
-            $sql->bind_param("i", $id);
-            $sql->execute();
-            $res = $sql->get_result();
-
-            $points = [];
-            if ($res) {
-                while ($row = $res->fetch_assoc()) {
-                    $point = new UsersPointsDTO($row['user'], $row['points'], $row['matches']);
-                    $points[] = $point->jsonSerialize();
-                }
-            }
-
-            return new ArrayResponseDTO("Pontuação Geral da Liga!", 200, $points);
+            return MatchesDAO::getLeagueRatingWeekly($id);
         }
         return new MessageResponseDTO("Liga não encontrada!", 404);
     }
