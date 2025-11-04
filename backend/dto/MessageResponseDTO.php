@@ -20,8 +20,7 @@ class MessageResponseDTO
 
     public function jsonSerialize(): array {
         return [
-            'message' => $this->message,
-            'statusCode' => $this->statusCode
+            'message' => $this->message 
         ];
     }
 
