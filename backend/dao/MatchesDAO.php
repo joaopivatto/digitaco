@@ -2,20 +2,31 @@
 
 namespace backend\dao;
 
-require_once "/../../config/Database.php";
-require_once "/../../dto/MessageResponseDTO.php";
+require_once __DIR__ . '/../config/Database.php';
+require_once __DIR__ . '/../dto/matches/MatchesDTO.php';
+require_once __DIR__ . '/../dto/matches/MatchesRating.php';
+require_once __DIR__ . '/../dto/matches/UserMatchesHistoryDTO.php';
+require_once __DIR__ . '/../dto/ArrayResponseDTO.php';
+require_once __DIR__ . '/../dto/MessageResponseDTO.php';;
+require_once __DIR__ . '/UsersDAO.php';
+require_once __DIR__ . '/LeaguesDAO.php';
 
 use backend\config\Database;
-use backend\dto\matches\MatchesDTO;
-use backend\dto\matches\MatchesRating;
-use backend\dto\matches\UserMatchesHistoryDTO;
+use dto\matches\MatchesDTO;
+use dto\matches\MatchesRating;
+use dto\matches\UserMatchesHistoryDTO;
 use dto\ArrayResponseDTO;
 use dto\MessageResponseDTO;
 
 class MatchesDAO
 {
 
-    public static function create(int $points, int $words, int $leagueId, int $userId): MessageResponseDTO {
+    public static function create(int $points, int $words, $leagueId, int $userId): MessageResponseDTO {
+
+        if ($leagueId != null && !LeaguesDAO::findByIdBoolean($leagueId)) {
+            return new MessageResponseDTO("Liga não encontrada!", 404);
+        }
+
         $conn = Database::connect();
         $sql = $conn->prepare("INSERT INTO matches (points, words, league_id, user_id) VALUES (?,?,?, ?)");
         $sql->bind_param("iiii", $points, $words, $leagueId, $userId);
@@ -79,7 +90,8 @@ class MatchesDAO
                 SUM(matches.points) AS totalPoints
             FROM matches
             INNER JOIN users ON users.id = matches.user_id
-            GROUP BY users.id, users.name;
+            GROUP BY users.id, users.name
+            ORDER BY totalPoints DESC;
         ");
         $sql->execute();
         $res = $sql->get_result();
