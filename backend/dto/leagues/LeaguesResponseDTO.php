@@ -2,6 +2,8 @@
 
 namespace dto\leagues;
 
+require_once __DIR__ . "/../MessageResponseDTO.php";
+
 use dto\MessageResponseDTO;
 
 class LeaguesResponseDTO extends MessageResponseDTO

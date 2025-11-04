@@ -2,6 +2,8 @@
 
 namespace dto\matches;
 
+require_once __DIR__ . "/../MessageResponseDTO.php";
+
 use dto\MessageResponseDTO;
 
 class UserMatchesHistoryDTO extends MessageResponseDTO
@@ -23,13 +25,16 @@ class UserMatchesHistoryDTO extends MessageResponseDTO
 
     public function jsonSerialize(): array
     {
-        return [
+        $parentData = parent::jsonSerialize();
+        $childData = [
             "totalMatches" => $this->totalMatches,
             "totalWords" => $this->totalWords,
             "totalPoints" => $this->totalPoints,
             "bestScore" => $this->bestScore,
             "matches" => $this->matches
         ];
+
+        return array_merge($parentData, $childData);
     }
 
     public function getTotalMatches(): int
