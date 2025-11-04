@@ -98,9 +98,11 @@ class MatchesDAO
         $sql->execute();
         $res = $sql->get_result();
         $rating = [];
-        if ($res && $row=$res->fetch_assoc()) {
-            $placement = new MatchesRating($row['user'], $row['totalMatches'], $row['totalPoints']);
-            $rating[] = $placement->jsonSerialize();
+        if ($res) {
+            while ($row = $res->fetch_assoc()) {
+                $placement = new MatchesRating($row['user'], $row['totalMatches'], $row['totalPoints']);
+                $rating[] = $placement->jsonSerialize();
+            }
         }
 
         return new ArrayResponseDTO("Ranking Geral!", 200, $rating);
