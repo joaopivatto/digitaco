@@ -4,7 +4,7 @@ namespace backend\dao;
 
 require_once __DIR__ . '/../config/Database.php';
 require_once __DIR__ . '/../dto/matches/MatchesDTO.php';
-require_once __DIR__ . '/../dto/matches/MatchesRating.php';
+require_once __DIR__ . '/../dto/users/UsersPointsDTO.php';
 require_once __DIR__ . '/../dto/matches/UserMatchesHistoryDTO.php';
 require_once __DIR__ . '/../dto/ArrayResponseDTO.php';
 require_once __DIR__ . '/../dto/MessageResponseDTO.php';;
@@ -13,10 +13,10 @@ require_once __DIR__ . '/LeaguesDAO.php';
 
 use backend\config\Database;
 use dto\matches\MatchesDTO;
-use dto\matches\MatchesRating;
 use dto\matches\UserMatchesHistoryDTO;
 use dto\ArrayResponseDTO;
 use dto\MessageResponseDTO;
+use dto\users\UsersPointsDTO;
 
 class MatchesDAO
 {
@@ -100,7 +100,7 @@ class MatchesDAO
         $rating = [];
         if ($res) {
             while ($row = $res->fetch_assoc()) {
-                $placement = new MatchesRating($row['user'], $row['totalMatches'], $row['totalPoints']);
+                $placement = new UsersPointsDTO($row['user'], $row['totalPoints'], $row['totalMatches']);
                 $rating[] = $placement->jsonSerialize();
             }
         }

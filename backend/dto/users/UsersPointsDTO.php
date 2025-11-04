@@ -22,7 +22,7 @@ class UsersPointsDTO
         $this->name = $name;
         $this->points = $points;
         $this->matches = $matches;
-        $this->average = $points / $matches;
+        $this->average = round($points / $matches, 2);
     }
 
     public function jsonSerialize(): array
