@@ -72,9 +72,11 @@ class MatchesDAO
         $sql->execute();
         $res = $sql->get_result();
         $matches = [];
-        if ($res && $row=$res->fetch_assoc()) {
-            $match = new MatchesDto($row['points'], $row['words'], $row['played_at']);
-            $matches[] = $match->jsonSerialize();
+        if ($res) {
+            while ($row = $res->fetch_assoc()) {
+                $match = new MatchesDto($row['points'], $row['words'], $row['played_at']);
+                $matches[] = $match->jsonSerialize();
+            }
         }
         $historic->setMatches($matches);
 

@@ -27,11 +27,13 @@ class UserMatchesHistoryDTO extends MessageResponseDTO
     {
         $parentData = parent::jsonSerialize();
         $childData = [
-            "totalMatches" => $this->totalMatches,
-            "totalWords" => $this->totalWords,
-            "totalPoints" => $this->totalPoints,
-            "bestScore" => $this->bestScore,
-            "matches" => $this->matches
+            "userPerformance" => [
+                "totalMatches" => $this->totalMatches,
+                "totalWords" => $this->totalWords,
+                "totalPoints" => $this->totalPoints,
+                "bestScore" => $this->bestScore,
+                "matches" => $this->matches
+            ]
         ];
 
         return array_merge($parentData, $childData);

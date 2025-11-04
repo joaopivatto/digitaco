@@ -10,10 +10,10 @@ class MatchesDTO
     private int $words;
     private string $date;
 
-    public function __construct(int $points, int $words, $date) {
+    public function __construct(int $points, int $words, string $date) {
         $this->points = $points;
         $this->words = $words;
-        $this->date = new \DateTime($date)->format('d/m/Y H:i');
+        $this->date = (new \DateTime($date))->format('d/m/Y H:i');
     }
 
     public function jsonSerialize(): array {
