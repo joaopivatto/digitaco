@@ -28,6 +28,24 @@ class LeagueDAO
         return $row['name'];
     }
 
+    public static function validatePasswordLeague($id, $password) :?string
+    {
+        $conn = Database::connect();
+
+        $validate = $conn->prepare("SELECT password FROM leagues WHERE id = ?");
+        $validate->bind_param("i", $id);
+        $validate->execute();
+        $resultPassword = $validate->get_result();
+
+        if ($resultPassword && $row = $resultPassword->fetch_assoc()) {
+            if (password_verify($password,$row['password'])) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public static function validateExistentUserLeague($idLeague)
     {
         $conn = Database::connect();
@@ -45,7 +63,7 @@ class LeagueDAO
         return true;
     }
 
-    public static function insertUserLeague($idLeague)
+    public static function insertUserLeague($idLeague, $password)
     {
         $conn = Database::connect();
         $nameLeague = self::validateExistentLeague($idLeague);
@@ -54,6 +72,14 @@ class LeagueDAO
             return [
                 "success" => false,
                 "reason" => "league_not_found"
+            ];
+        }
+
+        if (!self::validatePasswordLeague($idLeague, $password))
+        {
+            return [
+                "success" => false,
+                "reason" => "league_password_incorrect"
             ];
         }
 

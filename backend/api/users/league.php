@@ -11,8 +11,9 @@ $arquivo = file_get_contents('php://input');
 $conteudo = json_decode($arquivo, true);
 
 $idLeague = $_GET['leagueId'];
+$password = $conteudo['password'];
 
-if (empty($idLeague))
+if (empty($idLeague) || empty($password))
 {
     http_response_code(422);
     echo json_encode([
@@ -21,7 +22,7 @@ if (empty($idLeague))
     exit;
 }
 
-$insert = LeagueDAO::insertUserLeague($idLeague);
+$insert = LeagueDAO::insertUserLeague($idLeague, $password);
 
 try {
     if (!$insert['success'])
@@ -35,6 +36,10 @@ try {
             case "user_already_in_league":
                 http_response_code(409);
                 echo json_encode(["message" => "Usuário já está na liga!"]);
+                break;
+            case "league_password_incorrect":
+                http_response_code(401);
+                echo json_encode(["message" => "Senha da liga incorreta!"]);
                 break;
         }
     } else {
