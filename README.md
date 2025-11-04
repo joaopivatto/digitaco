@@ -213,16 +213,19 @@ RESPONSE 200 (OK)
         {
             "id": 3,
             "name": "League One",
+            "members": 1,
             "included": false
         },
         {
             "id": 4,
             "name": "League Two",
+            "members": 1,
             "included": false
         },
         {
             "id": 5,
             "name": "League Three",
+            "members": 1,
             "included": false
         }
     ]
@@ -239,7 +242,8 @@ RESPONSE 200 (OK)
     "statusCode": 200,
     "league": {
         "id": 8,
-        "name": "League Five"
+        "name": "League Five",
+        "members": 1,
     }
 }
 
@@ -261,11 +265,14 @@ RESPONSE 200 (OK)
     "data": [
         {
             "id": 3,
-            "name": "League One"
+            "name": "League One",
+            "members": 1,
+            
         },
         {
             "id": 4,
-            "name": "League Two"
+            "name": "League Two",
+            "members": 1,
         }
     ]
 }
@@ -282,7 +289,8 @@ RESPONSE 200 (OK)
     "data": [
         {
             "id": 5,
-            "name": "League Five"
+            "name": "League Five",
+            "members": 1,
         }
     ]
 }
@@ -316,11 +324,15 @@ RESPONSE 200 (OK)
     "data": [
         {
             "name": "pivatto",
-            "points": 260
+            "points": 260,
+            "matches": 8,
+            "average": 880
         },
         {
             "name": "samuel",
-            "points": 240
+            "points": 240,
+            "matches": 5,
+            "average": 670
         }
     ]
 }
@@ -338,16 +350,20 @@ RESPONSE 404 (NOT FOUND)
 
 RESPONSE 200 (OK)
 {
-    "message": "Pontuação Geral da Liga!",
+    "message": "Pontuação Semanal da Liga!",
     "statusCode": 200,
     "data": [
         {
             "name": "pivatto",
-            "points": 260
+            "points": 260,
+            "matches": 8,
+            "average": 880
         },
         {
             "name": "samuel",
-            "points": 160
+            "points": 1000,
+            "matches": 2,
+            "average": 500
         }
     ]
 }
@@ -361,37 +377,97 @@ RESPONSE 404 (NOT FOUND)
 
 ### 🎯 Matches
 
-#### 🎮 POST /matches
+#### 🎮 POST /api/matches/create.php
 ```json
+// Criar Partida
+
 REQUEST
 {
-    "points": 120,
-    "leagueId": 1 ?? null,
+    "points": 1130,
+    "words": 14,
+    "leagueId": 2
 }
 ```
 
 ```json
-RESPONSE
+RESPONSE 201 (Created)
 {
-    "message": "Partida finalizada!"
-    "points": 120
+    "message": "Partida finalizada!",
+    "statusCode": 201
 }
 ```
 
 
-#### 📋 GET /matches
+#### 📋 GET /api/matches/user-history.php
 ```json
-RESPONSE
+// Histórico do Usuário
+
+RESPONSE 200 (OK)
 {
-    "message": "Partidas!"
-    [
+    "message": "Histórico de Partidas!",
+    "statusCode": 200,
+    "userPerformance": {
+        "totalMatches": 9,
+        "totalWords": 1219,
+        "totalPoints": 8170,
+        "bestScore": 1130,
+        "matches": [
+            {
+                "points": 1130,
+                "words": 14,
+                "date": "04/11/2025 15:50"
+            }
+
+        ]
+    }
+}
+```
+
+#### 📋 GET /api/matches/global-rating.php
+```json
+// Ranking Geral
+
+RESPONSE 200 (OK)
+{
+    "message": "Ranking Geral!",
+    "statusCode": 200,
+    "data": [
         {
-            "points": 120,
-            "playedAt": "20/12/2025"
+            "name": "pivatto",
+            "points": 8170,
+            "matches": 9,
+            "average": 907.78
         },
         {
-            "points": 112,
-            "playedAt": "21/12/2025"
+            "name": "samuel",
+            "points": 240,
+            "matches": 2,
+            "average": 120
+        }
+    ]
+}
+```
+
+#### 📋 GET /api/matches/global-rating-weekly.php
+```json
+// Ranking Semanal
+
+RESPONSE 200 (OK)
+{
+    "message": "Ranking Geral Semanal!",
+    "statusCode": 200,
+    "data": [
+        {
+            "name": "pivatto",
+            "points": 8170,
+            "matches": 9,
+            "average": 907.78
+        },
+        {
+            "name": "samuel",
+            "points": 160,
+            "matches": 1,
+            "average": 160
         }
     ]
 }

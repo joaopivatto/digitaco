@@ -2,6 +2,8 @@
 
 namespace dto;
 
+require_once __DIR__ . "/MessageResponseDTO.php";
+
 class ArrayResponseDTO extends MessageResponseDTO
 {
 

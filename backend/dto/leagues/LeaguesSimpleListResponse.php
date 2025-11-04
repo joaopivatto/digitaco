@@ -9,21 +9,25 @@ class LeaguesSimpleListResponse
 
     private string $name;
 
+    private int $members;
+
     /**
      * @param int $id
      * @param string $name
      */
-    public function __construct(int $id, string $name)
+    public function __construct(int $id, string $name, int $members)
     {
         $this->id = $id;
         $this->name = $name;
+        $this->members = $members;
     }
 
     public function jsonSerialize(): array
     {
         return [
             "id" => $this->id,
-            "name" => $this->name
+            "name" => $this->name,
+            "members" => $this->members,
         ];
     }
 
@@ -46,6 +50,16 @@ class LeaguesSimpleListResponse
     public function setName(string $name): void
     {
         $this->name = $name;
+    }
+
+    public function getMembers(): int
+    {
+        return $this->members;
+    }
+
+    public function setMembers(int $members): void
+    {
+        $this->members = $members;
     }
 
 }

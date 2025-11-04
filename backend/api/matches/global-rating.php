@@ -1,19 +1,18 @@
 <?php
 
 session_start();
-// GET /leagues/points-weekly?id={id}
+// GET /matches/global-rating
 
-require_once __DIR__ . '/../../dao/LeaguesDAO.php';
+require_once __DIR__ . '/../../dao/MatchesDAO.php';
 require_once __DIR__ . '/../../dto/MessageResponseDTO.php';
 
-use backend\dao\LeaguesDAO;
+use backend\dao\MatchesDAO  ;
 use dto\MessageResponseDTO;
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
 
-$id = $_GET['id'] ?? null;
 $userId = $_SESSION['userId'] ?? null;
 
 if ($userId === null) {
@@ -24,7 +23,7 @@ if ($userId === null) {
 }
 
 try {
-    $list = LeaguesDAO::getWeekRating($id);
+    $list = MatchesDAO::getGlobalRating();
     http_response_code($list->getStatusCode());
     echo json_encode($list->jsonSerialize());
 } catch (Throwable $e) {

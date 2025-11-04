@@ -9,22 +9,29 @@ class UsersPointsDTO
 
     private int $points;
 
+    private int $matches;
+
+    private float $average;
 
     /**
      * @param string $name
      * @param int $points
      */
-    public function __construct(string $name, int $points)
+    public function __construct(string $name, int $points, int $matches)
     {
         $this->name = $name;
         $this->points = $points;
+        $this->matches = $matches;
+        $this->average = round($points / $matches, 2);
     }
 
     public function jsonSerialize(): array
     {
         return [
             "name" => $this->name,
-            "points" => $this->points
+            "points" => $this->points,
+            "matches" => $this->matches,
+            "average" => $this->average,
         ];
     }
 
@@ -49,5 +56,24 @@ class UsersPointsDTO
         $this->points = $points;
     }
 
+    public function getMatches(): int
+    {
+        return $this->matches;
+    }
+
+    public function setMatches(int $matches): void
+    {
+        $this->matches = $matches;
+    }
+
+    public function getAverage(): float
+    {
+        return $this->average;
+    }
+
+    public function setAverage(float $average): void
+    {
+        $this->average = $average;
+    }
 
 }

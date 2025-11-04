@@ -52,6 +52,24 @@ class UsersDAO
         return true;
     }
 
+    public static function validateExistentUser(int $id): bool
+    {
+        $conn = Database::connect();
+
+        //Verificação se user existe
+        $validate = $conn->prepare("SELECT id FROM users WHERE id = ?");
+        $validate->bind_param("i", $id);
+        $validate->execute();
+        $resultValidation = $validate->get_result();
+
+        if ($resultValidation->num_rows === 0)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
     public static function authenticate(string $email, string $password): ?Users {
         $conn = Database::connect();
         $sql = $conn->prepare("SELECT * FROM users WHERE email=?");
