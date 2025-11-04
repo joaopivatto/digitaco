@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\dto\matches;
+namespace dto\matches;
 
 use dto\MessageResponseDTO;
 
