@@ -7,7 +7,9 @@ require_once "/../../dto/MessageResponseDTO.php";
 
 use backend\config\Database;
 use backend\dto\matches\MatchesDTO;
-use backend\dto\matches\MatchesHistoryDTO;
+use backend\dto\matches\MatchesRating;
+use backend\dto\matches\UserMatchesHistoryDTO;
+use dto\ArrayResponseDTO;
 use dto\MessageResponseDTO;
 
 class MatchesDAO
@@ -22,7 +24,12 @@ class MatchesDAO
         return new MessageResponseDTO("Partida finalizada!", 201);
     }
 
-    public static function getHistoric(int $userId): MessageResponseDTO {
+    public static function getUserHistory(int $userId): MessageResponseDTO {
+
+        if(!UsersDAO::validateExistentUser($userId)) {
+            return new MessageResponseDTO("Usuário não encontrado!", 404);
+        }
+
         $conn = Database::connect();
         $sql = $conn->prepare("
             SELECT 
@@ -36,7 +43,7 @@ class MatchesDAO
         $sql->bind_param("i", $userId);
         $sql->execute();
         $res = $sql->get_result();
-        $historic = new MatchesHistoryDTO();
+        $historic = new UserMatchesHistoryDTO();
         if ($res && $row=$res->fetch_assoc()) {
             $historic->setTotalMatches($row['totalMatches']);
             $historic->setTotalWords($row['totalWords']);
@@ -61,6 +68,28 @@ class MatchesDAO
         $historic->setMatches($matches);
 
         return $historic;
+    }
+
+    public static function getGlobalRating(): MessageResponseDTO {
+        $conn = Database::connect();
+        $sql = $conn->prepare("
+            SELECT 
+                users.name AS user,
+                COUNT(matches.id) AS totalMatches,
+                SUM(matches.points) AS totalPoints
+            FROM matches
+            INNER JOIN users ON users.id = matches.user_id
+            GROUP BY users.id, users.name;
+        ");
+        $sql->execute();
+        $res = $sql->get_result();
+        $rating = [];
+        if ($res && $row=$res->fetch_assoc()) {
+            $placement = new MatchesRating($row['user'], $row['totalMatches'], $row['totalPoints']);
+            $rating[] = $placement->jsonSerialize();
+        }
+
+        return new ArrayResponseDTO("Ranking Geral!", 200, $rating);
     }
 
 }

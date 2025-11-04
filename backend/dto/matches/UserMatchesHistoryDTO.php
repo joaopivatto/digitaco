@@ -4,7 +4,7 @@ namespace backend\dto\matches;
 
 use dto\MessageResponseDTO;
 
-class MatchesHistoryDTO extends MessageResponseDTO
+class UserMatchesHistoryDTO extends MessageResponseDTO
 {
 
     private int $totalMatches;
