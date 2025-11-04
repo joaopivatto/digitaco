@@ -108,6 +108,32 @@ class MatchesDAO
         return new ArrayResponseDTO("Ranking Geral!", 200, $rating);
     }
 
+    public static function getGlobalRatingWeekly() : MessageResponseDTO {
+        $conn = Database::connect();
+        $sql = $conn->prepare("
+            SELECT 
+                users.name AS user,
+                COUNT(matches.id) AS totalMatches,
+                SUM(matches.points) AS totalPoints
+            FROM matches
+            INNER JOIN users ON users.id = matches.user_id
+            WHERE matches.played_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+            GROUP BY users.id, users.name
+            ORDER BY totalPoints DESC;
+        ");
+        $sql->execute();
+        $res = $sql->get_result();
+        $rating = [];
+        if ($res) {
+            while ($row = $res->fetch_assoc()) {
+                $placement = new UsersPointsDTO($row['user'], $row['totalPoints'], $row['totalMatches']);
+                $rating[] = $placement->jsonSerialize();
+            }
+        }
+
+        return new ArrayResponseDTO("Ranking Geral Semanal!", 200, $rating);
+    }
+
     public static function getLeagueRating(int $leagueId) {
         $conn = Database::connect();
         $sql = $conn->prepare("
@@ -163,7 +189,7 @@ class MatchesDAO
             }
         }
 
-        return new ArrayResponseDTO("Pontuação Geral da Liga!", 200, $points);
+        return new ArrayResponseDTO("Pontuação Semanal da Liga!", 200, $points);
     }
 
 }

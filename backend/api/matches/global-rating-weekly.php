@@ -1,7 +1,7 @@
 <?php
 
 session_start();
-// GET /matches/global-rating
+// GET /matches/global-rating-weekly
 
 require_once __DIR__ . '/../../dao/MatchesDAO.php';
 require_once __DIR__ . '/../../dto/MessageResponseDTO.php';
@@ -23,7 +23,7 @@ if ($userId === null) {
 }
 
 try {
-    $list = MatchesDAO::getGlobalRating();
+    $list = MatchesDAO::getGlobalRatingWeekly();
     http_response_code($list->getStatusCode());
     echo json_encode($list->jsonSerialize());
 } catch (Throwable $e) {
