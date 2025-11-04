@@ -9,6 +9,7 @@ require_once __DIR__ . '/../dto/leagues/LeaguesListResponseDTO.php';
 require_once __DIR__ . '/../dto/leagues/LeaguesSimpleListResponse.php';
 require_once __DIR__ . '/../dto/ArrayResponseDTO.php';
 require_once __DIR__ . '/../dto/users/UsersPointsDTO.php';
+require_once __DIR__ . '/UsersDAO.php';
 
 use backend\config\Database;
 use dto\ArrayResponseDTO;
