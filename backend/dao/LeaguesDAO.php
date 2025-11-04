@@ -56,15 +56,19 @@ class LeaguesDAO
             $sql = $conn->prepare("
                 SELECT 
                     leagues.*, 
+                    COUNT(league_user_members.user_id) AS members,
                     CASE 
-                        WHEN league_user.user_id IS NOT NULL THEN TRUE 
+                        WHEN league_user_included.user_id IS NOT NULL THEN TRUE 
                         ELSE FALSE 
                     END AS included
                 FROM leagues
-                LEFT JOIN league_user 
-                    ON leagues.id = league_user.league_id 
-                    AND league_user.user_id = ?
+                LEFT JOIN league_user league_user_members 
+                    ON leagues.id = league_user_members.league_id
+                LEFT JOIN league_user league_user_included 
+                    ON leagues.id = league_user_included.league_id AND league_user_included.user_id = ?
                 WHERE leagues.name LIKE ?
+                GROUP BY leagues.id
+                ORDER BY leagues.id;
             ");
             $param = "%$name%";
             $sql->bind_param("is", $id, $param);
@@ -72,14 +76,19 @@ class LeaguesDAO
             $sql = $conn->prepare("
                 SELECT 
                     leagues.*, 
+                    COUNT(league_user_members.user_id) AS members,
                     CASE 
-                        WHEN league_user.user_id IS NOT NULL THEN TRUE 
+                        WHEN league_user_included.user_id IS NOT NULL THEN TRUE 
                         ELSE FALSE 
                     END AS included
                 FROM leagues
-                LEFT JOIN league_user 
-                    ON leagues.id = league_user.league_id 
-                    AND league_user.user_id = ?");
+                LEFT JOIN league_user league_user_members 
+                    ON leagues.id = league_user_members.league_id
+                LEFT JOIN league_user league_user_included 
+                    ON leagues.id = league_user_included.league_id AND league_user_included.user_id = ?
+                GROUP BY leagues.id
+                ORDER BY leagues.id;
+            ");
             $sql->bind_param("i", $id);
         }
 
@@ -89,7 +98,7 @@ class LeaguesDAO
         $leagues = [];
         if ($res) {
             while ($row = $res->fetch_assoc()) {
-                $league = new LeaguesListResponseDTO($row['id'], $row['name'], $row['included']);
+                $league = new LeaguesListResponseDTO($row['id'], $row['name'], $row['members'], $row['included']);
                 $leagues[] = $league->jsonSerialize();
             }
         }
@@ -99,12 +108,17 @@ class LeaguesDAO
 
     public static function findById($id): MessageResponseDTO {
         $conn = Database::connect();
-        $sql = $conn->prepare("SELECT * FROM leagues WHERE id = ?");
+        $sql = $conn->prepare("
+            SELECT 
+                leagues.id, leagues.name, COUNT(league_user.id) AS members 
+            FROM leagues 
+            INNER JOIN league_user ON leagues.id = league_user.league_id
+            WHERE leagues.id = ?");
         $sql->bind_param("i", $id);
         $sql->execute();
         $res = $sql->get_result();
         if ($res && $row=$res->fetch_assoc()) {
-            return new LeaguesResponseDTO("Liga encontrada!", 200, $row['id'], $row['name']);
+            return new LeaguesResponseDTO("Liga encontrada!", 200, $row['id'], $row['name'], $row['members']);
         }
         return new MessageResponseDTO("Liga não encontrada!", 404);
     }
@@ -116,7 +130,14 @@ class LeaguesDAO
         }
 
         $conn = Database::connect();
-        $sql = $conn->prepare("SELECT * FROM leagues WHERE creator_id = ?");
+        $sql = $conn->prepare("
+            SELECT 
+                leagues.id, leagues.name, COUNT(league_user.id) AS members
+            FROM leagues 
+            INNER JOIN league_user ON leagues.id = league_user.league_id
+            WHERE creator_id = ?
+            GROUP BY leagues.id
+        ");
         $sql->bind_param("i", $creatorId);
         $sql->execute();
         $res = $sql->get_result();
@@ -124,7 +145,7 @@ class LeaguesDAO
         $leagues = [];
         if ($res) {
             while ($row = $res->fetch_assoc()) {
-                $league = new LeaguesSimpleListResponse($row['id'], $row['name']);
+                $league = new LeaguesSimpleListResponse($row['id'], $row['name'], $row['members']);
                 $leagues[] = $league->jsonSerialize();
             }
         }
@@ -140,9 +161,12 @@ class LeaguesDAO
 
         $conn = Database::connect();
         $sql = $conn->prepare("
-            SELECT * FROM leagues
+            SELECT 
+                leagues.*, COUNT(league_user.id) AS members  
+            FROM leagues
             INNER JOIN league_user ON leagues.id = league_user.league_id
             WHERE league_user.user_id = ?
+            GROUP BY leagues.id;
         ");
         $sql->bind_param("i", $includedId);
         $sql->execute();
@@ -151,7 +175,7 @@ class LeaguesDAO
         $leagues = [];
         if ($res) {
             while ($row = $res->fetch_assoc()) {
-                $league = new LeaguesSimpleListResponse($row['id'], $row['name']);
+                $league = new LeaguesSimpleListResponse($row['id'], $row['name'], $row['members']);
                 $leagues[] = $league->jsonSerialize();
             }
         }
