@@ -20,7 +20,7 @@ $conteudo = json_decode($arquivo, true);
 $points = $conteudo['points'] ?? '';
 $words = $conteudo['words'] ?? '';
 $leagueId = $conteudo['leagueId'] ?? null;
-$userId = $_SESSION['userId'] ?? null;
+$userId = $_SESSION['userId'];
 
 if (empty($points) || empty($words)) {
     http_response_code(422);

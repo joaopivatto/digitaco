@@ -19,7 +19,7 @@ $conteudo = json_decode($arquivo, true);
 
 $name = $conteudo['name'] ?? '';
 $password = $conteudo['password'] ?? '';
-$creatorId = $_SESSION['userId'] ?? null;
+$creatorId = $_SESSION['userId'];
 
 if (empty($name) || empty($password)) {
     http_response_code(422);

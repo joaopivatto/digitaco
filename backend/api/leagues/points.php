@@ -16,7 +16,7 @@ header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
 
 $id = $_GET['id'] ?? null;
-$userId = $_SESSION['userId'] ?? null;
+$userId = $_SESSION['userId'];
 
 try {
     $list = LeaguesDAO::getRating($id);

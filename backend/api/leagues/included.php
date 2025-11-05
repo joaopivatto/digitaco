@@ -14,7 +14,7 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
 
-$includedId = $_SESSION['userId'] ?? null;
+$includedId = $_SESSION['userId'];
 
 try {
     $list = LeaguesDAO::findAllByIncludedId($includedId);

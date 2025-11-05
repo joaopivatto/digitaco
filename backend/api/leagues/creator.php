@@ -15,7 +15,7 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
 
-$creatorId = $_SESSION['userId'] ?? null;
+$creatorId = $_SESSION['userId'];
 
 try {
     $list = LeaguesDAO::findAllByCreatorId($creatorId);

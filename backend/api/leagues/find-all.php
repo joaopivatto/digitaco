@@ -16,7 +16,7 @@ header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
 
 $name = $_GET['name'] ?? null;
-$userId = $_SESSION['userId'] ?? null;
+$userId = $_SESSION['userId'];
 
 try {
     $list = LeaguesDAO::findAllByName($userId, $name);
