@@ -18,13 +18,6 @@ header("Content-Type: application/json");
 $name = $_GET['name'] ?? null;
 $userId = $_SESSION['userId'] ?? null;
 
-if ($userId === null) {
-    http_response_code(401);
-    $response = new MessageResponseDTO("Não autorizado!", 401);
-    echo json_encode($response->jsonSerialize());
-    return;
-}
-
 try {
     $list = LeaguesDAO::findAllByName($userId, $name);
     http_response_code($list->getStatusCode());

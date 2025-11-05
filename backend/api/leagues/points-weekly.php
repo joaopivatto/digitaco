@@ -18,13 +18,6 @@ header("Content-Type: application/json");
 $id = $_GET['id'] ?? null;
 $userId = $_SESSION['userId'] ?? null;
 
-if ($userId === null) {
-    http_response_code(401);
-    $response = new MessageResponseDTO("Não autorizado!", 401);
-    echo json_encode($response->jsonSerialize());
-    return;
-}
-
 try {
     $list = LeaguesDAO::getWeekRating($id);
     http_response_code($list->getStatusCode());

@@ -22,13 +22,6 @@ $words = $conteudo['words'] ?? '';
 $leagueId = $conteudo['leagueId'] ?? null;
 $userId = $_SESSION['userId'] ?? null;
 
-if ($userId === null) {
-    http_response_code(401);
-    $response = new MessageResponseDTO("Não autorizado!", 401);
-    echo json_encode($response->jsonSerialize());
-    return;
-}
-
 if (empty($points) || empty($words)) {
     http_response_code(422);
     $response = new MessageResponseDTO("Campos Inválidos!", 422);

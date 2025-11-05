@@ -17,13 +17,6 @@ header("Content-Type: application/json");
 
 $creatorId = $_SESSION['userId'] ?? null;
 
-if ($creatorId === null) {
-    http_response_code(401);
-    $response = new MessageResponseDTO("Não autorizado!", 401);
-    echo json_encode($response->jsonSerialize());
-    return;
-}
-
 try {
     $list = LeaguesDAO::findAllByCreatorId($creatorId);
     http_response_code($list->getStatusCode());

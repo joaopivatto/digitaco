@@ -16,13 +16,6 @@ header("Content-Type: application/json");
 
 $includedId = $_SESSION['userId'] ?? null;
 
-if ($includedId === null) {
-    http_response_code(401);
-    $response = new MessageResponseDTO("Não autorizado!", 401);
-    echo json_encode($response->jsonSerialize());
-    return;
-}
-
 try {
     $list = LeaguesDAO::findAllByIncludedId($includedId);
     http_response_code($list->getStatusCode());

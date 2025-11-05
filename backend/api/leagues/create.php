@@ -21,13 +21,6 @@ $name = $conteudo['name'] ?? '';
 $password = $conteudo['password'] ?? '';
 $creatorId = $_SESSION['userId'] ?? null;
 
-if ($creatorId === null) {
-    http_response_code(401);
-    $response = new MessageResponseDTO("Não autorizado!", 401);
-    echo json_encode($response->jsonSerialize());
-    return;
-}
-
 if (empty($name) || empty($password)) {
     http_response_code(422);
     $response = new MessageResponseDTO("Campos Inválidos!", 422);
