@@ -5,7 +5,7 @@ use backend\dao\LeagueDAO;
 require_once __DIR__ . "/../../dao/LeagueDAO.php";
 require_once __DIR__ . '/../../utils/validate_session.php';
 
-valiateSession();
+validateSession();
 header('Content-Type: application/json');
 
 $arquivo = file_get_contents('php://input');
