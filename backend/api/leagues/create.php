@@ -1,11 +1,12 @@
 <?php
 
+require_once __DIR__ . '/../../dao/LeaguesDAO.php';
+require_once __DIR__ . '/../../dto/MessageResponseDTO.php';
+require_once __DIR__ . '/../../utils/validate_session.php';
+
 session_start();
 validateSession();
 // POST /leagues
-
-require_once __DIR__ . '/../../dao/LeaguesDAO.php';
-require_once __DIR__ . '/../../dto/MessageResponseDTO.php';
 
 use backend\dao\LeaguesDAO;
 use dto\MessageResponseDTO;

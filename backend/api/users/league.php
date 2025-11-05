@@ -3,15 +3,16 @@
 use backend\dao\LeagueDAO;
 
 require_once __DIR__ . '/../../dao/LeagueDAO.php';
+require_once __DIR__ . '/../../utils/validate_session.php';
 
-session_start();
+validateSession();
 header('Content-Type: application/json');
 
 $arquivo = file_get_contents('php://input');
 $conteudo = json_decode($arquivo, true);
 
 $idLeague = $_GET['leagueId'];
-$password = $conteudo['password'];
+$password = $conteudo['password'] ?? null;
 
 if (empty($idLeague) || empty($password))
 {

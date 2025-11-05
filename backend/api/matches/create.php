@@ -1,11 +1,11 @@
 <?php
 
-session_start();
-validateSession();
-// POST /matches
-
 require_once __DIR__ . '/../../dao/MatchesDAO.php';
 require_once __DIR__ . '/../../dto/MessageResponseDTO.php';
+require_once __DIR__ . '/../../utils/validate_session.php';
+
+validateSession();
+// POST /matches
 
 use backend\dao\MatchesDAO;
 use dto\MessageResponseDTO;
