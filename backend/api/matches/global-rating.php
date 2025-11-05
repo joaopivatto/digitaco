@@ -1,10 +1,11 @@
 <?php
 
-session_start();
-// GET /matches/global-rating
-
 require_once __DIR__ . '/../../dao/MatchesDAO.php';
 require_once __DIR__ . '/../../dto/MessageResponseDTO.php';
+require_once __DIR__ . '/../../utils/validate_session.php';
+
+validateSession();
+// GET /matches/global-rating
 
 use backend\dao\MatchesDAO  ;
 use dto\MessageResponseDTO;

@@ -9,7 +9,7 @@ class Database
     private static $host = 'localhost';
     private static $db_name = 'digitaco';
     private static $username = 'root';
-    private static $password = 'vertrigo';
+    private static $password = '20122003';
     private static $conn;
 
     public static function connect()
