@@ -1,6 +1,7 @@
 <?php
 
 session_start();
+validateSession();
 // GET /leagues?id={id}
 
 require_once __DIR__ . '/../../dao/LeaguesDAO.php';

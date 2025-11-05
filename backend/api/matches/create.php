@@ -1,6 +1,7 @@
 <?php
 
 session_start();
+validateSession();
 // POST /matches
 
 require_once __DIR__ . '/../../dao/MatchesDAO.php';

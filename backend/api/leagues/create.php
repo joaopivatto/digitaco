@@ -1,6 +1,7 @@
 <?php
 
 session_start();
+validateSession();
 // POST /leagues
 
 require_once __DIR__ . '/../../dao/LeaguesDAO.php';

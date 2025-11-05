@@ -1,6 +1,7 @@
 <?php
 
 session_start();
+validateSession();
 header('Content-Type: application/json');
 
 require_once __DIR__ . '/../../config/Database.php';

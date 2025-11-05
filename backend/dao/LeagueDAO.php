@@ -65,6 +65,7 @@ class LeagueDAO
 
     public static function insertUserLeague($idLeague, $password)
     {
+        validateSession();
         $conn = Database::connect();
         $nameLeague = self::validateExistentLeague($idLeague);
         if (!$nameLeague)
@@ -103,6 +104,7 @@ class LeagueDAO
 
     public static function deleteUserLeague($idLeague)
     {
+        validateSession();
         $conn = Database::connect();
         $nameLeague = self::validateExistentLeague($idLeague);
         if (!$nameLeague)

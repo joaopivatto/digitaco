@@ -1,6 +1,7 @@
 <?php
 
 session_start();
+valiateSession();
 // GET /leagues/{id}/points
 
 require_once __DIR__ . '/../../dao/LeaguesDAO.php';
