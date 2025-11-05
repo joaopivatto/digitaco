@@ -1,8 +1,36 @@
-import { Config } from "../config/index.js";
-
 export class UsersController {
     constructor (config) {
         this.config = config
+    }
+
+    async joinLeague(leagueId) {
+        const response = await fetch(`${this.config.API_BASE_URL}/users/league/${leagueId}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" }
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.message)
+        }
+
+        return data.message
+    }
+
+    async leaveLeague(leagueId) {
+        const response = await fetch(`${this.config.API_BASE_URL}/users/league/${leagueId}`, {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" }
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.message)
+        }
+
+        return data.message
     }
 
     async logOut() {
