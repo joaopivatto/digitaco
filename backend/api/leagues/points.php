@@ -1,6 +1,7 @@
 <?php
 
 session_start();
+valiateSession();
 // GET /leagues/{id}/points
 
 require_once __DIR__ . '/../../dao/LeaguesDAO.php';
@@ -24,7 +25,7 @@ if ($userId === null) {
 }
 
 try {
-    $list = LeaguesDAO::getTablePoints($id);
+    $list = LeaguesDAO::getRating($id);
     http_response_code($list->getStatusCode());
     echo json_encode($list->jsonSerialize());
 } catch (Throwable $e) {

@@ -182,20 +182,17 @@ REQUEST
 
 RESPONSE 201 (Created)
 {
-    "message": "Liga criada com sucesso!",
-    "statusCode": 201
+    "message": "Liga criada com sucesso!"
 }
 
 RESPONSE 409 (Conflict)
 {
-    "message": "Esta liga já existe!",
-    "statusCode": 409
+    "message": "Esta liga já existe!"
 }
 
 RESPONSE 422 (Unprocessable Entity)
 {
-    "message": "Campos Inválidos!",
-    "statusCode": 422
+    "message": "Campos Inválidos!"
 }
 ```
 
@@ -208,21 +205,23 @@ RESPONSE 422 (Unprocessable Entity)
 RESPONSE 200 (OK)
 {
     "message": "Ligas encontradas!",
-    "statusCode": 200,
     "data": [
         {
             "id": 3,
             "name": "League One",
+            "members": 1,
             "included": false
         },
         {
             "id": 4,
             "name": "League Two",
+            "members": 1,
             "included": false
         },
         {
             "id": 5,
             "name": "League Three",
+            "members": 1,
             "included": false
         }
     ]
@@ -236,17 +235,16 @@ RESPONSE 200 (OK)
 RESPONSE 200 (OK)
 {
     "message": "Liga encontrada!",
-    "statusCode": 200,
     "league": {
         "id": 8,
-        "name": "League Five"
+        "name": "League Five",
+        "members": 1,
     }
 }
 
 RESPONSE 404 (NOT FOUND)
 {
-    "message": "Liga não encontrada!",
-    "statusCode": 404
+    "message": "Liga não encontrada!"
 }
 ```
 
@@ -257,15 +255,17 @@ RESPONSE 404 (NOT FOUND)
 RESPONSE 200 (OK)
 {
     "message": "Ligas encontradas!",
-    "statusCode": 200,
     "data": [
         {
             "id": 3,
-            "name": "League One"
+            "name": "League One",
+            "members": 1,
+            
         },
         {
             "id": 4,
-            "name": "League Two"
+            "name": "League Two",
+            "members": 1,
         }
     ]
 }
@@ -278,11 +278,11 @@ RESPONSE 200 (OK)
 RESPONSE 200 (OK)
 {
     "message": "Ligas encontradas!",
-    "statusCode": 200,
     "data": [
         {
             "id": 5,
-            "name": "League Five"
+            "name": "League Five",
+            "members": 1,
         }
     ]
 }
@@ -294,14 +294,12 @@ RESPONSE 200 (OK)
 
 RESPONSE 200 (OK)
 {
-    "message": "Liga excluída com sucesso!",
-    "statusCode": 200
+    "message": "Liga excluída com sucesso!"
 }
 
 RESPONSE 404 (NOT FOUND)
 {
-    "message": "Liga não encontrada!",
-    "statusCode": 404
+    "message": "Liga não encontrada!"
 }
 ```
 
@@ -312,23 +310,25 @@ RESPONSE 404 (NOT FOUND)
 RESPONSE 200 (OK)
 {
     "message": "Pontuação Geral da Liga!",
-    "statusCode": 200,
     "data": [
         {
             "name": "pivatto",
-            "points": 260
+            "points": 260,
+            "matches": 8,
+            "average": 880
         },
         {
             "name": "samuel",
-            "points": 240
+            "points": 240,
+            "matches": 5,
+            "average": 670
         }
     ]
 }
 
 RESPONSE 404 (NOT FOUND)
 {
-    "message": "Liga não encontrada!",
-    "statusCode": 404
+    "message": "Liga não encontrada!"
 }
 ```
 
@@ -338,60 +338,118 @@ RESPONSE 404 (NOT FOUND)
 
 RESPONSE 200 (OK)
 {
-    "message": "Pontuação Geral da Liga!",
-    "statusCode": 200,
+    "message": "Pontuação Semanal da Liga!",
     "data": [
         {
             "name": "pivatto",
-            "points": 260
+            "points": 260,
+            "matches": 8,
+            "average": 880
         },
         {
             "name": "samuel",
-            "points": 160
+            "points": 1000,
+            "matches": 2,
+            "average": 500
         }
     ]
 }
 
 RESPONSE 404 (NOT FOUND)
 {
-    "message": "Liga não encontrada!",
-    "statusCode": 404
+    "message": "Liga não encontrada!"
 }
 ```
 
 ### 🎯 Matches
 
-#### 🎮 POST /matches
+#### 🎮 POST /api/matches/create.php
 ```json
+// Criar Partida
+
 REQUEST
 {
-    "points": 120,
-    "leagueId": 1 ?? null,
+    "points": 1130,
+    "words": 14,
+    "leagueId": 2
 }
 ```
 
 ```json
-RESPONSE
+RESPONSE 201 (Created)
 {
     "message": "Partida finalizada!"
-    "points": 120
 }
 ```
 
 
-#### 📋 GET /matches
+#### 📋 GET /api/matches/user-history.php
 ```json
-RESPONSE
+// Histórico do Usuário
+
+RESPONSE 200 (OK)
 {
-    "message": "Partidas!"
-    [
+    "message": "Histórico de Partidas!",
+    "userPerformance": {
+        "totalMatches": 9,
+        "totalWords": 1219,
+        "totalPoints": 8170,
+        "bestScore": 1130,
+        "matches": [
+            {
+                "points": 1130,
+                "words": 14,
+                "date": "04/11/2025 15:50"
+            }
+
+        ]
+    }
+}
+```
+
+#### 📋 GET /api/matches/global-rating.php
+```json
+// Ranking Geral
+
+RESPONSE 200 (OK)
+{
+    "message": "Ranking Geral!",
+    "data": [
         {
-            "points": 120,
-            "playedAt": "20/12/2025"
+            "name": "pivatto",
+            "points": 8170,
+            "matches": 9,
+            "average": 907.78
         },
         {
-            "points": 112,
-            "playedAt": "21/12/2025"
+            "name": "samuel",
+            "points": 240,
+            "matches": 2,
+            "average": 120
+        }
+    ]
+}
+```
+
+#### 📋 GET /api/matches/global-rating-weekly.php
+```json
+// Ranking Semanal
+
+RESPONSE 200 (OK)
+{
+    "message": "Ranking Geral Semanal!",
+    "data": [
+        {
+            "name": "pivatto",
+            "points": 8170,
+            "matches": 9,
+            "average": 907.78
+        },
+        {
+            "name": "samuel",
+            "points": 160,
+            "matches": 1,
+            "average": 160
         }
     ]
 }

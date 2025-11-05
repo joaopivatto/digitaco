@@ -1,10 +1,12 @@
 <?php
 
-session_start();
-// GET /leagues?name={name}
-
 require_once __DIR__ . '/../../dao/LeaguesDAO.php';
 require_once __DIR__ . '/../../dto/MessageResponseDTO.php';
+require_once __DIR__ . '/../../utils/validate_session.php';
+
+validateSession();
+// GET /leagues?name={name}
+
 
 use backend\dao\LeaguesDAO;
 use dto\MessageResponseDTO;

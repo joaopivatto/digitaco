@@ -9,16 +9,19 @@ class LeaguesListResponseDTO
 
     private string $name;
 
+    private int $members;
+
     private bool $included;
 
     /**
      * @param int $id
      * @param string $name
      */
-    public function __construct(int $id, string $name, bool $included)
+    public function __construct(int $id, string $name, int $members, bool $included)
     {
         $this->id = $id;
         $this->name = $name;
+        $this->members = $members;
         $this->included = $included;
     }
 
@@ -27,6 +30,7 @@ class LeaguesListResponseDTO
         return [
             "id" => $this->id,
             "name" => $this->name,
+            "members" => $this->members,
             "included" => $this->included
         ];
     }
@@ -49,6 +53,16 @@ class LeaguesListResponseDTO
     public function setName(string $name): void
     {
         $this->name = $name;
+    }
+
+    public function getMembers(): int
+    {
+        return $this->members;
+    }
+
+    public function setMembers(int $members): void
+    {
+        $this->members = $members;
     }
 
     public function isIncluded(): bool

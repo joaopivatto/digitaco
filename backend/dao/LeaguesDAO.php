@@ -9,6 +9,8 @@ require_once __DIR__ . '/../dto/leagues/LeaguesListResponseDTO.php';
 require_once __DIR__ . '/../dto/leagues/LeaguesSimpleListResponse.php';
 require_once __DIR__ . '/../dto/ArrayResponseDTO.php';
 require_once __DIR__ . '/../dto/users/UsersPointsDTO.php';
+require_once __DIR__ . '/UsersDAO.php';
+require_once __DIR__ . '/MatchesDAO.php';
 
 use backend\config\Database;
 use dto\ArrayResponseDTO;
@@ -23,6 +25,10 @@ class LeaguesDAO
 
     public static function create($name, $password, $creatorId): MessageResponseDTO
     {
+
+        if(!UsersDAO::validateExistentUser($creatorId)) {
+            return new MessageResponseDTO("Usuário não encontrado!", 404);
+        }
 
         if (self::findByNameBoolean($name)) {
             return new MessageResponseDTO("Esta liga já existe!", 409);
@@ -50,15 +56,19 @@ class LeaguesDAO
             $sql = $conn->prepare("
                 SELECT 
                     leagues.*, 
+                    COUNT(league_user_members.user_id) AS members,
                     CASE 
-                        WHEN league_user.user_id IS NOT NULL THEN TRUE 
+                        WHEN league_user_included.user_id IS NOT NULL THEN TRUE 
                         ELSE FALSE 
                     END AS included
                 FROM leagues
-                LEFT JOIN league_user 
-                    ON leagues.id = league_user.league_id 
-                    AND league_user.user_id = ?
+                LEFT JOIN league_user league_user_members 
+                    ON leagues.id = league_user_members.league_id
+                LEFT JOIN league_user league_user_included 
+                    ON leagues.id = league_user_included.league_id AND league_user_included.user_id = ?
                 WHERE leagues.name LIKE ?
+                GROUP BY leagues.id
+                ORDER BY leagues.id;
             ");
             $param = "%$name%";
             $sql->bind_param("is", $id, $param);
@@ -66,14 +76,19 @@ class LeaguesDAO
             $sql = $conn->prepare("
                 SELECT 
                     leagues.*, 
+                    COUNT(league_user_members.user_id) AS members,
                     CASE 
-                        WHEN league_user.user_id IS NOT NULL THEN TRUE 
+                        WHEN league_user_included.user_id IS NOT NULL THEN TRUE 
                         ELSE FALSE 
                     END AS included
                 FROM leagues
-                LEFT JOIN league_user 
-                    ON leagues.id = league_user.league_id 
-                    AND league_user.user_id = ?");
+                LEFT JOIN league_user league_user_members 
+                    ON leagues.id = league_user_members.league_id
+                LEFT JOIN league_user league_user_included 
+                    ON leagues.id = league_user_included.league_id AND league_user_included.user_id = ?
+                GROUP BY leagues.id
+                ORDER BY leagues.id;
+            ");
             $sql->bind_param("i", $id);
         }
 
@@ -83,7 +98,7 @@ class LeaguesDAO
         $leagues = [];
         if ($res) {
             while ($row = $res->fetch_assoc()) {
-                $league = new LeaguesListResponseDTO($row['id'], $row['name'], $row['included']);
+                $league = new LeaguesListResponseDTO($row['id'], $row['name'], $row['members'], $row['included']);
                 $leagues[] = $league->jsonSerialize();
             }
         }
@@ -93,19 +108,36 @@ class LeaguesDAO
 
     public static function findById($id): MessageResponseDTO {
         $conn = Database::connect();
-        $sql = $conn->prepare("SELECT * FROM leagues WHERE id = ?");
+        $sql = $conn->prepare("
+            SELECT 
+                leagues.id, leagues.name, COUNT(league_user.id) AS members 
+            FROM leagues 
+            INNER JOIN league_user ON leagues.id = league_user.league_id
+            WHERE leagues.id = ?");
         $sql->bind_param("i", $id);
         $sql->execute();
         $res = $sql->get_result();
         if ($res && $row=$res->fetch_assoc()) {
-            return new LeaguesResponseDTO("Liga encontrada!", 200, $row['id'], $row['name']);
+            return new LeaguesResponseDTO("Liga encontrada!", 200, $row['id'], $row['name'], $row['members']);
         }
         return new MessageResponseDTO("Liga não encontrada!", 404);
     }
 
     public static function findAllByCreatorId($creatorId): MessageResponseDTO {
+
+        if(!UsersDAO::validateExistentUser($creatorId)) {
+            return new MessageResponseDTO("Usuário não encontrado!", 404);
+        }
+
         $conn = Database::connect();
-        $sql = $conn->prepare("SELECT * FROM leagues WHERE creator_id = ?");
+        $sql = $conn->prepare("
+            SELECT 
+                leagues.id, leagues.name, COUNT(league_user.id) AS members
+            FROM leagues 
+            INNER JOIN league_user ON leagues.id = league_user.league_id
+            WHERE creator_id = ?
+            GROUP BY leagues.id
+        ");
         $sql->bind_param("i", $creatorId);
         $sql->execute();
         $res = $sql->get_result();
@@ -113,7 +145,7 @@ class LeaguesDAO
         $leagues = [];
         if ($res) {
             while ($row = $res->fetch_assoc()) {
-                $league = new LeaguesSimpleListResponse($row['id'], $row['name']);
+                $league = new LeaguesSimpleListResponse($row['id'], $row['name'], $row['members']);
                 $leagues[] = $league->jsonSerialize();
             }
         }
@@ -122,11 +154,19 @@ class LeaguesDAO
     }
 
     public static function findAllByIncludedId($includedId): MessageResponseDTO {
+
+        if(!UsersDAO::validateExistentUser($includedId)) {
+            return new MessageResponseDTO("Usuário não encontrado!", 404);
+        }
+
         $conn = Database::connect();
         $sql = $conn->prepare("
-            SELECT * FROM leagues
+            SELECT 
+                leagues.*, COUNT(league_user.id) AS members  
+            FROM leagues
             INNER JOIN league_user ON leagues.id = league_user.league_id
             WHERE league_user.user_id = ?
+            GROUP BY leagues.id;
         ");
         $sql->bind_param("i", $includedId);
         $sql->execute();
@@ -135,7 +175,7 @@ class LeaguesDAO
         $leagues = [];
         if ($res) {
             while ($row = $res->fetch_assoc()) {
-                $league = new LeaguesSimpleListResponse($row['id'], $row['name']);
+                $league = new LeaguesSimpleListResponse($row['id'], $row['name'], $row['members']);
                 $leagues[] = $league->jsonSerialize();
             }
         }
@@ -165,64 +205,16 @@ class LeaguesDAO
         return new MessageResponseDTO("Liga não encontrada!", 404);
     }
 
-    public static function getTablePoints($id): MessageResponseDTO {
+    public static function getRating($id): MessageResponseDTO {
         if (self::findByIdBoolean($id)) {
-            $conn = Database::connect();
-            $sql = $conn->prepare("
-                SELECT 
-                    users.name AS user,
-                    SUM(matches.points) AS points
-                FROM matches
-                INNER JOIN users ON users.id = matches.user_id
-                WHERE matches.league_id = ?
-                GROUP BY users.id, users.name
-                ORDER BY points DESC;
-            ");
-            $sql->bind_param("i", $id);
-            $sql->execute();
-            $res = $sql->get_result();
-
-            $points = [];
-            if ($res) {
-                while ($row = $res->fetch_assoc()) {
-                    $point = new UsersPointsDTO($row['user'], $row['points']);
-                    $points[] = $point->jsonSerialize();
-                }
-            }
-
-            return new ArrayResponseDTO("Pontuação Geral da Liga!", 200, $points);
+            return MatchesDAO::getLeagueRating($id);
         }
         return new MessageResponseDTO("Liga não encontrada!", 404);
     }
 
-    public static function getWeekTablePoints($id): MessageResponseDTO {
+    public static function getWeekRating($id): MessageResponseDTO {
         if (self::findByIdBoolean($id)) {
-            $conn = Database::connect();
-            $sql = $conn->prepare("
-                SELECT 
-                    users.name AS user,
-                    SUM(matches.points) AS points
-                FROM matches
-                INNER JOIN users ON users.id = matches.user_id
-                WHERE 
-                    matches.league_id = ?
-                    AND matches.played_at >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
-                GROUP BY users.id, users.name
-                ORDER BY points DESC;
-            ");
-            $sql->bind_param("i", $id);
-            $sql->execute();
-            $res = $sql->get_result();
-
-            $points = [];
-            if ($res) {
-                while ($row = $res->fetch_assoc()) {
-                    $point = new UsersPointsDTO($row['user'], $row['points']);
-                    $points[] = $point->jsonSerialize();
-                }
-            }
-
-            return new ArrayResponseDTO("Pontuação Geral da Liga!", 200, $points);
+            return MatchesDAO::getLeagueRatingWeekly($id);
         }
         return new MessageResponseDTO("Liga não encontrada!", 404);
     }
