@@ -1,13 +1,14 @@
+import { Config } from "../config/index.js";
+
 export class UsersController {
     constructor (config) {
         this.config = config
     }
 
     async logOut() {
-        const response = await fetch(`${this.config.BASE_URL}/users/logout.php`, {
+        const response = await fetch(`${this.config.API_BASE_URL}/users/logout.php`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload)
+            headers: { "Content-Type": "application/json" }
         });
 
         const data = await response.json();
@@ -28,7 +29,7 @@ export class UsersController {
 
         this.validate(password, "change-password")
 
-        const response = await fetch(`${this.config.BASE_URL}/users/change-password.php`, {
+        const response = await fetch(`${this.config.API_BASE_URL}/users/change-password.php`, {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload)
@@ -51,7 +52,7 @@ export class UsersController {
 
         this.validate(payload, "sign-in")
 
-        const response = await fetch(`${this.config.BASE_URL}/users/sign-in.php`, {
+        const response = await fetch(`${this.config.API_BASE_URL}/users/sign-in.php`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload)
@@ -75,7 +76,7 @@ export class UsersController {
 
         this.validate(payload, "sign-up")
 
-        const response = await fetch(`${this.config.BASE_URL}/users/sign-up.php`, {
+        const response = await fetch(`${this.config.API_BASE_URL}/users/sign-up.php`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload)
