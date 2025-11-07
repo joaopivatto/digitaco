@@ -19,6 +19,7 @@ class Database
             self::$conn = new mysqli(self::$host, self::$username, self::$password, self::$db_name);
             if (self::$conn->connect_error)
             {
+                self::$conn->close();
                 die(json_encode(["error" => "Conexão falhou: " . self::$conn->connect_error]));
             }
         }
