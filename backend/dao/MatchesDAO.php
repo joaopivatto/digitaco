@@ -31,7 +31,7 @@ class MatchesDAO
         $sql = $conn->prepare("INSERT INTO matches (points, words, league_id, user_id) VALUES (?,?,?, ?)");
         $sql->bind_param("iiii", $points, $words, $leagueId, $userId);
         $sql->execute();
-        $conn->close();
+        Database::close();
 
         return new MessageResponseDTO("Partida finalizada!", 201);
     }
@@ -81,7 +81,7 @@ class MatchesDAO
         }
         $historic->setMatches($matches);
 
-        $conn->close();
+        Database::close();
         return $historic;
     }
 
@@ -107,7 +107,7 @@ class MatchesDAO
             }
         }
 
-        $conn->close();
+        Database::close();
         return new ArrayResponseDTO("Ranking Geral!", 200, $rating);
     }
 
@@ -134,7 +134,7 @@ class MatchesDAO
             }
         }
 
-        $conn->close();
+        Database::close();
         return new ArrayResponseDTO("Ranking Geral Semanal!", 200, $rating);
     }
 
@@ -163,7 +163,7 @@ class MatchesDAO
             }
         }
 
-        $conn->close();
+        Database::close();
         return new ArrayResponseDTO("Pontuação Geral da Liga!", 200, $points);
     }
 
@@ -194,7 +194,7 @@ class MatchesDAO
             }
         }
 
-        $conn->close();
+        Database::close();
         return new ArrayResponseDTO("Pontuação Semanal da Liga!", 200, $points);
     }
 

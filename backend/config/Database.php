@@ -25,4 +25,13 @@ class Database
         }
         return self::$conn;
     }
+
+    public static function close()
+    {
+        if (self::$conn)
+        {
+            self::$conn->close();
+            self::$conn = null;
+        }
+    }
 }

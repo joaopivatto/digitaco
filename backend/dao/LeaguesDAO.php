@@ -32,12 +32,12 @@ class LeaguesDAO
 
         if ($resultValidation->num_rows === 0)
         {
-            $conn->close();
+            Database::close();
             return false;
         }
 
         $row = $resultValidation->fetch_assoc();
-        $conn->close();
+        Database::close();
         return $row['name'];
     }
 
@@ -52,12 +52,12 @@ class LeaguesDAO
 
         if ($resultPassword && $row = $resultPassword->fetch_assoc()) {
             if (password_verify($password,$row['password'])) {
-                $conn->close();
+                Database::close();
                 return true;
             }
         }
 
-        $conn->close();
+        Database::close();
         return false;
     }
 
@@ -72,11 +72,11 @@ class LeaguesDAO
 
         if ($resultValidation->num_rows === 0)
         {
-            $conn->close();
+            Database::close();
             return false;
         }
 
-        $conn->close();
+        Database::close();
         return true;
     }
 
@@ -87,7 +87,7 @@ class LeaguesDAO
         $nameLeague = self::validateExistentLeague($idLeague);
         if (!$nameLeague)
         {
-            $conn->close();
+            Database::close();
             return [
                 "success" => false,
                 "reason" => "league_not_found"
@@ -96,7 +96,7 @@ class LeaguesDAO
 
         if (!self::validatePasswordLeague($idLeague, $password))
         {
-            $conn->close();
+            Database::close();
             return [
                 "success" => false,
                 "reason" => "league_password_incorrect"
@@ -105,7 +105,7 @@ class LeaguesDAO
 
         if (self::validateExistentUserLeague($idLeague))
         {
-            $conn->close();
+            Database::close();
             return [
                 "success" => false,
                 "reason" => "user_already_in_league"
@@ -116,7 +116,7 @@ class LeaguesDAO
         $sql->bind_param("ii", $idLeague, $_SESSION['userId']);
         $sql->execute();
 
-        $conn->close();
+        Database::close();
         return [
             "success" => true,
             "leagueName" => $nameLeague
@@ -130,7 +130,7 @@ class LeaguesDAO
         $nameLeague = self::validateExistentLeague($idLeague);
         if (!$nameLeague)
         {
-            $conn->close();
+            Database::close();
             return [
                 "success" => false,
                 "reason" => "league_not_found"
@@ -139,7 +139,7 @@ class LeaguesDAO
 
         if (!self::validateExistentUserLeague($idLeague))
         {
-            $conn->close();
+            Database::close();
             return [
                 "success" => false,
                 "reason" => "user_not_already_in_league"
@@ -150,7 +150,7 @@ class LeaguesDAO
         $sql->bind_param("ii", $idLeague, $_SESSION['userId']);
         $sql->execute();
 
-        $conn->close();
+        Database::close();
         return [
             "success" => true,
             "leagueName" => $nameLeague
@@ -179,7 +179,7 @@ class LeaguesDAO
         $sql->bind_param("ii", $leagueId, $creatorId);
         $sql->execute();
 
-        $conn->close();
+        Database::close();
         return new MessageResponseDTO("Liga criada com sucesso!", 201);
     }
 
@@ -238,7 +238,7 @@ class LeaguesDAO
             }
         }
 
-        $conn->close();
+        Database::close();
         return new ArrayResponseDTO("Ligas encontradas!", 200, $leagues);
     }
 
@@ -254,10 +254,10 @@ class LeaguesDAO
         $sql->execute();
         $res = $sql->get_result();
         if ($res && $row=$res->fetch_assoc()) {
-            $conn->close();
+            Database::close();
             return new LeaguesResponseDTO("Liga encontrada!", 200, $row['id'], $row['name'], $row['members']);
         }
-        $conn->close();
+        Database::close();
         return new MessageResponseDTO("Liga não encontrada!", 404);
     }
 
@@ -288,7 +288,7 @@ class LeaguesDAO
             }
         }
 
-        $conn->close();
+        Database::close();
         return new ArrayResponseDTO("Ligas encontradas!", 200, $leagues);
     }
 
@@ -319,7 +319,7 @@ class LeaguesDAO
             }
         }
 
-        $conn->close();
+        Database::close();
         return new ArrayResponseDTO("Ligas encontradas!", 200, $leagues);
     }
 
@@ -340,7 +340,7 @@ class LeaguesDAO
             $sql->bind_param("i", $id);
             $sql->execute();
 
-            $conn->close();
+            Database::close();
             return new MessageResponseDTO("Liga excluída com sucesso!", 200);
         }
         return new MessageResponseDTO("Liga não encontrada!", 404);
@@ -367,7 +367,7 @@ class LeaguesDAO
         $sql->execute();
         $res = $sql->get_result();
         $result = $res && $res->num_rows > 0;
-        $conn->close();
+        Database::close();
 
         return $result;
     }
@@ -380,7 +380,7 @@ class LeaguesDAO
         $res = $sql->get_result();
 
         $result = $res && $res->num_rows > 0;
-        $conn->close();
+        Database::close();
 
         return $result;
     }
