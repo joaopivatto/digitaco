@@ -5,7 +5,83 @@ export class LeaguesController {
         this.config = config
     }
 
-    async findOne(leagueId) {
+    async getLeaguePointsWeekly(leagueId) {
+        const response = await fetch(`${this.config.API_BASE_URL}/leagues/points-weekly.php?id=${leagueId}`, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.message)
+        }
+
+        return data
+    }
+
+    async getLeaguePoints(leagueId) {
+        const response = await fetch(`${this.config.API_BASE_URL}/leagues/points.php?id=${leagueId}`, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.message)
+        }
+
+        return data
+    }
+
+    async deleteLeague(leagueId) {
+        const response = await fetch(`${this.config.API_BASE_URL}/leagues/delete.php?id=${leagueId}`, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.message)
+        }
+
+        return data
+    }
+
+    async getLeaguesUserIsIncluded() {
+        const response = await fetch(`${this.config.API_BASE_URL}/leagues/creator.php`, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.message)
+        }
+
+        return data
+    }
+
+    async getLeaguesUserIsCreator() {
+        const response = await fetch(`${this.config.API_BASE_URL}/leagues/creator.php`, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.message)
+        }
+
+        return data
+    }
+
+
+    async findById(leagueId) {
         const response = await fetch(`${this.config.API_BASE_URL}/leagues/find-by-id.php?id=${leagueId}`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
