@@ -1,8 +1,8 @@
 <?php
 
-use backend\dao\LeagueDAO;
+use backend\dao\LeaguesDAO;
 
-require_once __DIR__ . '/../../dao/LeagueDAO.php';
+require_once __DIR__ . '/../../dao/LeaguesDAO.php';
 require_once __DIR__ . '/../../utils/validate_session.php';
 
 validateSession();
@@ -23,7 +23,7 @@ if (empty($idLeague) || empty($password))
     exit;
 }
 
-$insert = LeagueDAO::insertUserLeague($idLeague, $password);
+$insert = LeaguesDAO::insertUserLeague($idLeague, $password);
 
 try {
     if (!$insert['success'])

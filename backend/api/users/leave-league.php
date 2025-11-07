@@ -1,10 +1,11 @@
 <?php
 
-use backend\dao\LeagueDAO;
+use backend\dao\LeaguesDAO;
 
-require_once __DIR__ . "/../../dao/LeagueDAO.php";
+require_once __DIR__ . "/../../dao/LeaguesDAO.php";
+require_once __DIR__ . '/../../utils/validate_session.php';
 
-session_start();
+valiateSession();
 header('Content-Type: application/json');
 
 $arquivo = file_get_contents('php://input');
@@ -21,7 +22,7 @@ if (empty($idLeague))
     exit;
 }
 
-$delete = LeagueDAO::deleteUserLeague($idLeague);
+$delete = LeaguesDAO::deleteUserLeague($idLeague);
 
 try {
     if (!$delete['success'])
