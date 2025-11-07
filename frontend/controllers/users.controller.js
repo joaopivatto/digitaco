@@ -1,3 +1,9 @@
+import { 
+    validateConfirmPassword,
+    validateEmail,
+    validateName,
+    validatePassword } from "../utils/validations.js";
+
 export class UsersController {
     constructor (config) {
         this.config = config
@@ -121,36 +127,20 @@ export class UsersController {
     
     validate(payload, domain) {
         if (domain === "sign-up") {
-            const nameIsValid = this.validateName(payload.name)
+            const nameIsValid = validateName(payload.name)
             if (!nameIsValid) throw new Error("Nome inválido ou vazio.")
         }
         
         if (domain !== "change-password") {
-            const emailIsValid = this.validateEmail(payload.email)
+            const emailIsValid = validateEmail(payload.email)
             if (!emailIsValid) throw new Error("Email inválido!")
         } else {
-            const confirmPasswordIsValid = this.validateConfirmPassword(payload.password, payload.confirmPassword)
+            const confirmPasswordIsValid = validateConfirmPassword(payload.password, payload.confirmPassword)
             if (!confirmPasswordIsValid) throw new Error("As senhas não coincidem!")
         }
         
-        const passwordIsValid = this.validatePassword(payload.password)
+        const passwordIsValid = validatePassword(payload.password)
         if (!passwordIsValid) throw new Error("Senha inválida!")
         
-    }
-
-    validateName(name) {
-        if (!name) return false
-        return true
-    }
-    validateEmail(email) {
-        const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-        return regex.test(email)
-    }
-    validatePassword(password) {
-        const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
-        return regex.test(password)
-    }
-    validateConfirmPassword(password, confirmPassword) {
-        return password === confirmPassword
     }
 }
