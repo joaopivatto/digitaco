@@ -16,7 +16,9 @@ class UsersDAO
         $sql = $conn->prepare("INSERT INTO users (name,email,password) VALUES (?,?,?)");
         $hash = password_hash($password, PASSWORD_DEFAULT);
         $sql->bind_param("sss", $name, $email, $hash);
-        return $sql->execute();
+        $result = $sql->execute();
+        Database::close();
+        return $result;
     }
 
     public static function updatePassword(string $email, string $newPassword): bool
@@ -28,8 +30,10 @@ class UsersDAO
             $hash = password_hash($newPassword, PASSWORD_DEFAULT);
             $sql = $conn->prepare("UPDATE users SET password = ? where email = ?");
             $sql->bind_param("ss", $hash, $email);
+            Database::close();
             return $sql->execute();
         } else {
+            Database::close();
             return false;
         }
     }
@@ -46,9 +50,11 @@ class UsersDAO
 
         if ($resultValidation->num_rows === 0)
         {
+            Database::close();
             return false;
         }
 
+        Database::close();
         return true;
     }
 
@@ -64,9 +70,11 @@ class UsersDAO
 
         if ($resultValidation->num_rows === 0)
         {
+            Database::close();
             return false;
         }
 
+        Database::close();
         return true;
     }
 
@@ -78,9 +86,11 @@ class UsersDAO
         $res = $sql->get_result();
         if ($res && $row=$res->fetch_assoc()) {
             if (password_verify($password,$row['password'])) {
+                Database::close();
                 return new Users($row['id'],$row['name'],$row['email'],$row['password']);
             }
         }
+        Database::close();
         return null;
     }
 }

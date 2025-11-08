@@ -1,8 +1,8 @@
 <?php
 
-use backend\dao\LeagueDAO;
+use backend\dao\LeaguesDAO;
 
-require_once __DIR__ . "/../../dao/LeagueDAO.php";
+require_once __DIR__ . "/../../dao/LeaguesDAO.php";
 require_once __DIR__ . '/../../utils/validate_session.php';
 
 validateSession();
@@ -22,7 +22,7 @@ if (empty($idLeague))
     exit;
 }
 
-$delete = LeagueDAO::deleteUserLeague($idLeague);
+$delete = LeaguesDAO::deleteUserLeague($idLeague);
 
 try {
     if (!$delete['success'])
