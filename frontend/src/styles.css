@@ -1,0 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@import "tailwindcss";
+
+/* * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+} */
+
+:root {
+  --primary: #6754f7;
+  --primary-hover: #5741fc;
+  --logo: "Press Start 2P", system-ui
+}
+
+.digitaco {
+  font-family: var(--logo);
+}
