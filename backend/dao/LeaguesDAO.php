@@ -21,141 +21,6 @@ use dto\leagues\LeaguesResponseDTO;
 
 class LeaguesDAO
 {
-    public static function validateExistentLeague($id) :?string
-    {
-        $conn = Database::connect();
-
-        $validate = $conn->prepare("SELECT name FROM leagues WHERE id = ?");
-        $validate->bind_param("i", $id);
-        $validate->execute();
-        $resultValidation = $validate->get_result();
-
-        if ($resultValidation->num_rows === 0)
-        {
-            Database::close();
-            return false;
-        }
-
-        $row = $resultValidation->fetch_assoc();
-        Database::close();
-        return $row['name'];
-    }
-
-    public static function validatePasswordLeague($id, $password) :?string
-    {
-        $conn = Database::connect();
-
-        $validate = $conn->prepare("SELECT password FROM leagues WHERE id = ?");
-        $validate->bind_param("i", $id);
-        $validate->execute();
-        $resultPassword = $validate->get_result();
-
-        if ($resultPassword && $row = $resultPassword->fetch_assoc()) {
-            if (password_verify($password,$row['password'])) {
-                Database::close();
-                return true;
-            }
-        }
-
-        Database::close();
-        return false;
-    }
-
-    public static function validateExistentUserLeague($idLeague)
-    {
-        $conn = Database::connect();
-
-        $validate = $conn->prepare("SELECT id FROM league_user WHERE user_id = ? AND league_id = ?");
-        $validate->bind_param("ii", $_SESSION['userId'], $idLeague);
-        $validate->execute();
-        $resultValidation = $validate->get_result();
-
-        if ($resultValidation->num_rows === 0)
-        {
-            Database::close();
-            return false;
-        }
-
-        Database::close();
-        return true;
-    }
-
-    public static function insertUserLeague($idLeague, $password)
-    {
-        validateSession();
-        $conn = Database::connect();
-        $nameLeague = self::validateExistentLeague($idLeague);
-        if (!$nameLeague)
-        {
-            Database::close();
-            return [
-                "success" => false,
-                "reason" => "league_not_found"
-            ];
-        }
-
-        if (!self::validatePasswordLeague($idLeague, $password))
-        {
-            Database::close();
-            return [
-                "success" => false,
-                "reason" => "league_password_incorrect"
-            ];
-        }
-
-        if (self::validateExistentUserLeague($idLeague))
-        {
-            Database::close();
-            return [
-                "success" => false,
-                "reason" => "user_already_in_league"
-            ];
-        }
-
-        $sql = $conn->prepare("INSERT INTO league_user (league_id, user_id) VALUES (?, ?)");
-        $sql->bind_param("ii", $idLeague, $_SESSION['userId']);
-        $sql->execute();
-
-        Database::close();
-        return [
-            "success" => true,
-            "leagueName" => $nameLeague
-        ];
-    }
-
-    public static function deleteUserLeague($idLeague)
-    {
-        validateSession();
-        $conn = Database::connect();
-        $nameLeague = self::validateExistentLeague($idLeague);
-        if (!$nameLeague)
-        {
-            Database::close();
-            return [
-                "success" => false,
-                "reason" => "league_not_found"
-            ];
-        }
-
-        if (!self::validateExistentUserLeague($idLeague))
-        {
-            Database::close();
-            return [
-                "success" => false,
-                "reason" => "user_not_already_in_league"
-            ];
-        }
-
-        $sql = $conn->prepare("DELETE FROM league_user WHERE league_id = ? AND user_id = ?");
-        $sql->bind_param("ii", $idLeague, $_SESSION['userId']);
-        $sql->execute();
-
-        Database::close();
-        return [
-            "success" => true,
-            "leagueName" => $nameLeague
-        ];
-    }
 
     public static function create($name, $password, $creatorId): MessageResponseDTO
     {
@@ -383,5 +248,45 @@ class LeaguesDAO
         Database::close();
 
         return $result;
+    }
+
+    public static function validateExistentLeague($id) :?string
+    {
+        $conn = Database::connect();
+
+        $validate = $conn->prepare("SELECT name FROM leagues WHERE id = ?");
+        $validate->bind_param("i", $id);
+        $validate->execute();
+        $resultValidation = $validate->get_result();
+
+        if ($resultValidation->num_rows === 0)
+        {
+            Database::close();
+            return false;
+        }
+
+        $row = $resultValidation->fetch_assoc();
+        Database::close();
+        return $row['name'];
+    }
+
+    public static function validatePasswordLeague($id, $password) :?string
+    {
+        $conn = Database::connect();
+
+        $validate = $conn->prepare("SELECT password FROM leagues WHERE id = ?");
+        $validate->bind_param("i", $id);
+        $validate->execute();
+        $resultPassword = $validate->get_result();
+
+        if ($resultPassword && $row = $resultPassword->fetch_assoc()) {
+            if (password_verify($password,$row['password'])) {
+                Database::close();
+                return true;
+            }
+        }
+
+        Database::close();
+        return false;
     }
 }

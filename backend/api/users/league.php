@@ -1,9 +1,11 @@
 <?php
 
-use backend\dao\LeaguesDAO;
-
-require_once __DIR__ . '/../../dao/LeaguesDAO.php';
+require_once __DIR__ . '/../../dao/LeagueUserDAO.php';
 require_once __DIR__ . '/../../utils/validate_session.php';
+require_once __DIR__ . '/../../dto/MessageResponseDTO.php';
+
+use backend\dao\LeagueUserDAO;
+use dto\MessageResponseDTO;
 
 validateSession();
 header('Content-Type: application/json');
@@ -16,39 +18,19 @@ $password = $conteudo['password'] ?? null;
 
 if (empty($idLeague) || empty($password))
 {
-    http_response_code(422);
-    echo json_encode([
-        "message" => "Campos inválidos"
-    ]);
+    $response = new MessageResponseDTO("Campos Inválidos!", 422);
+    echo json_encode($response->jsonSerialize());
     exit;
 }
 
-$insert = LeaguesDAO::insertUserLeague($idLeague, $password);
-
 try {
-    if (!$insert['success'])
-    {
-        switch ($insert['reason'])
-        {
-            case "league_not_found":
-                http_response_code(404);
-                echo json_encode(["message" => "Liga não encontrada!"]);
-                break;
-            case "user_already_in_league":
-                http_response_code(409);
-                echo json_encode(["message" => "Usuário já está na liga!"]);
-                break;
-            case "league_password_incorrect":
-                http_response_code(401);
-                echo json_encode(["message" => "Senha da liga incorreta!"]);
-                break;
-        }
-    } else {
-        http_response_code(200);
-        echo json_encode(["message" => "Bem-vindo à liga" . $insert['leagueName'] . "!"]);
-    }
+
+    $insert = LeagueUserDAO::insertLeagueUser($idLeague, $password);
+    http_response_code($insert->getStatusCode());
+    echo json_encode($insert->jsonSerialize());
 } catch (Throwable $e)
 {
     http_response_code(500);
-    echo json_encode(["error" => "Erro interno no servidor.", "details" => $e->getMessage()]);
+    $response = new MessageResponseDTO($e->getMessage(), 500);
+    echo json_encode($response->jsonSerialize());
 }
