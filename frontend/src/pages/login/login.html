@@ -1,1 +1,13 @@
-<p>login works!</p>
+<form>
+  <div class="mx-w-md rounded-lg overflow-hidden shadow-lg bg-white p-8 flex flex-col gap-8 items-center">
+    <div>
+      <h3 class="font-bold text-xl mb-2 text-gray-900 digitaco">DIGITAÇO</h3>
+      <p class="text-xl text-gray-500 font-bold text-center">Acesse sua conta</p>
+    </div>
+    <div class="flex flex-col gap-4">
+      <app-input [label]="'EMAIL'" [placeholder]="'seu@email.com'" [type]="'email'" [(ngModel)]="loginData.email" name="email" />
+      <app-input [label]="'SENHA'" [placeholder]="'********'" [type]="'password'" [(ngModel)]="loginData.senha" name="senha" />
+      <app-button [label]="'ENTRAR'" (click)="onSubmit()" [buttonClass]="'w-full text-white bg-[var(--primary)] hover:bg-[var(--primary-hover)]'" />
+    </div>
+  </div>
+</form>
