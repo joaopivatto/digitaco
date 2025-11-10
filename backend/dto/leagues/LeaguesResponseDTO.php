@@ -15,12 +15,15 @@ class LeaguesResponseDTO extends MessageResponseDTO
 
     private int $members;
 
-    public function __construct(string $message, int $statusCode, int $id, string $name, int $members)
+    private array $languages;
+
+    public function __construct(string $message, int $statusCode, int $id, string $name, int $members, array $languages)
     {
         parent::__construct($message, $statusCode);
         $this->id = $id;
         $this->name = $name;
         $this->members = $members;
+        $this->languages = $languages;
     }
 
     public function jsonSerialize(): array
@@ -31,6 +34,7 @@ class LeaguesResponseDTO extends MessageResponseDTO
                 'id' => $this->id,
                 'name' => $this->name,
                 'members' => $this->members,
+                'languages' => $this->languages
             ]
         ];
         return array_merge($parentData, $childData);
@@ -55,4 +59,25 @@ class LeaguesResponseDTO extends MessageResponseDTO
     {
         $this->name = $name;
     }
+
+    public function getMembers(): int
+    {
+        return $this->members;
+    }
+
+    public function setMembers(int $members): void
+    {
+        $this->members = $members;
+    }
+
+    public function getLanguages(): array
+    {
+        return $this->languages;
+    }
+
+    public function setLanguages(array $languages): void
+    {
+        $this->languages = $languages;
+    }
+
 }

@@ -2,43 +2,49 @@
 
 namespace backend\dao;
 
-use backend\config\Database;
-use backend\model\Users;
-
 require_once __DIR__ . '/../config/Database.php';
-require_once __DIR__ . '/../model/Users.php';
+require_once __DIR__ . '/../dto/MessageResponseDTO.php';
+require_once __DIR__ . '/../dto/users/UsersDTO.php';
+
+use backend\config\Database;
+use dto\MessageResponseDTO;
+use dto\users\UsersDTO;
 
 class UsersDAO
 {
-    public static function create(string $name, string $email, string $password): bool
+    public static function create(string $name, string $email, string $password): MessageResponseDTO
     {
+        if (self::validateExistentEmail($email)) {
+            return new MessageResponseDTO("Email já está em uso!", 409);
+        }
+
         $conn = Database::connect();
         $sql = $conn->prepare("INSERT INTO users (name,email,password) VALUES (?,?,?)");
         $hash = password_hash($password, PASSWORD_DEFAULT);
         $sql->bind_param("sss", $name, $email, $hash);
-        $result = $sql->execute();
+        $sql->execute();
+
         Database::close();
-        return $result;
+        return new MessageResponseDTO("Usuário criado com sucesso!", 201);
     }
 
-    public static function updatePassword(string $email, string $newPassword): bool
+    public static function updatePassword(string $email, string $newPassword): MessageResponseDTO
     {
-        $conn = Database::connect();
-
         if (self::validateExistentEmail($email))
         {
+            $conn = Database::connect();
             $hash = password_hash($newPassword, PASSWORD_DEFAULT);
             $sql = $conn->prepare("UPDATE users SET password = ? where email = ?");
             $sql->bind_param("ss", $hash, $email);
+            $sql->execute();
             Database::close();
-            return $sql->execute();
-        } else {
-            Database::close();
-            return false;
+
+            return new MessageResponseDTO("Senha alterada com sucesso!", 200);
         }
+        return new MessageResponseDTO("Email não existe!", 400);
     }
 
-    public static function validateExistentEmail($email)
+    public static function validateExistentEmail(string $email): bool
     {
         $conn = Database::connect();
 
@@ -48,14 +54,8 @@ class UsersDAO
         $validate->execute();
         $resultValidation = $validate->get_result();
 
-        if ($resultValidation->num_rows === 0)
-        {
-            Database::close();
-            return false;
-        }
-
         Database::close();
-        return true;
+        return $resultValidation->num_rows !== 0;
     }
 
     public static function validateExistentUser(int $id): bool
@@ -68,17 +68,11 @@ class UsersDAO
         $validate->execute();
         $resultValidation = $validate->get_result();
 
-        if ($resultValidation->num_rows === 0)
-        {
-            Database::close();
-            return false;
-        }
-
         Database::close();
-        return true;
+        return $resultValidation->num_rows !== 0;
     }
 
-    public static function authenticate(string $email, string $password): ?Users {
+    public static function authenticate(string $email, string $password): MessageResponseDTO {
         $conn = Database::connect();
         $sql = $conn->prepare("SELECT * FROM users WHERE email=?");
         $sql->bind_param("s",$email);
@@ -87,10 +81,12 @@ class UsersDAO
         if ($res && $row=$res->fetch_assoc()) {
             if (password_verify($password,$row['password'])) {
                 Database::close();
-                return new Users($row['id'],$row['name'],$row['email'],$row['password']);
+                return new UsersDTO(
+                    "Login realizado com sucesso!", 200 ,
+                    $row['id'],$row['name'],$row['email']);
             }
         }
         Database::close();
-        return null;
+        return new MessageResponseDTO("Credenciais Inválidas!", 401);
     }
 }

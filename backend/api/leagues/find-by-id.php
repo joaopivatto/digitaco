@@ -15,14 +15,7 @@ header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
 
 $id = $_GET['id'] ?? null;
-$creatorId = $_SESSION['userId'] ?? null;
-
-if ($creatorId === null) {
-    http_response_code(401);
-    $response = new MessageResponseDTO("Não autorizado!", 401);
-    echo json_encode($response->jsonSerialize());
-    return;
-}
+$creatorId = $_SESSION['userId'];
 
 try {
     $league = LeaguesDAO::findById($id);

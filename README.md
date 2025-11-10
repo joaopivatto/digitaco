@@ -65,8 +65,6 @@ REQUEST
 RESPONSE 201 (Created)
 {
     "message": "Usuário criado com sucesso!"
-    "name": "name",
-    "email": "user@email.com"
 }
 
 RESPONSE 409 (Conflict)
@@ -91,9 +89,9 @@ REQUEST
 ```json
 RESPONSE 200 (OK)
 {
-    "message": "Login realizado com sucesso!"
-    "name": "name",
-    "email": "user@email.com"
+    "message": "Login realizado com sucesso!",
+    "name": "pivatto",
+    "email": "pivatto@email.com"
 }
 
 RESPONSE 401 (Unauthorized)
@@ -142,7 +140,12 @@ RESPONSE 422 (Unprocessable Entity)
 ```json
 RESPONSE 200 (OK)
 {
-    "message": "Bem-vindo a {leagueName}!"
+    "message": "Bem-vindo a liga: {leagueName}!"
+}
+
+RESPONSE 409 (Conflict)
+{
+    "message": "Usuário já está na liga!"
 }
 
 RESPONSE 404 (NOT FOUND)
@@ -155,7 +158,12 @@ RESPONSE 404 (NOT FOUND)
 ```json
 RESPONSE 200 (OK)
 {
-    "message": "Você saiu da liga: {leagueName}!"
+    "message": "Usuário removido da liga: {leagueName}!"
+}
+
+RESPONSE 409 (Conflict)
+{
+    "message": "Usuário não está na liga!"
 }
 
 RESPONSE 404 (NOT FOUND)
@@ -174,6 +182,11 @@ REQUEST
 {
     "name": "League Name",
     "password": "!Password123",
+    "languages": [
+        "en",
+        "pt-br",
+        "es"
+    ]
 } 
 ```
 
@@ -210,19 +223,31 @@ RESPONSE 200 (OK)
             "id": 3,
             "name": "League One",
             "members": 1,
-            "included": false
+            "included": false,
+            "languages": [
+                "en",
+                "pt-br"
+            ]
         },
         {
             "id": 4,
             "name": "League Two",
             "members": 1,
-            "included": false
+            "included": false,
+            "languages": [
+                "en",
+                "pt-br"
+            ]
         },
         {
             "id": 5,
             "name": "League Three",
             "members": 1,
-            "included": false
+            "included": false,
+            "languages": [
+                "en",
+                "pt-br"
+            ]
         }
     ]
 } 
@@ -239,6 +264,11 @@ RESPONSE 200 (OK)
         "id": 8,
         "name": "League Five",
         "members": 1,
+        "languages": [
+            "en",
+            "pt-br",
+            "es"
+        ]
     }
 }
 
@@ -260,12 +290,21 @@ RESPONSE 200 (OK)
             "id": 3,
             "name": "League One",
             "members": 1,
-            
+            "languages": [
+                "en",
+                "pt-br",
+                "es"
+            ]
         },
         {
             "id": 4,
             "name": "League Two",
             "members": 1,
+            "languages": [
+                "en",
+                "pt-br",
+                "es"
+            ]
         }
     ]
 }
@@ -283,6 +322,11 @@ RESPONSE 200 (OK)
             "id": 5,
             "name": "League Five",
             "members": 1,
+            "languages": [
+                "en",
+                "pt-br",
+                "es"
+            ]
         }
     ]
 }
@@ -358,6 +402,53 @@ RESPONSE 200 (OK)
 RESPONSE 404 (NOT FOUND)
 {
     "message": "Liga não encontrada!"
+}
+```
+#### ➕ POST /api/leagues/insert-language.php
+```json
+REQUEST
+{
+    "leagueId": 1,
+    "language": "zh"
+} 
+```
+
+```json
+// Salvar Idiomas
+
+RESPONSE 201 (Created)
+{
+    "message": "Idioma adicionado com sucesso!"
+}
+
+RESPONSE 409 (Conflict)
+{
+    "message": "Idioma já adicionado!"
+}
+
+RESPONSE 422 (Unprocessable Entity)
+{
+    "message": "Campos Inválidos!"
+}
+```
+#### ➕ DELETE /api/leagues/delete-language.php?leagueId=17&language=zh
+
+```json
+// Remover Idiomas
+
+RESPONSE 200 (OK)
+{
+    "message": "Idioma removido da liga!"
+}
+
+RESPONSE 409 (Conflict)
+{
+    "message": "Idioma não adicionado!"
+}
+
+RESPONSE 422 (Unprocessable Entity)
+{
+    "message": "Campos Inválidos!"
 }
 ```
 

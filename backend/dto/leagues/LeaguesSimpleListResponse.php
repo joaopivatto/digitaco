@@ -11,15 +11,18 @@ class LeaguesSimpleListResponse
 
     private int $members;
 
+    private array $languages;
+
     /**
      * @param int $id
      * @param string $name
      */
-    public function __construct(int $id, string $name, int $members)
+    public function __construct(int $id, string $name, int $members, array $languages)
     {
         $this->id = $id;
         $this->name = $name;
         $this->members = $members;
+        $this->languages = $languages;
     }
 
     public function jsonSerialize(): array
@@ -28,6 +31,7 @@ class LeaguesSimpleListResponse
             "id" => $this->id,
             "name" => $this->name,
             "members" => $this->members,
+            "languages" => $this->languages,
         ];
     }
 
@@ -61,5 +65,17 @@ class LeaguesSimpleListResponse
     {
         $this->members = $members;
     }
+
+    public function getLanguages(): array
+    {
+        return $this->languages;
+    }
+
+    public function setLanguages(array $languages): void
+    {
+        $this->languages = $languages;
+    }
+
+
 
 }
