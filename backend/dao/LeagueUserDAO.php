@@ -19,6 +19,7 @@ class LeagueUserDAO
         $sql->execute();
         Database::close();
     }
+
     public static function validateExistentLeagueUser($idLeague)
     {
         $conn = Database::connect();
@@ -81,6 +82,14 @@ class LeagueUserDAO
 
         Database::close();
         return new MessageResponseDTO("Usuário removido da liga: " .$leagueName . "!" , 200);
+    }
+
+    public static function deleteAllLeagueUser($idLeague) {
+        $conn = Database::connect();
+        $sql = $conn->prepare("DELETE FROM league_user WHERE league_id = ?");
+        $sql->bind_param("i", $idLeague);
+        $sql->execute();
+        Database::close();
     }
 
 }

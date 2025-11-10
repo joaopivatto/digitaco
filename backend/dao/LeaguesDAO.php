@@ -56,7 +56,7 @@ class LeaguesDAO
         $leagueId = $conn->insert_id;
         Database::close();
 
-        LeagueUserDAO::insertLeagueUser($leagueId, $password);
+        LeagueUserDAO::insertCreator($leagueId, $creatorId);;
 
         LeagueIdiomesDAO::insertIdiomes($leagueId, $idiomEnums);
 
@@ -210,14 +210,10 @@ class LeaguesDAO
 
     public static function delete($id): MessageResponseDTO {
         if (self::findByIdBoolean($id)) {
-            $conn = Database::connect();
-            $sql = $conn->prepare("
-                DELETE FROM league_user
-                WHERE league_id = ?
-            ");
-            $sql->bind_param("i", $id);
-            $sql->execute();
+            LeagueUserDAO::deleteAllLeagueUser($id);
+            LeagueIdiomesDAO::deleteIdiomes($id);
 
+            $conn = Database::connect();
             $sql = $conn->prepare("
                 DELETE FROM leagues
                 WHERE id = ?

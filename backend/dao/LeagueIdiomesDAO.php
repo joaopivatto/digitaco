@@ -11,6 +11,13 @@ use backend\model\enums\IdiomEnum;
 class LeagueIdiomesDAO
 {
 
+    public static function insertIdiome(int $leagueId, int $idiomId) {
+        $conn = Database::connect();
+        $sql = $conn->prepare("INSERT INTO league_idiomes (league_id, idiom) VALUES (?,?)");
+        $sql->bind_param("ii", $leagueId, $idiomId);
+        $sql->execute();
+        Database::close();
+    }
     public static function insertIdiomes(int $leagueId, array $idioms) {
         $placeholders = [];
         $params = [];
@@ -73,5 +80,20 @@ class LeagueIdiomesDAO
         return $map;
     }
 
+    public static function deleteIdiome(int $leagueId, int $idiomId) {
+        $conn = Database::connect();
+        $sql = $conn->prepare("DELETE FROM league_idiomes WHERE league_id = ? AND idiom = ?");
+        $sql->bind_param("ii", $leagueId, $idiomId);
+        $sql->execute();
+        Database::close();
+    }
+
+    public static function deleteIdiomes(int $leagueId) {
+        $conn = Database::connect();
+        $sql = $conn->prepare("DELETE FROM league_idiomes WHERE league_id = ?");
+        $sql->bind_param("i", $leagueId);
+        $sql->execute();
+        Database::close();
+    }
 
 }
