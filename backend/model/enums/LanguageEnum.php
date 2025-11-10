@@ -2,7 +2,7 @@
 
 namespace backend\model\enums;
 
-enum IdiomEnum: int
+enum LanguageEnum: int
 {
     case EN = 1;
     case DE = 2;

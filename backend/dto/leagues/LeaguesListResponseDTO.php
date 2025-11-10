@@ -13,19 +13,19 @@ class LeaguesListResponseDTO
 
     private bool $included;
 
-    private array $idiomes;
+    private array $languages;
 
     /**
      * @param int $id
      * @param string $name
      */
-    public function __construct(int $id, string $name, int $members, bool $included, array $idiomes)
+    public function __construct(int $id, string $name, int $members, bool $included, array $languages)
     {
         $this->id = $id;
         $this->name = $name;
         $this->members = $members;
         $this->included = $included;
-        $this->idiomes = $idiomes;
+        $this->languages = $languages;
     }
 
     public function jsonSerialize(): array
@@ -35,7 +35,7 @@ class LeaguesListResponseDTO
             "name" => $this->name,
             "members" => $this->members,
             "included" => $this->included,
-            "idiomes" => $this->idiomes,
+            "languages" => $this->languages,
         ];
     }
 
@@ -79,14 +79,14 @@ class LeaguesListResponseDTO
         $this->included = $included;
     }
 
-    public function getIdiomes(): array
+    public function getLanguages(): array
     {
-        return $this->idiomes;
+        return $this->languages;
     }
 
-    public function setIdiomes(array $idiomes): void
+    public function setLanguages(array $languages): void
     {
-        $this->idiomes = $idiomes;
+        $this->languages = $languages;
     }
 
 

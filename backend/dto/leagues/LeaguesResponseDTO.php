@@ -15,15 +15,15 @@ class LeaguesResponseDTO extends MessageResponseDTO
 
     private int $members;
 
-    private array $idiomes;
+    private array $languages;
 
-    public function __construct(string $message, int $statusCode, int $id, string $name, int $members, array $idiomes)
+    public function __construct(string $message, int $statusCode, int $id, string $name, int $members, array $languages)
     {
         parent::__construct($message, $statusCode);
         $this->id = $id;
         $this->name = $name;
         $this->members = $members;
-        $this->idiomes = $idiomes;
+        $this->languages = $languages;
     }
 
     public function jsonSerialize(): array
@@ -34,7 +34,7 @@ class LeaguesResponseDTO extends MessageResponseDTO
                 'id' => $this->id,
                 'name' => $this->name,
                 'members' => $this->members,
-                'idiomes' => $this->idiomes
+                'languages' => $this->languages
             ]
         ];
         return array_merge($parentData, $childData);
@@ -70,14 +70,14 @@ class LeaguesResponseDTO extends MessageResponseDTO
         $this->members = $members;
     }
 
-    public function getIdiomes(): array
+    public function getLanguages(): array
     {
-        return $this->idiomes;
+        return $this->languages;
     }
 
-    public function setIdiomes(array $idiomes): void
+    public function setLanguages(array $languages): void
     {
-        $this->idiomes = $idiomes;
+        $this->languages = $languages;
     }
 
 }
