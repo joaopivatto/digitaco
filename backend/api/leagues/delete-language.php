@@ -5,7 +5,7 @@ require_once __DIR__ . '/../../dto/MessageResponseDTO.php';
 require_once __DIR__ . '/../../utils/validate_session.php';
 
 validateSession();
-// POST /leagues/insert-language
+// DELETE /leagues/delete-language
 
 use backend\dao\LeagueLanguagesDAO;
 use dto\MessageResponseDTO;
@@ -14,11 +14,8 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
 
-$arquivo = file_get_contents("php://input");
-$conteudo = json_decode($arquivo, true);
-
-$leagueId = $conteudo['leagueId'] ?? '';
-$language = $conteudo['language'] ?? '';
+$leagueId = $_GET['leagueId'] ?? '';
+$language = $_GET['language'] ?? '';
 $user = $_SESSION['userId'];
 
 if (empty($leagueId) || empty($language)) {
@@ -29,9 +26,9 @@ if (empty($leagueId) || empty($language)) {
 }
 
 try {
-    $created = LeagueLanguagesDAO::insertLanguage($leagueId, $language);
-    http_response_code($created->getStatusCode());
-    echo json_encode($created->jsonSerialize());
+    $deleted = LeagueLanguagesDAO::deleteLanguage($leagueId, $language);
+    http_response_code($deleted->getStatusCode());
+    echo json_encode($deleted->jsonSerialize());
 } catch (Throwable $e) {
     http_response_code(500);
     $response = new MessageResponseDTO($e->getMessage(), 500);

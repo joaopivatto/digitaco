@@ -16,6 +16,10 @@ class LeagueLanguagesDAO
 
     public static function insertLanguage(int $leagueId, string $language): MessageResponseDTO {
         $languageId = LanguageEnum::fromCode($language)->value;
+        if ($languageId == null) {
+            return new MessageResponseDTO("Idioma inválido!", 400);
+        }
+
         if(self::exists($leagueId, $languageId)) {
             return new MessageResponseDTO("Idioma já adicionado!", 409);
         }
@@ -93,6 +97,9 @@ class LeagueLanguagesDAO
 
     public static function deleteLanguage(int $leagueId, string $language): MessageResponseDTO {
         $languageId = LanguageEnum::fromCode($language)->value;
+        if ($languageId == null) {
+            return new MessageResponseDTO("Idioma inválido!", 400);
+        }
         if(!self::exists($leagueId, $languageId)) {
             return new MessageResponseDTO("Idioma não adicionado!", 409);
         }
