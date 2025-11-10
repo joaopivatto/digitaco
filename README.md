@@ -27,7 +27,9 @@
     - [👤 GET /api/leagues/includedphp](#-get-apileaguesincludedphp)
     - [🗑️ DELETE /api/leagues/deletephp?id{id}](#-delete-apileaguesdeletephpidid)
     - [🏅 GET /api/leagues/pointsphp?id{id}](#-get-apileaguespointsphpidid)
-    - [📊 GET /api/leagues/points-weeklyphp?id{id}](#-get-apileaguespoints-weeklyphpidid)
+    - [➕ POST /api/leagues/insert-language.php](#-post-apileaguesinsert-languagephp)
+    - [🗑️ DELETE /api/leagues/delete-language.php?leagueId=17&language=zh](#️-delete-apileaguesdelete-languagephpleagueid17languagezh)
+    - [POST /api/leagues/insert-language.php]
   - [🎯 Matches](#-matches)
     - [🎮 POST /matches](#-post-matches)
     - [📋 GET /matches](#-get-matches)
@@ -431,7 +433,7 @@ RESPONSE 422 (Unprocessable Entity)
     "message": "Campos Inválidos!"
 }
 ```
-#### ➕ DELETE /api/leagues/delete-language.php?leagueId=17&language=zh
+#### 🗑️ DELETE /api/leagues/delete-language.php?leagueId=17&language=zh
 
 ```json
 // Remover Idiomas
