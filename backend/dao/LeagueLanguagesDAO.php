@@ -15,7 +15,10 @@ class LeagueLanguagesDAO
 {
 
     public static function insertLanguage(int $leagueId, string $language): MessageResponseDTO {
-        $languageId = LanguageEnum::from($language)->value;
+        $languageId = LanguageEnum::fromCode($language)->value;
+        if(self::exists($leagueId, $languageId)) {
+            return new MessageResponseDTO("Idioma já adicionado!", 409);
+        }
         if (LeaguesDAO::findByIdBoolean($leagueId)) {
             $conn = Database::connect();
             $sql = $conn->prepare("INSERT INTO league_languages (league_id, language) VALUES (?,?)");
@@ -89,7 +92,10 @@ class LeagueLanguagesDAO
     }
 
     public static function deleteLanguage(int $leagueId, string $language): MessageResponseDTO {
-        $languageId = LanguageEnum::from($language)->value;
+        $languageId = LanguageEnum::fromCode($language)->value;
+        if(!self::exists($leagueId, $languageId)) {
+            return new MessageResponseDTO("Idioma não adicionado!", 409);
+        }
         if (LeaguesDAO::findByIdBoolean($leagueId)) {
             $conn = Database::connect();
             $sql = $conn->prepare("DELETE FROM league_languages WHERE league_id = ? AND language = ?");
@@ -108,6 +114,16 @@ class LeagueLanguagesDAO
         $sql->bind_param("i", $leagueId);
         $sql->execute();
         Database::close();
+    }
+
+    private static function exists(int $leagueId, int $languageId): bool {
+        $conn = Database::connect();
+        $sql = $conn->prepare("SELECT * FROM league_languages WHERE league_id = ? AND language = ?");
+        $sql->bind_param("ii", $leagueId, $languageId);
+        $sql->execute();
+        $result = $sql->get_result();
+        Database::close();
+        return $result->num_rows > 0;
     }
 
 }
