@@ -4,6 +4,7 @@ namespace backend\dao;
 
 require_once __DIR__ . '/../config/Database.php';
 require_once __DIR__ . '/../dto/MessageResponseDTO.php';;
+require_once __DIR__ . '/LeaguesDAO.php';
 
 use backend\config\Database;
 use dto\MessageResponseDTO;
