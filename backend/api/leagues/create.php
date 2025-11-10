@@ -19,9 +19,10 @@ $conteudo = json_decode($arquivo, true);
 
 $name = $conteudo['name'] ?? '';
 $password = $conteudo['password'] ?? '';
+$idiomes = $conteudo['idiomes'] ?? [];
 $creatorId = $_SESSION['userId'];
 
-if (empty($name) || empty($password)) {
+if (empty($name) || empty($password) || empty($idiomes)) {
     http_response_code(422);
     $response = new MessageResponseDTO("Campos Inválidos!", 422);
     echo json_encode($response->jsonSerialize());
@@ -29,7 +30,7 @@ if (empty($name) || empty($password)) {
 }
 
 try {
-    $created = LeaguesDAO::create($name, $password, $creatorId);
+    $created = LeaguesDAO::create($name, $password, $creatorId, $idiomes);
     http_response_code($created->getStatusCode());
     echo json_encode($created->jsonSerialize());
 } catch (Throwable $e) {

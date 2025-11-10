@@ -3,6 +3,7 @@
 namespace backend\dao;
 
 require_once __DIR__ . '/../config/Database.php';
+require_once __DIR__ . '/../model/enums/IdiomEnum.php';
 require_once __DIR__ . '/../dto/MessageResponseDTO.php';;
 require_once __DIR__ . '/../dto/leagues/LeaguesResponseDTO.php';
 require_once __DIR__ . '/../dto/leagues/LeaguesListResponseDTO.php';
@@ -11,8 +12,11 @@ require_once __DIR__ . '/../dto/ArrayResponseDTO.php';
 require_once __DIR__ . '/../dto/users/UsersPointsDTO.php';
 require_once __DIR__ . '/UsersDAO.php';
 require_once __DIR__ . '/MatchesDAO.php';
+require_once __DIR__ . '/LeagueUserDAO.php';
+require_once __DIR__ . '/LeagueIdiomesDAO.php';
 
 use backend\config\Database;
+use backend\model\enums\IdiomEnum;
 use dto\ArrayResponseDTO;
 use dto\leagues\LeaguesListResponseDTO;
 use dto\leagues\LeaguesSimpleListResponse;
@@ -22,9 +26,8 @@ use dto\leagues\LeaguesResponseDTO;
 class LeaguesDAO
 {
 
-    public static function create($name, $password, $creatorId): MessageResponseDTO
+    public static function create($name, $password, $creatorId, $idiomes): MessageResponseDTO
     {
-
         if(!UsersDAO::validateExistentUser($creatorId)) {
             return new MessageResponseDTO("Usuário não encontrado!", 404);
         }
@@ -33,6 +36,17 @@ class LeaguesDAO
             return new MessageResponseDTO("Esta liga já existe!", 409);
         }
 
+        // validate and create enum array
+        $idiomEnums = [];
+        foreach ($idiomes as $idiom) {
+            $enum = IdiomEnum::fromCode($idiom);
+            if ($enum === null) {
+                return new MessageResponseDTO("Idioma inválido: $idiom", 400);
+            }
+            $idiomEnums[] = $enum->value;
+        }
+
+
         $conn = Database::connect();
         $sql = $conn->prepare("INSERT INTO leagues (name, password, creator_id) VALUES (?,?,?)");
         $hash = password_hash($password, PASSWORD_DEFAULT);
@@ -40,11 +54,12 @@ class LeaguesDAO
         $sql->execute();
 
         $leagueId = $conn->insert_id;
-        $sql = $conn->prepare("INSERT INTO league_user (league_id, user_id) VALUES (?,?)");
-        $sql->bind_param("ii", $leagueId, $creatorId);
-        $sql->execute();
-
         Database::close();
+
+        LeagueUserDAO::insertLeagueUser($leagueId, $password);
+
+        LeagueIdiomesDAO::insertIdiomes($leagueId, $idiomEnums);
+
         return new MessageResponseDTO("Liga criada com sucesso!", 201);
     }
 
@@ -96,9 +111,11 @@ class LeaguesDAO
         $res = $sql->get_result();
 
         $leagues = [];
+        $idiomes = LeagueIdiomesDAO::getLeaguesIdiomes();
         if ($res) {
             while ($row = $res->fetch_assoc()) {
-                $league = new LeaguesListResponseDTO($row['id'], $row['name'], $row['members'], $row['included']);
+                $leagueIdiomes = $idiomes[$row['id']] ?? [];
+                $league = new LeaguesListResponseDTO($row['id'], $row['name'], $row['members'], $row['included'], $leagueIdiomes);
                 $leagues[] = $league->jsonSerialize();
             }
         }
@@ -118,11 +135,11 @@ class LeaguesDAO
         $sql->bind_param("i", $id);
         $sql->execute();
         $res = $sql->get_result();
-        if ($res && $row=$res->fetch_assoc()) {
-            Database::close();
-            return new LeaguesResponseDTO("Liga encontrada!", 200, $row['id'], $row['name'], $row['members']);
-        }
         Database::close();
+        if ($res && $row=$res->fetch_assoc()) {
+            return new LeaguesResponseDTO("Liga encontrada!", 200,
+                $row['id'], $row['name'], $row['members'], LeagueIdiomesDAO::getLeagueIdiomes($id));
+        }
         return new MessageResponseDTO("Liga não encontrada!", 404);
     }
 
@@ -146,9 +163,11 @@ class LeaguesDAO
         $res = $sql->get_result();
 
         $leagues = [];
+        $idiomes = LeagueIdiomesDAO::getLeaguesIdiomes();
         if ($res) {
             while ($row = $res->fetch_assoc()) {
-                $league = new LeaguesSimpleListResponse($row['id'], $row['name'], $row['members']);
+                $leagueIdiomes = $idiomes[$row['id']] ?? [];
+                $league = new LeaguesSimpleListResponse($row['id'], $row['name'], $row['members'], $leagueIdiomes);
                 $leagues[] = $league->jsonSerialize();
             }
         }
@@ -176,10 +195,11 @@ class LeaguesDAO
         $sql->execute();
         $res = $sql->get_result();
 
-        $leagues = [];
+        $idiomes = LeagueIdiomesDAO::getLeaguesIdiomes();
         if ($res) {
             while ($row = $res->fetch_assoc()) {
-                $league = new LeaguesSimpleListResponse($row['id'], $row['name'], $row['members']);
+                $leagueIdiomes = $idiomes[$row['id']] ?? [];
+                $league = new LeaguesSimpleListResponse($row['id'], $row['name'], $row['members'], $leagueIdiomes);
                 $leagues[] = $league->jsonSerialize();
             }
         }

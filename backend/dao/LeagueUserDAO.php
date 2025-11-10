@@ -12,6 +12,13 @@ use dto\MessageResponseDTO;
 class LeagueUserDAO
 {
 
+    public static function insertCreator(int $leagueId, int $creatorId) {
+        $conn = Database::connect();
+        $sql = $conn->prepare("INSERT INTO league_user (league_id, user_id) VALUES (?,?)");
+        $sql->bind_param("ii", $leagueId, $creatorId);
+        $sql->execute();
+        Database::close();
+    }
     public static function validateExistentLeagueUser($idLeague)
     {
         $conn = Database::connect();
