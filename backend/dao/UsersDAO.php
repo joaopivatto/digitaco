@@ -36,8 +36,8 @@ class UsersDAO
             $hash = password_hash($newPassword, PASSWORD_DEFAULT);
             $sql = $conn->prepare("UPDATE users SET password = ? where email = ?");
             $sql->bind_param("ss", $hash, $email);
-            Database::close();
             $sql->execute();
+            Database::close();
 
             return new MessageResponseDTO("Senha alterada com sucesso!", 200);
         }
