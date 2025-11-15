@@ -1,28 +1,40 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { InputComponent } from '../../components/input/input';
 import { Button } from '../../components/button/button';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
+import { MessageService } from 'primeng/api';
+import { RouterLink } from '@angular/router';
+import { ToastModule } from 'primeng/toast';
+
 
 @Component({
   selector: 'app-sign-up',
   standalone: true,
-  imports: [InputComponent, Button, FormsModule],
+  imports: [InputComponent, Button, FormsModule, ReactiveFormsModule, RouterLink, ToastModule],
+  providers: [MessageService],
   templateUrl: './sign-up.html',
   styleUrl: './sign-up.scss',
 })
 export class SignUp {
+  constructor(private messageService: MessageService) {}
 
-  signUpData = {
-    email: '',
-    password: '',
-    confirmPassword: ''
-  };
+
+  private formBuilder = inject(FormBuilder);
+  protected signUpForm = this.formBuilder.group({
+    email: [null, [Validators.required, Validators.email]],
+    password: [null, [Validators.required, Validators.minLength(6)]],
+    confirmPassword: [null, [Validators.required, Validators.minLength(6)]]
+  });
 
 
   onSubmit() {
-    console.log(this.signUpData);
-    if (this.signUpData.password !== this.signUpData.confirmPassword) {
-      alert('As senhas não coincidem');
+    console.log(this.signUpForm.value);
+    if (this.signUpForm.value.password !== this.signUpForm.value.confirmPassword) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'As senhas não coincidem',
+      });
       return;
     }
   }
