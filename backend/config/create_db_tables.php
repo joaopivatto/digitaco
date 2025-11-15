@@ -4,7 +4,7 @@ use backend\config\Database;
 
 require_once __DIR__ . '/../config/Database.php';
 
-const NAME_DATABASE = 'digitaco';
+const NAME_DATABASE = 'digitacosssss';
 
 // Create connection
 $conn = mysqli_connect(Database::HOST, Database::USERNAME, Database::PASSWORD);
@@ -93,7 +93,7 @@ try {
                     CONSTRAINT `fk_league_id` FOREIGN KEY (`league_id`) REFERENCES `leagues` (`id`),
                     CONSTRAINT `matches_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
                 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci");
-    echo "<br>Tabela matches criada com sucesso!.<br>";
+    echo "<br>Tabela matches criada com sucesso!<br>";
     Database::close();
 } catch (\Throwable $erro)
 {
@@ -110,7 +110,7 @@ try {
                     KEY `fk_idioms_league_id` (`league_id`),
                     CONSTRAINT `fk_idioms_league_id` FOREIGN KEY (`league_id`) REFERENCES `leagues` (`id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci");
-    echo "<br>Tabela league_languages criada com sucesso!.<br>";
+    echo "<br>Tabela league_languages criada com sucesso!<br>";
     Database::close();
 } catch (\Throwable $erro)
 {
@@ -131,7 +131,7 @@ try {
                     CONSTRAINT `league_user_ibfk_1` FOREIGN KEY (`league_id`) REFERENCES `leagues` (`id`),
                     CONSTRAINT `league_user_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
                 ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci");
-    echo "<br>Tabela league_user criada com sucesso!.<br>";
+    echo "<br>Tabela league_user criada com sucesso!<br>";
     Database::close();
 } catch (\Throwable $erro)
 {
