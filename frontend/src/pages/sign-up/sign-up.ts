@@ -3,7 +3,7 @@ import { InputComponent } from '../../components/input/input';
 import { Button } from '../../components/button/button';
 import { FormsModule, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MessageService } from 'primeng/api';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 import { ToastModule } from 'primeng/toast';
 
 
@@ -16,7 +16,7 @@ import { ToastModule } from 'primeng/toast';
   styleUrl: './sign-up.scss',
 })
 export class SignUp {
-  constructor(private messageService: MessageService) {}
+  constructor(private messageService: MessageService, private router: Router) {}
 
 
   private formBuilder = inject(FormBuilder);
@@ -36,6 +36,9 @@ export class SignUp {
         detail: 'As senhas não coincidem',
       });
       return;
+    }
+    if (this.signUpForm.valid) {
+      this.router.navigate(['/home']);
     }
   }
 }

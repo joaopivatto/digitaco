@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { InputComponent } from '../../components/input/input';
 import { Button } from '../../components/button/button';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
@@ -15,7 +15,7 @@ import { MessageService } from 'primeng/api';
   styleUrl: './login.scss',
 })
 export class Login {
-  constructor(private messageService: MessageService) {}
+  constructor(private messageService: MessageService, private router: Router) {}
   label: string = 'Texto';
 
   private formBuilder = inject(FormBuilder);
@@ -25,9 +25,8 @@ export class Login {
   });
 
   onSubmit() {
-    console.log(this.loginForm);
     if (this.loginForm.valid) {
-      console.log(this.loginForm.value);
+      this.router.navigate(['/home']);
     } else {
       this.messageService.add({
         severity: 'error',

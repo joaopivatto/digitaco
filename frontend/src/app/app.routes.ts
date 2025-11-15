@@ -9,7 +9,7 @@ import { History } from '../pages/history/history'
 
 
 export const routes: Routes = [
-    { path: '', redirectTo: 'home', pathMatch: 'full' },
+    { path: '', redirectTo: 'login', pathMatch: 'full' },
     { path: 'login', component: Login },
     { path: 'sign-up', component: SignUp },
     { path: 'home', component: Home },
