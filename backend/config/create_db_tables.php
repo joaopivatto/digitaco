@@ -4,7 +4,7 @@ use backend\config\Database;
 
 require_once __DIR__ . '/../config/Database.php';
 
-const NAME_DATABASE = 'digitacosssss';
+const NAME_DATABASE = 'digitaco';
 
 // Create connection
 $conn = mysqli_connect(Database::HOST, Database::USERNAME, Database::PASSWORD);
