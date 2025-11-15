@@ -17,7 +17,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 export class Button implements ControlValueAccessor {
   @Input() label: string = 'button works!';
   @Input() buttonClass: string = '';
-  disabled: boolean = false;
+  @Input() disabled: boolean = false;
 
   onChange: any = () => {};
   onTouched: any = () => {};
@@ -37,5 +37,9 @@ export class Button implements ControlValueAccessor {
   onClick() {
     this.onChange(!this.disabled);
     this.onTouched();
+  }
+
+  setDisabledState(isDisabled: boolean): void {
+    this.disabled = isDisabled;
   }
 }
