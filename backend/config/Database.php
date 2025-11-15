@@ -6,17 +6,21 @@ use mysqli;
 
 class Database
 {
+    const HOST = 'localhost';
+    const DATABASE_NAME = 'digitaco';
+    const USERNAME = 'root';
+    const PASSWORD = '';
     private static $host = 'localhost';
     private static $db_name = 'digitaco';
     private static $username = 'root';
     private static $password = '';
     private static $conn;
 
-    public static function connect()
+    public static function connect($dataBaseName = null)
     {
         if (!self::$conn)
         {
-            self::$conn = new mysqli(self::$host, self::$username, self::$password, self::$db_name);
+            self::$conn = new mysqli(self::$host, self::$username, self::$password, $dataBaseName ?? self::$db_name);
             if (self::$conn->connect_error)
             {
                 self::$conn->close();
