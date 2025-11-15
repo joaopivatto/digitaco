@@ -1,0 +1,31 @@
+<p-toast />
+<form [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
+  <div class="w-sm rounded-lg overflow-hidden shadow-lg bg-white p-8 flex flex-col gap-8 items-center">
+    <div>
+      <h3 class="font-bold text-2xl mb-2 text-gray-900 digitaco text-center">DIGITAÇO</h3>
+      <p class="text-xs text-gray-500 font-bold text-center">Cadastre-se para começar a jogar</p>
+    </div>
+    <div class="flex flex-col gap-4 w-full">
+      <div class="w-full">
+        <app-input [label]="'EMAIL'" [placeholder]="'seu@email.com'" [type]="'email'" formControlName="email" name="email" />
+        @if(signUpForm.get('email')?.hasError('email') && signUpForm.get('email')?.touched) {
+          <small id="email-help" class="text-red-500">Email inválido</small>
+        }
+      </div>
+      <div class="w-full">
+        <app-input [label]="'SENHA'" [placeholder]="'********'" [type]="'password'" formControlName="password" name="password" />
+        @if(signUpForm.get('password')?.hasError('minlength') && signUpForm.get('password')?.touched) {
+          <small id="password-help" class="text-red-500">Senha deve ter no mínimo 6 caracteres</small>
+        }
+      </div>
+      <div class="w-full">
+        <app-input [label]="'CONFIRME A SENHA'" [placeholder]="'********'" [type]="'password'" formControlName="confirmPassword" name="confirmPassword" />
+        @if(signUpForm.get('confirmPassword')?.hasError('mismatch') && signUpForm.get('confirmPassword')?.touched) {
+          <small id="confirmPassword-help" class="text-red-500">As senhas não coincidem</small>
+        }
+      </div>
+      <app-button [label]="'REGISTRAR'" [buttonClass]="'w-full text-white bg-[var(--primary)] hover:bg-[var(--primary-hover)]'" [disabled]="signUpForm.invalid" />
+      <p class="mt-4 text-sm text-gray-500 text-center">Já possui uma conta? <a class="text-[var(--primary)] cursor-pointer font-bold" routerLink="/login">Faça login</a></p>
+    </div>
+  </div>
+</form>

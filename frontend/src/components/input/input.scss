@@ -1,0 +1,13 @@
+input  {
+  transition: all 0.2s ease-in-out;
+}
+
+:host(.ng-invalid.ng-touched) input {
+  border-color: red;
+  box-shadow: 0 0 5px rgba(255, 0, 0, 0.3);
+}
+
+:host(.ng-disabled) input {
+  background-color: #f0f0f0;
+  cursor: not-allowed;
+}
