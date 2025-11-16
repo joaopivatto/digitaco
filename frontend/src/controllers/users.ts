@@ -44,7 +44,7 @@ export class UsersController {
   }
 
   async logOut(): Promise<boolean> {
-    const response = await fetch(`${this.config.API_BASE_URL}/users/logout.php`, {
+    const response = await fetch(`${this.config.API_BASE_URL}/users/log-out.php`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
     });

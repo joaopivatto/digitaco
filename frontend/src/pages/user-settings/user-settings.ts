@@ -12,12 +12,14 @@ import { UsersController } from '../../controllers/users';
 import { InputComponent } from '../../components/input/input';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { TooltipModule } from 'primeng/tooltip';
+
 
 
 @Component({
   selector: 'app-user-settings',
   standalone: true,
-  imports: [Header, ButtonModule, RouterModule, AsyncPipe, AvatarModule, InputComponent, FormsModule, ReactiveFormsModule, ToastModule],
+  imports: [Header, ButtonModule, RouterModule, AsyncPipe, AvatarModule, InputComponent, FormsModule, ReactiveFormsModule, ToastModule, TooltipModule],
   providers: [MessageService],
   templateUrl: './user-settings.html',
   styleUrl: './user-settings.scss',

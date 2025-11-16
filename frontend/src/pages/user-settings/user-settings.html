@@ -22,13 +22,13 @@
             <div class="text-surface-700 dark:text-surface-100 text-sm font-semibold">{{(user$ | async)?.email || 'email@exemplo.com'}}</div>
           </div>
           <div class="mt-6 lg:mt-0 flex items-center gap-4 justify-self-end">
-            <button pButton [rounded]="true" [severity]="'secondary'">
+            <button pButton [rounded]="true" [severity]="'secondary'" routerLink="/global-ranking" tooltipPosition="top" pTooltip="Ranking Global">
               <i pButtonIcon class="pi pi-trophy"></i>
             </button>
-            <button pButton [rounded]="true" [severity]="'secondary'">
+            <button pButton [rounded]="true" [severity]="'secondary'" routerLink="/leagues" tooltipPosition="top" pTooltip="Ligas">
               <i pButtonIcon class="pi pi-users"></i>
             </button>
-            <button pButton [rounded]="true" [severity]="'secondary'">
+            <button pButton [rounded]="true" [severity]="'secondary'" routerLink="/history" tooltipPosition="top" pTooltip="Histórico">
               <i pButtonIcon class="pi pi-history"></i>
             </button>
           </div>

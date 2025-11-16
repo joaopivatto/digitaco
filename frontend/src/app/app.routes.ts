@@ -17,7 +17,7 @@ export const routes: Routes = [
     { path: 'game', component: Game },
     { path: 'global-ranking', component: GlobalRanking },
     { path: 'leagues', component: Leagues },
-    { path: 'game-history', component: History },
+    { path: 'history', component: History },
     { path: 'user-settings', component: UserSettings },
 
 ];
