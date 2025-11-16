@@ -8,11 +8,11 @@ import { Observable } from 'rxjs';
 import { User } from '../../entities/user';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-header',
-  imports: [ButtonModule, RouterModule, TooltipModule, AsyncPipe, ConfirmDialogModule, RouterModule],
+  imports: [ButtonModule, RouterModule, TooltipModule, AsyncPipe, ConfirmDialogModule, RouterLink],
   providers: [ConfirmationService, MessageService],
   templateUrl: './header.html',
   styleUrl: './header.scss',
@@ -46,7 +46,7 @@ export class Header {
           summary: 'Confirmed',
           detail: 'You have accepted',
         });
-        this.userService.setUsuario(null);
+        this.userService.clearUsuario();
         this.router.navigate(['/login']);
         this.messageService.add({
           severity: 'info',

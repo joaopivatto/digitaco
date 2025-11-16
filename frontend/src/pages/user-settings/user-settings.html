@@ -1,0 +1,70 @@
+<p-toast />
+<app-header />
+<section class="grid grid-cols-[1fr_4fr] items-start p-8 pt-24 h-[100vh] w-[100vw] max-w-[1600px] gap-8">
+  <aside class="flex flex-col gap-4 overflow-hidden shadow-lg bg-white p-8 h-full rounded-lg min-[1200px]:flex max-[1200px]:hidden">
+    <p-button label="Informações" icon="pi pi-info-circle" [severity]="active === 'user-info' ? 'info' : 'secondary'" (click)="active = 'user-info'" fluid [outlined]="active != 'user-info'" class="min-[1200px]:block max-[1200px]:hidden" />
+    <p-button label="Alterar Senha" icon="pi pi-key" [severity]="active === 'change-password' ? 'info' : 'secondary'" (click)="active = 'change-password'" fluid [outlined]="active != 'change-password'" class="min-[1200px]:block max-[1200px]:hidden" />
+  </aside>
+  <aside class="gap-2 overflow-hidden justify-center shadow-lg bg-white p-8 rounded-lg min-[1200px]:hidden max-[1200px]:flex">
+    <p-button icon="pi pi-info-circle" [outlined]="active != 'user-info'" [rounded]="true" class="min-[1200px]:hidden max-[1200px]:block" [severity]="active === 'user-info' ? 'info' : 'secondary'" (click)="active = 'user-info'" />
+    <p-button icon="pi pi-key" [outlined]="active != 'change-password'" [rounded]="true" [severity]="active === 'change-password' ? 'info' : 'secondary'" (click)="active = 'change-password'" />
+  </aside>
+  <div class="rounded-lg overflow-hidden shadow-lg bg-white p-8">
+    @if(active === 'user-info') {
+    <h2 class="font-bold text-2xl digitaco text-center cursor-pointer">Informações do Usuário</h2>
+    <div class="bg-surface-0 dark:bg-surface-950 px-2 py-8 md:px-6 lg:px-20">
+      <div class="flex items-center flex-col lg:flex-row lg:justify-between">
+        <div class="grid grid-cols-[auto_auto_1fr_1fr] items-center flex-col md:flex-row gap-8 w-full">
+          <p-avatar icon="pi pi-user" class="mr-2 align-self-center" size="xlarge" style="background-color: #ece9fc; color: #2a1261" shape="circle" />
+          <span class="text-surface-900 dark:text-surface-0 font-bold text-3xl">{{(user$ | async)?.name || 'Usuário'}}</span>
+          <div class="flex items-center flex-wrap gap-2 justify-self-end">
+            <span class="text-surface-500 dark:text-surface-300">Email</span>
+            <div class="text-surface-700 dark:text-surface-100 text-sm font-semibold">{{(user$ | async)?.email || 'email@exemplo.com'}}</div>
+          </div>
+          <div class="mt-6 lg:mt-0 flex items-center gap-4 justify-self-end">
+            <button pButton [rounded]="true" [severity]="'secondary'">
+              <i pButtonIcon class="pi pi-trophy"></i>
+            </button>
+            <button pButton [rounded]="true" [severity]="'secondary'">
+              <i pButtonIcon class="pi pi-users"></i>
+            </button>
+            <button pButton [rounded]="true" [severity]="'secondary'">
+              <i pButtonIcon class="pi pi-history"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    }
+    @if(active === 'change-password') {
+    <form [formGroup]="changePasswordForm">
+      <h2 class="font-bold text-2xl digitaco text-center cursor-pointer">Alterar Senha</h2>
+      <div class="bg-surface-0 dark:bg-surface-950 px-2 py-8 md:px-6 lg:px-20">
+        <div class="flex items-center gap-4 flex-col lg:flex-row lg:justify-between">
+          <div class="flex flex-col gap-4 w-full">
+            <app-input [label]="'NOVA SENHA'" [placeholder]="'********'" [type]="'password'" formControlName="newPassword" />
+
+          </div>
+          <div class="flex flex-col gap-4 w-full">
+            <app-input [label]="'CONFIRMAR NOVA SENHA'" [placeholder]="'********'" [type]="'password'" formControlName="confirmNewPassword" />
+          </div>
+        </div>
+        @if(changePasswordForm.get('newPassword')?.hasError('pattern') && changePasswordForm.get('newPassword')?.touched) {
+          <small id="newPassword-help" class="text-red-500">Senha deve ter:
+            <ul>
+              <li>no mínimo 8 caracteres</li>
+              <li>pelo menos uma letra maiúscula</li>
+              <li>pelo menos uma letra minúscula</li>
+              <li>pelo menos um número</li>
+              <li>pelo menos um caractere especial</li>
+            </ul>
+          </small>
+          }
+        <div class="flex justify-end mt-2">
+          <p-button label="ALTERAR SENHA" [severity]="'primary'" [disabled]="changePasswordForm.invalid" (click)="onSubmit()" />
+        </div>
+      </div>
+    </form>
+    }
+  </div>
+</section>

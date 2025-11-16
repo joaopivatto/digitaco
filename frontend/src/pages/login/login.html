@@ -18,10 +18,7 @@
       <div>
         <app-input [label]="'SENHA'" [placeholder]="'********'" [type]="'password'" formControlName="password" />
         @if(loginForm.get('password')?.hasError('required') && loginForm.get('password')?.touched) {
-          <small id="password-help" class="text-red-500">Senha é obrigatória</small>
-        }
-        @if(loginForm.get('password')?.hasError('minlength') && loginForm.get('password')?.touched) {
-          <small id="password-help" class="text-red-500">Senha deve ter no mínimo 6 caracteres</small>
+          <small id="password-help" class="text-red-500">Digite sua senha</small>
         }
       </div>
       <app-button [label]="'ENTRAR'" [buttonClass]="'w-full text-white bg-[var(--primary)] hover:bg-[var(--primary-hover)]'" [disabled]="loginForm.invalid" />

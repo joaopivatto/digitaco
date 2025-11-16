@@ -6,6 +6,7 @@ import { Game } from '../pages/game/game'
 import { GlobalRanking } from '../pages/global-ranking/global-ranking'
 import { Leagues } from '../pages/leagues/leagues'
 import { History } from '../pages/history/history'
+import { UserSettings } from '../pages/user-settings/user-settings'
 
 
 export const routes: Routes = [
@@ -17,4 +18,6 @@ export const routes: Routes = [
     { path: 'global-ranking', component: GlobalRanking },
     { path: 'leagues', component: Leagues },
     { path: 'game-history', component: History },
+    { path: 'user-settings', component: UserSettings },
+
 ];
