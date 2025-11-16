@@ -5,6 +5,8 @@ import { RouterLink, Router } from '@angular/router';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { UsersController } from '../../controllers/users';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +17,7 @@ import { MessageService } from 'primeng/api';
   styleUrl: './login.scss',
 })
 export class Login {
-  constructor(private messageService: MessageService, private router: Router) {}
+  constructor(private messageService: MessageService, private router: Router, private usersController: UsersController, private userService: UserService) {}
   label: string = 'Texto';
 
   private formBuilder = inject(FormBuilder);
@@ -24,9 +26,25 @@ export class Login {
     password: [null, [Validators.required, Validators.minLength(6)]],
   });
 
-  onSubmit() {
+  async onSubmit() {
     if (this.loginForm.valid) {
-      this.router.navigate(['/home']);
+      try {
+        const response = await this.usersController.signIn({
+          email: this.loginForm.value.email!,
+          password: this.loginForm.value.password!,
+        });
+        this.userService.setUsuario({
+          name: response.name!,
+          email: response.email!,
+        });
+        this.router.navigate(['/home']);
+      } catch (error: any) {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: error.message,
+        });
+      }
     } else {
       this.messageService.add({
         severity: 'error',
