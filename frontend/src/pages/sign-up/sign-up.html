@@ -7,6 +7,12 @@
     </div>
     <div class="flex flex-col gap-4 w-full">
       <div class="w-full">
+        <app-input [label]="'NOME'" [placeholder]="'Digite seu nome'" [type]="'text'" formControlName="name" name="name" />
+        @if(signUpForm.get('name')?.hasError('required') && signUpForm.get('name')?.touched) {
+          <small id="name-help" class="text-red-500">Nome é obrigatório</small>
+        }
+      </div>
+      <div class="w-full">
         <app-input [label]="'EMAIL'" [placeholder]="'seu@email.com'" [type]="'email'" formControlName="email" name="email" />
         @if(signUpForm.get('email')?.hasError('email') && signUpForm.get('email')?.touched) {
           <small id="email-help" class="text-red-500">Email inválido</small>
@@ -14,15 +20,20 @@
       </div>
       <div class="w-full">
         <app-input [label]="'SENHA'" [placeholder]="'********'" [type]="'password'" formControlName="password" name="password" />
-        @if(signUpForm.get('password')?.hasError('minlength') && signUpForm.get('password')?.touched) {
-          <small id="password-help" class="text-red-500">Senha deve ter no mínimo 6 caracteres</small>
+        @if(signUpForm.get('password')?.hasError('pattern') && signUpForm.get('password')?.touched) {
+          <small id="password-help" class="text-red-500">Senha deve ter:
+            <ul>
+              <li>no mínimo 8 caracteres</li>
+              <li>pelo menos uma letra maiúscula</li>
+              <li>pelo menos uma letra minúscula</li>
+              <li>pelo menos um número</li>
+              <li>pelo menos um caractere especial</li>
+            </ul>
+          </small>
         }
       </div>
       <div class="w-full">
         <app-input [label]="'CONFIRME A SENHA'" [placeholder]="'********'" [type]="'password'" formControlName="confirmPassword" name="confirmPassword" />
-        @if(signUpForm.get('confirmPassword')?.hasError('mismatch') && signUpForm.get('confirmPassword')?.touched) {
-          <small id="confirmPassword-help" class="text-red-500">As senhas não coincidem</small>
-        }
       </div>
       <app-button [label]="'REGISTRAR'" [buttonClass]="'w-full text-white bg-[var(--primary)] hover:bg-[var(--primary-hover)]'" [disabled]="signUpForm.invalid" />
       <p class="mt-4 text-sm text-gray-500 text-center">Já possui uma conta? <a class="text-[var(--primary)] cursor-pointer font-bold" routerLink="/login">Faça login</a></p>

@@ -1,3 +1,4 @@
+import { Injectable } from '@angular/core';
 import { Config } from '../config';
 import {
   validateConfirmPassword,
@@ -5,13 +6,12 @@ import {
   validateName,
   validatePassword,
 } from '../utils/validations';
+import { User } from '../entities/user';
 
+@Injectable({ providedIn: 'root' })
 export class UsersController {
-  private config: Config;
+  constructor(private config: Config) {}
 
-  constructor(config: Config) {
-    this.config = config;
-  }
 
   async joinLeague(leagueId: number): Promise<string> {
     const response = await fetch(`${this.config.API_BASE_URL}/users/league/${leagueId}`, {
@@ -80,7 +80,7 @@ export class UsersController {
     return true;
   }
 
-  async signIn(input: { email: string; password: string }): Promise<boolean> {
+  async signIn(input: { email: string; password: string }): Promise<User> {
     this.validate(input, 'sign-in');
 
     const response = await fetch(`${this.config.API_BASE_URL}/users/sign-in.php`, {
@@ -95,18 +95,20 @@ export class UsersController {
       throw new Error(data.message);
     }
 
-    return true;
+    return {
+      name: data.name,
+      email: data.email,
+    };
   }
 
   async signUp(input: { name: string; email: string; password: string }): Promise<boolean> {
+    debugger
     this.validate(input, 'sign-up');
-
     const response = await fetch(`${this.config.API_BASE_URL}/users/sign-up.php`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(input),
     });
-
     const data = await response.json();
 
     if (!response.ok) {
