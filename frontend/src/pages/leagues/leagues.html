@@ -9,48 +9,65 @@
         Ligas
       </h3>
     </div>
-    <p-button label="Criar Liga" icon="pi pi-plus" [rounded]="true" severity="help" routerLink="/create-league" />
+    <p-button label="Criar Liga" icon="pi pi-plus" severity="help" routerLink="/create-league" />
   </div>
-  <div class="mt-8 card">
-    <p-tabs value="0">
-      <p-tablist>
-        <p-tab value="0">Minhas Ligas (2)</p-tab>
-        <p-tab value="1">Outras Ligas (0)</p-tab>
-      </p-tablist>
-      <p-tabpanels>
-        <p-tabpanel value="0">
-          <p-virtualscroller [items]="myLeagues" [itemSize]="50" scrollHeight="200px">
-            <ng-template #item let-item let-options="options">
-              <div class="flex items-center p-2 w-full" >
-                <div class="bg-gray-200 p-4 rounded-lg w-full flex justify-between">
-                  <div>
-                    <h4 class="font-bold text-lg digitaco">{{ item.name }}</h4>
-                    <div class="flex items-center gap-2 mt-2">
-                      <i class="pi pi-users" style="font-size: 1rem;"></i>
-                      <span class="text-sm text-gray-500">3 Membros </span>
-                      <span class="text-sm text-gray-500 ml-4">Sua posição: 1º</span>
+  <div class="mt-8">
+    @if(creatingLeague) {
+
+    }
+    @else {
+      <p-tabs value="0">
+        <p-tablist>
+          <p-tab value="0">Minhas Ligas ({{myLeagues.length}})</p-tab>
+          <p-tab value="1">Outras Ligas ({{otherLeagues.length}})</p-tab>
+        </p-tablist>
+        <p-tabpanels>
+          <p-tabpanel value="0">
+            <p-virtualscroller [items]="myLeagues" [itemSize]="50" scrollHeight="200px">
+              <ng-template #item let-item let-options="options">
+                <div class="flex items-center p-2 w-full" >
+                  <div class="bg-gray-200 p-4 rounded-lg w-full flex justify-between">
+                    <div>
+                      <h4 class="font-bold text-lg digitaco">{{ item.name }}</h4>
+                      <div class="flex items-center gap-2 mt-2">
+                        <i class="pi pi-users" style="font-size: 1rem;"></i>
+                        <span class="text-sm text-gray-500">3 Membros </span>
+                        <span class="text-sm text-gray-500 ml-4">Sua posição: 1º</span>
+                      </div>
+                    </div>
+                    <div>
+                      <p class="font-bold text-lg digitaco">222 012</p>
+                      <p class="text-sm text-gray-500 text-right">pontos</p>
                     </div>
                   </div>
-                  <div>
-                    <p class="font-bold text-lg digitaco">222 012</p>
-                    <p class="text-sm text-gray-500 text-right">pontos</p>
+                </div>
+              </ng-template>
+            </p-virtualscroller>
+            <!-- <div class="flex flex-col gap-4">
+            </div> -->
+          </p-tabpanel>
+          <p-tabpanel value="1">
+            <p-virtualscroller [items]="otherLeagues" [itemSize]="50" scrollHeight="200px">
+              <ng-template #item let-item let-options="options">
+                <div class="flex items-center p-2 w-full" >
+                  <div class="bg-gray-200 p-4 rounded-lg w-full flex justify-between">
+                    <div>
+                      <h4 class="font-bold text-lg digitaco">{{ item.name }}</h4>
+                      <div class="flex items-center gap-2 mt-2">
+                        <i class="pi pi-users" style="font-size: 1rem;"></i>
+                        <span class="text-sm text-gray-500">{{item.members}} Membros </span>
+                      </div>
+                    </div>
+                    <div class="flex items-center justify-end">
+                      <p-button label="Entrar" icon="pi pi-lock" severity="help" />
+                    </div>
                   </div>
                 </div>
-              </div>
-            </ng-template>
-          </p-virtualscroller>
-          <!-- <div class="flex flex-col gap-4">
-          </div> -->
-        </p-tabpanel>
-        <p-tabpanel value="1">
-          <div class="flex flex-col gap-4">
-            <div class="bg-gray-200 p-4 rounded-lg w-full">
-              <h4 class="font-bold text-lg digitaco">Liga 2</h4>
-              <p class="text-sm text-gray-500">Criada em: 02/01/2023</p>
-            </div>
-          </div>
-        </p-tabpanel>
-      </p-tabpanels>
-    </p-tabs>
+              </ng-template>
+            </p-virtualscroller>
+          </p-tabpanel>
+        </p-tabpanels>
+      </p-tabs>
+    }
   </div>
 </div>

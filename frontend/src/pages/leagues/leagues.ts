@@ -21,29 +21,11 @@ export class Leagues implements OnInit {
 
   myLeagues: League[] = [];
   otherLeagues: League[] = [];
+  creatingLeague: boolean = false;
 
   async ngOnInit() {
-    // this.myLeagues = await this.leaguesController.getLeaguesUserIsIncluded();
-    // this.otherLeagues = await this.leaguesController.findAll();
-    this.myLeagues = [{
-      id: 1,
-      name: 'Liga 1',
-      members: 10,
-      languages: ['Português', 'Inglês'],
-    },
-    {
-      id: 1,
-      name: 'Champions',
-      members: 10,
-      languages: ['Português', 'Inglês'],
-    },
-    {
-      id: 1,
-      name: 'Podres',
-      members: 10,
-      languages: ['Português', 'Inglês'],
-    },
-    ];
+    this.myLeagues = await this.leaguesController.getLeaguesUserIsIncluded();
     this.otherLeagues = await this.leaguesController.findAll();
   }
+
 }
