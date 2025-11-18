@@ -1,14 +1,11 @@
-import { Config } from '../config/index.js';
-import { League } from '../entities/league.js';
-import { Rating } from '../entities/rating.js';
-import { validateName, validatePassword } from '../utils/validations.js';
-
+import { Injectable } from '@angular/core';
+import { Config } from '../config';
+import { League } from '../entities/league';
+import { Rating } from '../entities/rating';
+import { validateName, validatePassword } from '../utils/validations';
+@Injectable({ providedIn: 'root' })
 export class LeaguesController {
-  private config: Config;
-
-  constructor(config: Config) {
-    this.config = config;
-  }
+  constructor(private config: Config) {}
 
   async getLeaguePointsWeekly(leagueId: string): Promise<Rating[]> {
     const response = await fetch(
