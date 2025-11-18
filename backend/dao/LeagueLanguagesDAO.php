@@ -3,12 +3,12 @@
 namespace backend\dao;
 
 require_once __DIR__ . '/../config/Database.php';
-require_once __DIR__ . '/../model/enums/LanguageEnum.php';
+require_once __DIR__ . '/../model/enum/LanguageEnum.php';
 require_once __DIR__ . '/../dto/MessageResponseDTO.php';;
 require_once __DIR__ . '/LeaguesDAO.php';
 
 use backend\config\Database;
-use backend\model\enums\LanguageEnum;
+use backend\model\enum\LanguageEnum;
 use dto\MessageResponseDTO;
 
 class LeagueLanguagesDAO

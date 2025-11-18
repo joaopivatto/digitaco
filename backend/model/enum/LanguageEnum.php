@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\model\enums;
+namespace backend\model\enum;
 
 enum LanguageEnum: int
 {
