@@ -8,6 +8,7 @@ require_once __DIR__ . '/../dto/MessageResponseDTO.php';;
 require_once __DIR__ . '/../dto/leagues/LeaguesResponseDTO.php';
 require_once __DIR__ . '/../dto/leagues/LeaguesListResponseDTO.php';
 require_once __DIR__ . '/../dto/leagues/LeaguesSimpleListResponse.php';
+require_once __DIR__ . '/../dto/leagues/LeaguesSimplePointsResponse.php';
 require_once __DIR__ . '/../dto/ArrayResponseDTO.php';
 require_once __DIR__ . '/../dto/users/UsersPointsDTO.php';
 require_once __DIR__ . '/UsersDAO.php';
@@ -20,6 +21,7 @@ use backend\model\enum\LanguageEnum;
 use dto\ArrayResponseDTO;
 use dto\leagues\LeaguesListResponseDTO;
 use dto\leagues\LeaguesSimpleListResponse;
+use dto\leagues\LeaguesSimplePointsResponse;
 use dto\MessageResponseDTO;
 use dto\leagues\LeaguesResponseDTO;
 
@@ -185,11 +187,17 @@ class LeaguesDAO
         $conn = Database::connect();
         $sql = $conn->prepare("
             SELECT 
-                leagues.*, COUNT(league_user.id) AS members  
-            FROM leagues
-            INNER JOIN league_user ON leagues.id = league_user.league_id
-            WHERE league_user.user_id = ?
-            GROUP BY leagues.id;
+                l.*,
+                COUNT(lu.id) AS members,
+                COALESCE(SUM(m.points), 0) AS points
+            FROM leagues l
+            INNER JOIN league_user lu 
+                ON l.id = lu.league_id
+            LEFT JOIN matches m 
+                ON m.league_id = l.id 
+               AND m.user_id = lu.user_id
+            WHERE lu.user_id = ?
+            GROUP BY l.id;
         ");
         $sql->bind_param("i", $includedId);
         $sql->execute();
@@ -199,7 +207,7 @@ class LeaguesDAO
         if ($res) {
             while ($row = $res->fetch_assoc()) {
                 $leagueLanguages = $languages[$row['id']] ?? [];
-                $league = new LeaguesSimpleListResponse($row['id'], $row['name'], $row['members'], $leagueLanguages);
+                $league = new LeaguesSimplePointsResponse($row['id'], $row['name'], $row['members'], $row['points'], $leagueLanguages);
                 $leagues[] = $league->jsonSerialize();
             }
         }
