@@ -9,6 +9,7 @@ import { RouterModule, Router } from '@angular/router';
 import { ToastModule } from 'primeng/toast';
 import { ListaIdiomas, IIdiomaDetalhe } from '../../../entities/languages';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { LoadingService } from '../../../services/loading.service';
 
 @Component({
   selector: 'app-new-league',
@@ -30,7 +31,8 @@ export class NewLeague {
   router = inject(Router);
   constructor(
     private leaguesController: LeaguesController,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private loading: LoadingService
   ) {}
   private formBuilder = inject(FormBuilder);
   newLeagueForm = this.formBuilder.group({
@@ -46,6 +48,7 @@ export class NewLeague {
       const password = this.newLeagueForm.value.password as string;
       const languages = (this.newLeagueForm.value.languages || []).map((language: IIdiomaDetalhe) => language.id);
       try {
+        this.loading.start();
         await this.leaguesController.create({
           name,
           password,
@@ -63,6 +66,8 @@ export class NewLeague {
           summary: 'Erro',
           detail: 'Erro ao criar liga',
         });
+      } finally {
+        this.loading.stop();
       }
       this.newLeagueForm.reset();
     }

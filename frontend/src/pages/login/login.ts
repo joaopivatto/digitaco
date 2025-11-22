@@ -1,10 +1,11 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { InputComponent } from '../../components/input/input';
 import { Button } from '../../components/button/button';
 import { RouterLink, Router } from '@angular/router';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { LoadingService } from '../../services/loading.service';
 import { UsersController } from '../../controllers/users';
 import { UserService } from '../../services/user.service';
 
@@ -16,8 +17,8 @@ import { UserService } from '../../services/user.service';
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })
-export class Login {
-  constructor(private messageService: MessageService, private router: Router, private usersController: UsersController, private userService: UserService) {}
+export class Login implements OnInit {
+  constructor(private messageService: MessageService, private router: Router, private usersController: UsersController, private userService: UserService, private loading: LoadingService) {}
   label: string = 'Texto';
 
   private formBuilder = inject(FormBuilder);
@@ -26,9 +27,17 @@ export class Login {
     password: [null, [Validators.required, Validators.minLength(6)]],
   });
 
+  ngOnInit(): void {
+    const user = this.userService.getUsuario();
+    if (user) {
+      this.router.navigate(['/home']);
+    }
+  }
+
   async onSubmit() {
     if (this.loginForm.valid) {
       try {
+        this.loading.start();
         const response = await this.usersController.signIn({
           email: this.loginForm.value.email!,
           password: this.loginForm.value.password!,
@@ -44,6 +53,8 @@ export class Login {
           summary: 'Error',
           detail: error.message,
         });
+      } finally {
+        this.loading.stop();
       }
     } else {
       this.messageService.add({

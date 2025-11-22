@@ -13,6 +13,7 @@ import { InputComponent } from '../../components/input/input';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { TooltipModule } from 'primeng/tooltip';
+import { LoadingService } from '../../services/loading.service';
 
 
 
@@ -26,7 +27,7 @@ import { TooltipModule } from 'primeng/tooltip';
 })
 export class UserSettings {
   public user$: Observable<User | null>;
-  constructor(private userService: UserService, private usersController: UsersController, private messageService: MessageService) {
+  constructor(private userService: UserService, private usersController: UsersController, private messageService: MessageService, private loading: LoadingService) {
     this.user$ = this.userService.currentUser;
   }
   private formBuilder = inject(FormBuilder);
@@ -46,6 +47,7 @@ export class UserSettings {
         return;
       }
       try {
+        this.loading.start();
         await this.usersController.changePassword({
           email: this.userService.getUsuario()?.email as string,
           password: newPassword,
@@ -55,6 +57,8 @@ export class UserSettings {
       } catch (error) {
         console.error('Erro ao alterar senha', error);
         this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao alterar senha' });
+      } finally {
+        this.loading.stop();
       }
       this.changePasswordForm.reset();
     }

@@ -7,6 +7,7 @@ import { RouterLink, Router } from '@angular/router';
 import { ToastModule } from 'primeng/toast';
 import { UsersController } from '../../controllers/users';
 import { UserService } from '../../services/user.service';
+import { LoadingService } from '../../services/loading.service';
 
 
 @Component({
@@ -18,7 +19,7 @@ import { UserService } from '../../services/user.service';
   styleUrl: './sign-up.scss',
 })
 export class SignUp {
-  constructor(private messageService: MessageService, private router: Router, private usersController: UsersController, private userService: UserService) {}
+  constructor(private messageService: MessageService, private router: Router, private usersController: UsersController, private userService: UserService, private loading: LoadingService) {}
 
 
   private formBuilder = inject(FormBuilder);
@@ -41,6 +42,7 @@ export class SignUp {
     }
     if (this.signUpForm.valid) {
       try {
+        this.loading.start();
         await this.usersController.signUp({
           name: this.signUpForm.value.name!,
           email: this.signUpForm.value.email!,
@@ -61,6 +63,8 @@ export class SignUp {
           summary: 'Error',
           detail: error?.message || 'Erro ao cadastrar usuário',
         });
+      } finally {
+        this.loading.stop();
       }
     }
   }
