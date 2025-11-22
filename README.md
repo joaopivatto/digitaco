@@ -324,6 +324,7 @@ RESPONSE 200 (OK)
             "id": 5,
             "name": "League Five",
             "members": 1,
+            "points": 525,
             "languages": [
                 "en",
                 "pt-br",
