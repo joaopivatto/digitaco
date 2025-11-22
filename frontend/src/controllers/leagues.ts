@@ -112,7 +112,7 @@ export class LeaguesController {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
-    
+
     const data = await response.json();
 
     if (!response.ok) {
@@ -122,7 +122,7 @@ export class LeaguesController {
     return data.data as League[];
   }
 
-  async create(input: { name: string; password: string }) {
+  async create(input: { name: string; password: string; languages: string[] }) {
     const passwordIsValid = validatePassword(input.password);
     if (!passwordIsValid) throw new Error('Senha inválida!');
 

@@ -16,8 +16,8 @@ import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-header',
-  imports: [ButtonModule, RouterModule, TooltipModule, AsyncPipe, ConfirmDialogModule, RouterLink, ToastModule],  
-  providers: [ConfirmationService, MessageService],
+  imports: [ButtonModule, RouterModule, TooltipModule, AsyncPipe, ConfirmDialogModule, RouterLink],  
+  providers: [ConfirmationService],
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })

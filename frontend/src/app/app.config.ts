@@ -8,6 +8,7 @@ import { providePrimeNG } from 'primeng/config';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import Aura from '@primeuix/themes/aura';
 import { routes } from './app.routes';
+import { MessageService } from 'primeng/api';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -15,6 +16,7 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
+    MessageService,
     providePrimeNG({
       theme: {
         preset: Aura,
@@ -22,6 +24,7 @@ export const appConfig: ApplicationConfig = {
           darkModeSelector: '.my-app-dark',
         },
       },
+      ripple: true
     }),
   ],
 };
