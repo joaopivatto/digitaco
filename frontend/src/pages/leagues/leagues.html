@@ -9,7 +9,7 @@
         Ligas
       </h3>
     </div>
-    <p-button label="Criar Liga" icon="pi pi-plus" severity="help" (click)="showDialog()" />
+    <p-button label="Criar Liga" icon="pi pi-plus" severity="help" (click)="showCreateDialog()" />
   </div>
   <div class="mt-8">
     <p-tabs value="0">
@@ -19,6 +19,9 @@
       </p-tablist>
       <p-tabpanels>
         <p-tabpanel value="0">
+          @if(myLeagues.length == 0) {
+            <p class="text-center text-gray-500">Você ainda não participa de nenhuma liga.</p>
+          }
           <p-virtualscroller [items]="myLeagues" [itemSize]="50" scrollHeight="50vh">
             <ng-template #item let-item let-options="options">
               <div class="flex items-center p-2 w-full">
@@ -29,12 +32,12 @@
                       <i class="pi pi-users" style="font-size: 1rem;"></i>
                       <span class="text-sm text-gray-500">{{item.members}} Membros </span>
                       @for(language of item.languages; track language) {
-                        <p-tag severity="secondary" [value]="language.name" />
+                      <p-tag severity="secondary" [value]="language.name" />
                       }
                     </div>
                   </div>
                   <div>
-                    <p class="font-bold text-lg digitaco">222 012</p>
+                    <p class="font-bold text-lg digitaco text-right">{{item.points}}</p>
                     <p class="text-sm text-gray-500 text-right">pontos</p>
                   </div>
                 </div>
@@ -43,6 +46,9 @@
           </p-virtualscroller>
         </p-tabpanel>
         <p-tabpanel value="1">
+          @if(otherLeagues.length == 0) {
+            <p class="text-center text-gray-500">Nenhuma liga encontrada.</p>
+          }
           <p-virtualscroller [items]="otherLeagues" [itemSize]="50" scrollHeight="50vh">
             <ng-template #item let-item let-options="options">
               <div class="flex items-center p-2 w-full">
@@ -55,7 +61,7 @@
                     </div>
                   </div>
                   <div class="flex items-center justify-end">
-                    <p-button label="Entrar" icon="pi pi-lock" severity="help" />
+                    <p-button label="Entrar" icon="pi pi-lock" severity="help" (click)="showJoinDialog(item.id)" />
                   </div>
                 </div>
               </div>
@@ -65,9 +71,12 @@
       </p-tabpanels>
     </p-tabs>
   </div>
-  TODO: Mostrar Informações corretas em minhas Ligas, fechar o modal quando a liga for adicionada, visualizar a liga e entrar na liga
 </div>
 
 <p-dialog header="Criar Liga" [modal]="true" [(visible)]="creatingLeague" [style]="{ width: '25rem' }">
-  <app-new-league />
+  <app-new-league (created)="onLeagueCreated()" />
+</p-dialog>
+
+<p-dialog header="Se juntar à liga" [modal]="true" [(visible)]="joinLeague" [style]="{ width: '25rem' }">
+  <app-join-league [leagueId]="joinLeagueId" (joined)="onLeagueJoined()" />
 </p-dialog>

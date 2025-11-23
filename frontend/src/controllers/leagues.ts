@@ -56,7 +56,7 @@ export class LeaguesController {
   }
 
   async getLeaguesUserIsIncluded(): Promise<League[]> {
-    const response = await fetch(`${this.config.API_BASE_URL}/leagues/creator.php`, {
+    const response = await fetch(`${this.config.API_BASE_URL}/leagues/included.php`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });

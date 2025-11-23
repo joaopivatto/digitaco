@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
@@ -59,6 +59,7 @@ export class NewLeague {
           summary: 'Sucesso',
           detail: 'Liga criada com sucesso',
         })
+        this.created.emit();
       } catch (error) {
         console.error('Erro ao criar liga', error);
         this.messageService.add({
@@ -72,4 +73,6 @@ export class NewLeague {
       this.newLeagueForm.reset();
     }
   }
+
+  @Output() created = new EventEmitter<void>();
 }

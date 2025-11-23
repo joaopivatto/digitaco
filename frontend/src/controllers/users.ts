@@ -13,10 +13,11 @@ export class UsersController {
   constructor(private config: Config) {}
 
 
-  async joinLeague(leagueId: number): Promise<string> {
-    const response = await fetch(`${this.config.API_BASE_URL}/users/league/${leagueId}`, {
+  async joinLeague(input: { password: string }, leagueId: number): Promise<string> {
+    const response = await fetch(`${this.config.API_BASE_URL}/users/league.php?leagueId=${leagueId}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(input),
     });
 
     const data = await response.json();

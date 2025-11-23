@@ -4,4 +4,5 @@ export interface League {
   members: number;
   included?: boolean;
   languages: string[];
+  points?: number;
 }

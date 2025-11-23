@@ -12,13 +12,15 @@ import { LoadingService } from '../../services/loading.service';
 import { DialogModule } from 'primeng/dialog';
 import { NewLeague } from './new-league/new-league';
 import { TagModule } from 'primeng/tag';
-import { ListaIdiomas } from '../../entities/languages'
+import { ListaIdiomas } from '../../entities/languages';
+import { JoinLeague } from './join-league/join-league';
 
 type myLeague = Omit<League, 'languages'> & {
   languages: {
     id: string;
     name: string;
   }[];
+  points: number;
 }
 
 @Component({
@@ -33,6 +35,7 @@ type myLeague = Omit<League, 'languages'> & {
     ScrollerModule,
     DialogModule,
     NewLeague,
+    JoinLeague,
     TagModule,
   ],
   templateUrl: './leagues.html',
@@ -44,27 +47,50 @@ export class Leagues implements OnInit {
   myLeagues: myLeague[] = [];
   otherLeagues: League[] = [];
   creatingLeague: boolean = false;
+  joinLeague: boolean = false;
+  joinLeagueId: number | null = null;
 
-  showDialog() {
+  showCreateDialog() {
     this.creatingLeague = true;
   }
 
+  showJoinDialog(leagueId: number) {
+    this.joinLeague = true;
+    this.joinLeagueId = leagueId;
+  }
+
   async ngOnInit() {
+    await this.reloadLeagues();
+  }
+
+  async reloadLeagues() {
     this.loading.start();
     try {
       const myLeagues = await this.leaguesController.getLeaguesUserIsIncluded();
       this.myLeagues = myLeagues.map((league) => ({
         ...league,
+        points: league.points ?? 0,
         languages: league.languages.map((language) => ({
           id: language,
           name: ListaIdiomas.find((idioma) => idioma.id === language)?.title || language,
-        })),
+        }))
       }));
       const allLeagues = await this.leaguesController.findAll();
       this.otherLeagues = allLeagues.filter((league) => !league.included);
     } finally {
       this.loading.stop();
     }
+  }
+
+  async onLeagueCreated() {
+    this.creatingLeague = false;
+    await this.reloadLeagues();
+  }
+
+  async onLeagueJoined() {
+    this.joinLeague = false;
+    this.joinLeagueId = null;
+    await this.reloadLeagues();
   }
 
   getLanguageName(language: string) {
