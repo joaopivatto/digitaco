@@ -1,14 +1,11 @@
-import { Config } from '../config/index.js';
-import { League } from '../entities/league.js';
-import { Rating } from '../entities/rating.js';
-import { validateName, validatePassword } from '../utils/validations.js';
-
+import { Injectable } from '@angular/core';
+import { Config } from '../config';
+import { League } from '../entities/league';
+import { Rating } from '../entities/rating';
+import { validateName, validatePassword } from '../utils/validations';
+@Injectable({ providedIn: 'root' })
 export class LeaguesController {
-  private config: Config;
-
-  constructor(config: Config) {
-    this.config = config;
-  }
+  constructor(private config: Config) {}
 
   async getLeaguePointsWeekly(leagueId: string): Promise<Rating[]> {
     const response = await fetch(
@@ -59,7 +56,7 @@ export class LeaguesController {
   }
 
   async getLeaguesUserIsIncluded(): Promise<League[]> {
-    const response = await fetch(`${this.config.API_BASE_URL}/leagues/creator.php`, {
+    const response = await fetch(`${this.config.API_BASE_URL}/leagues/included.php`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
@@ -125,7 +122,7 @@ export class LeaguesController {
     return data.data as League[];
   }
 
-  async create(input: { name: string; password: string }) {
+  async create(input: { name: string; password: string; languages: string[] }) {
     const passwordIsValid = validatePassword(input.password);
     if (!passwordIsValid) throw new Error('Senha inválida!');
 

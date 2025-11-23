@@ -1,7 +1,7 @@
 <p-toast />
 <app-header />
 <section class="grid grid-cols-[1fr_4fr] items-start p-8 pt-24 h-[100vh] w-[100vw] max-w-[1600px] gap-8">
-  <aside class="flex flex-col gap-4 overflow-hidden shadow-lg bg-white p-8 h-full rounded-lg min-[1200px]:flex max-[1200px]:hidden">
+  <aside class="flex flex-col gap-4 overflow-hidden shadow-lg bg-white p-8 rounded-lg min-[1200px]:flex max-[1200px]:hidden">
     <p-button label="Informações" icon="pi pi-info-circle" [severity]="active === 'user-info' ? 'info' : 'secondary'" (click)="active = 'user-info'" fluid [outlined]="active != 'user-info'" class="min-[1200px]:block max-[1200px]:hidden" />
     <p-button label="Alterar Senha" icon="pi pi-key" [severity]="active === 'change-password' ? 'info' : 'secondary'" (click)="active = 'change-password'" fluid [outlined]="active != 'change-password'" class="min-[1200px]:block max-[1200px]:hidden" />
   </aside>

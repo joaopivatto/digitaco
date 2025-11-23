@@ -1,0 +1,14 @@
+<app-header />
+
+<div class="rounded-lg overflow-hidden shadow-lg bg-white p-8 min-w-[500px] md:min-w-[700px] lg:min-w-[1000px] mt-[70px]">
+  <div class="grid grid-cols-[auto_1fr_auto] justify-between items-center gap-4">
+    <p-button [rounded]="true" icon="pi pi-arrow-left" severity="secondary" variant="outlined" routerLink="/leagues" />
+    <div class="flex  items-center justify-center gap-4">
+      <h3 class="font-bold text-xl digitaco text-center cursor-pointer">
+        {{league.name}}
+      </h3>
+    </div>
+  </div>
+  <div class="mt-8">
+  </div>
+</div>

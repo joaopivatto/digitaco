@@ -10,20 +10,20 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Router, RouterLink } from '@angular/router';
 import { UsersController } from '../../controllers/users';
-import { ToastModule } from 'primeng/toast';
+import { LoadingService } from '../../services/loading.service';
 
 
 
 @Component({
   selector: 'app-header',
-  imports: [ButtonModule, RouterModule, TooltipModule, AsyncPipe, ConfirmDialogModule, RouterLink, ToastModule],  
-  providers: [ConfirmationService, MessageService],
+  imports: [ButtonModule, RouterModule, TooltipModule, AsyncPipe, ConfirmDialogModule, RouterLink],  
+  providers: [ConfirmationService],
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })
 export class Header {
   public user$: Observable<User | null>;
-  constructor(private userService: UserService, private confirmationService: ConfirmationService, private messageService: MessageService, private router: Router, private userController: UsersController) {
+  constructor(private userService: UserService, private confirmationService: ConfirmationService, private messageService: MessageService, private router: Router, private userController: UsersController, private loading: LoadingService) {
     this.user$ = this.userService.currentUser;
   }
   score: number = 2300;
@@ -46,6 +46,7 @@ export class Header {
       },
       accept: async () => {
         try {
+          this.loading.start();
           await this.userController.logOut();
           this.userService.clearUsuario();
           this.router.navigate(['/login']);
@@ -62,6 +63,8 @@ export class Header {
             detail: 'Ocorreu um erro ao sair',
             life: 3000,
           });
+        } finally {
+          this.loading.stop();
         }
       },
       reject: () => {

@@ -1,0 +1,28 @@
+<form [formGroup]="newLeagueForm">
+  <div class="p-8">
+    <div class="bg-surface-0 dark:bg-surface-950">
+      <div class="flex gap-4 flex-col">
+        <app-input [label]="'NOME DA LIGA'" [placeholder]="'Digite o nome da liga'" [type]="'text'" formControlName="name" />
+        <div>
+          <app-input [label]="'SENHA'" [placeholder]="'Digite a senha'" [type]="'password'" formControlName="password" />
+          @if(newLeagueForm.get('password')?.hasError('pattern') && newLeagueForm.get('password')?.touched) {
+          <small id="password-help" class="text-red-500">Senha deve ter:
+            <ul>
+              <li>no mínimo 8 caracteres</li>
+              <li>pelo menos uma letra maiúscula</li>
+              <li>pelo menos uma letra minúscula</li>
+              <li>pelo menos um número</li>
+              <li>pelo menos um caractere especial</li>
+            </ul>
+          </small>
+          }
+        </div>
+        <p-multiselect [options]="languagesList" formControlName="languages" placeholder="Idiomas" optionLabel="title" display="chip" class="w-full mt-4" appendTo="body" />
+      </div>
+
+      <div class="flex justify-end mt-4">
+        <p-button label="CRIAR LIGA" [severity]="'primary'" [disabled]="newLeagueForm.invalid" (click)="onSubmit()" />
+      </div>
+    </div>
+  </div>
+</form>

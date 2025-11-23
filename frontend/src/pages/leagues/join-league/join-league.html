@@ -1,0 +1,20 @@
+<div>
+  <p class="digitaco mb-4 font-bold text-2xl text-center">{{league?.name}}</p>
+  <form [formGroup]="joinLeagueForm">
+    <div class="mt-8 flex items-end justify-between">
+      <app-input [label]="'SENHA'" [placeholder]="'Digite a senha'" [type]="'password'" formControlName="password" />
+      <p-button [disabled]="joinLeagueForm.invalid" (click)="joinLeague()">Entrar</p-button>
+    </div>
+    @if(joinLeagueForm.get('password')?.hasError('pattern') && joinLeagueForm.get('password')?.touched) {
+    <small id="password-help" class="text-red-500">Senha deve ter:
+      <ul>
+        <li>no mínimo 8 caracteres</li>
+        <li>pelo menos uma letra maiúscula</li>
+        <li>pelo menos uma letra minúscula</li>
+        <li>pelo menos um número</li>
+        <li>pelo menos um caractere especial</li>
+      </ul>
+    </small>
+    }
+  </form>
+</div>
