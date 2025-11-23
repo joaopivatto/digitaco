@@ -188,18 +188,20 @@ class LeaguesDAO
         $sql = $conn->prepare("
             SELECT 
                 l.*,
-                COUNT(lu.id) AS members,
+                COUNT(DISTINCT lu_all.user_id) AS members,
                 COALESCE(SUM(m.points), 0) AS points
             FROM leagues l
-            INNER JOIN league_user lu 
+            INNER JOIN league_user lu
                 ON l.id = lu.league_id
-            LEFT JOIN matches m 
-                ON m.league_id = l.id 
-               AND m.user_id = lu.user_id
-            WHERE lu.user_id = ?
+                AND lu.user_id = ?
+            LEFT JOIN league_user lu_all
+                ON l.id = lu_all.league_id
+            LEFT JOIN matches m
+                ON m.league_id = l.id
+               AND m.user_id = ?
             GROUP BY l.id;
         ");
-        $sql->bind_param("i", $includedId);
+        $sql->bind_param("ii", $includedId, $includedId);
         $sql->execute();
         $res = $sql->get_result();
 
