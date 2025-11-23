@@ -215,7 +215,7 @@ class LeaguesDAO
         }
 
         Database::close();
-        return new ArrayResponseDTO("Ligas encontradas!", 200, $leagues);
+        return new ArrayResponseDTO("Ligas encontradas!", 200, $leagues ?? []);
     }
 
     public static function delete($id): MessageResponseDTO {
