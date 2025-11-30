@@ -15,7 +15,7 @@ import { TagModule } from 'primeng/tag';
 import { ListaIdiomas } from '../../entities/languages';
 import { JoinLeague } from './join-league/join-league';
 
-type myLeague = Omit<League, 'languages'> & {
+export type myLeague = Omit<League, 'languages'> & {
   languages: {
     id: string;
     name: string;

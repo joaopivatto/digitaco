@@ -1,1 +1,56 @@
-<p>game works!</p>
+<p-confirmdialog />
+<header class="w-[100vw] p-5 h-[80px] shadow-[0_0_10px_rgba(0,0,0,0.5)]">
+  <div class="max-w-[1200px] mx-auto flex justify-between items-center">
+    <div class="flex items-center gap-2">
+      <p-tag [style]="{ 'background-color': 'rgba(120, 120, 120, 0.3)', 'color': '#fff', padding: '6px 12px', 'font-weight': 'normal', 'font-size': '1rem' }">
+        Pontos: <span class="font-bold text-[yellow] ml-1">{{ points }}</span>
+      </p-tag>
+      <p-tag [style]="{ 'background-color': 'rgba(120, 120, 120, 0.3)', 'color': '#fff', padding: '6px 12px', 'font-weight': 'normal', 'font-size': '1rem', 'margin': '0 12px' }">
+        Palavras: <span class="font-bold text-[green] ml-1">{{ wordsCount }}</span>
+      </p-tag>
+      @for(heart of [1,2,3]; track heart; let i = $index) {
+      @if(i < hearts) { <i class="pi pi-heart-fill" style="color: red; font-size: 1.5rem;"></i>
+        } @else {
+        <i class="pi pi-heart" style="color: red; font-size: 1.5rem;"></i>
+        }
+        }
+    </div>
+    <p-button label="Sair" icon="pi pi-times" size="small" [raised]="true" severity="secondary" (click)="confirmExit()"></p-button>
+  </div>
+</header>
+
+<section class="w-[100vw] h-[100vh] pt-[80px] pb-[160px]">
+  <div class="max-w-[1200px] mx-auto flex flex-col justify-center items-center relative">
+    @for (word of words; track word.id) {
+    <div class="absolute text-white font-bold text-xl digitaco" [style.left.%]="word.x" [style.top.px]="word.y">
+      @for (letter of word.word.split(''); track $index) {
+      <span [class.text-[green]]="isLetterMatched(word.word, $index)">{{ letter }}</span>
+      }
+    </div>
+    }
+  </div>
+
+</section>
+
+<footer class="w-[100vw] h-[160px] p-4 fixed bottom-0 left-0 bg-[#0b101d] shadow-[0_0_10px_rgba(0,0,0,0.5)]">
+  <div class="max-w-[1200px] mx-auto flex flex-col justify-center items-center gap-4">
+    <p class="text-white text-lg digitaco">Digite o máximo que puder: </p>
+    <input #gameInput type="text" class="p-3 w-[300px] text-2xl text-center text-white bg-transparent border border-white rounded-md outline-none focus:border-[#f68e00] focus:ring-1 focus:ring-[#f68e00]" [(ngModel)]="inputText">
+  </div>
+</footer>
+
+<p-dialog header="Estatísticas da Partida" [modal]="true" [(visible)]="showMatchStats" [style]="{ width: '50vw' }">
+  <h2 class="text-2xl font-bold text-center digitaco mb-8">{{ league?.name }}</h2>
+  <div class="grid grid-cols-2 justify-center items-center gap-8 mb-8">
+    <p class="flex items-center justify-between text-lg font-bold text-center">
+      Pontuação: <span class=" digitaco">{{ points }}</span>
+    </p>
+    <p class="flex items-center justify-between text-lg font-bold text-center">
+      Palavras Digitadas: <span class="digitaco">{{ wordsCount }}</span>
+    </p>
+  </div>
+  <ng-template #footer>
+        <p-button label="Voltar ao menu" [text]="true" severity="secondary" routerLink="/" />
+        <p-button label="Jogar Novamente"  severity="success" (click)="playAgain()" />
+    </ng-template>
+</p-dialog>

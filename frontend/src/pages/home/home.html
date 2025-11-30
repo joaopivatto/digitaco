@@ -1,7 +1,37 @@
 <app-header />
 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 pt-32 pb-16 w-full h-full pr-8 pl-8 max-w-[1600px] mx-auto">
-  <app-card icon="pi-play-circle" title="JOGAR" description="Jogue agora mesmo!" routerLink="/game" />
+  <app-card icon="pi-play-circle" title="JOGAR" description="Jogue agora mesmo!" (click)="chooseLeague()" />
   <app-card icon="pi-trophy" variant="2" title="CLASSIFIÇÃO GERAL" description="Veja o ranking global" routerLink="/global-ranking" />
   <app-card icon="pi-users" variant="3" title="LIGAS" description="Gerencie suas ligas" routerLink="/leagues" />
   <app-card icon="pi-history" variant="4" title="HISTÓRICO" description="Veja suas partidas anteriores" routerLink="/history" />
 </div>
+
+<p-dialog header="Escolha a liga" [modal]="true" [(visible)]="visible" [style]="{ width: '80vw', maxWidth: '1200px' }">
+  <p class="p-text-secondary block mb-8"></p>
+
+  <p-table [value]="myLeagues" [columns]="columns">
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        @for(col of columns; track col.header) {
+        <th>{{ col.header }}</th>
+        }
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+      <tr>
+        <td class="digitaco">{{ rowData.name }}</td>
+        <td class="digitaco">{{ rowData.points }}</td>
+        <td class="text-xs">
+          @for(lang of rowData.languages;let index = $index; track lang) {
+            <p-tag type="info" class="mr-2">{{ lang.name }}</p-tag>
+          }
+        </td>
+
+
+        <td>
+          <p-button type="button" rounded="true" icon="pi pi-play" severity="info" (click)="play(rowData)" />
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-dialog>

@@ -1,0 +1,17 @@
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  border-bottom: 2px solid #3f3b7e;
+}
+footer {
+  border-top: 2px solid #3f3b7e;
+}
+
+header, footer {
+  background: linear-gradient(to right bottom, #0b101d, #221e5d);
+}
+
+section {
+  background: linear-gradient(to right bottom, #141b31, #2b2976, #521c89);
+}

@@ -1,3 +1,4 @@
+import { Injectable } from '@angular/core';
 import { Config } from '../config';
 import { League } from '../entities/league';
 import { Match } from '../entities/match';
@@ -14,7 +15,9 @@ export interface UserHistoryOutput {
     matches: Match[];
   };
 }
-
+@Injectable({
+  providedIn: 'root',
+})
 export class MatchesController {
   private config: Config;
 
