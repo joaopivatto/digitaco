@@ -70,7 +70,9 @@ export class Game implements OnInit, OnDestroy, AfterViewInit {
   async ngOnInit() {
     this.loading.start();
     const leagueId = Number(this.route.snapshot.paramMap.get('leagueId'));
-    this.league = await this.leaguesController.findById(leagueId);
+    if(leagueId) {
+      this.league = await this.leaguesController.findById(leagueId);
+    }
     await this.loadWords();
     this.loading.stop();
     this.startGame();
@@ -139,7 +141,7 @@ export class Game implements OnInit, OnDestroy, AfterViewInit {
     }
     if(this.matchEnded) {
       this.league?.id && this.matchesController.create({
-        leagueId: this.league.id,
+        leagueId: this.league.id ?? null,
         points: this.points,
         words: this.wordsCount,
       });

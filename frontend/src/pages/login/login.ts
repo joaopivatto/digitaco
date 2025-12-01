@@ -17,7 +17,7 @@ import { UserService } from '../../services/user.service';
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })
-export class Login implements OnInit {
+export class Login {
   constructor(private messageService: MessageService, private router: Router, private usersController: UsersController, private userService: UserService, private loading: LoadingService) {}
   label: string = 'Texto';
 
@@ -26,13 +26,6 @@ export class Login implements OnInit {
     email: [null, [Validators.required, Validators.email]],
     password: [null, [Validators.required, Validators.minLength(6)]],
   });
-
-  ngOnInit(): void {
-    const user = this.userService.getUsuario();
-    if (user) {
-      this.router.navigate(['/home']);
-    }
-  }
 
   async onSubmit() {
     if (this.loginForm.valid) {
