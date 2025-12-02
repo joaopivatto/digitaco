@@ -7,6 +7,7 @@ import {
   validatePassword,
 } from '../utils/validations';
 import { User } from '../entities/user';
+import { fetchWithAuth } from '../utils/http';
 
 @Injectable({ providedIn: 'root' })
 export class UsersController {
@@ -14,7 +15,7 @@ export class UsersController {
 
 
   async joinLeague(input: { password: string }, leagueId: number): Promise<string> {
-    const response = await fetch(`${this.config.API_BASE_URL}/users/league.php?leagueId=${leagueId}`, {
+    const response = await fetchWithAuth(`${this.config.API_BASE_URL}/users/league.php?leagueId=${leagueId}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(input),
@@ -30,7 +31,7 @@ export class UsersController {
   }
 
   async leaveLeague(leagueId: number): Promise<string> {
-    const response = await fetch(`${this.config.API_BASE_URL}/users/league/${leagueId}`, {
+    const response = await fetchWithAuth(`${this.config.API_BASE_URL}/users/league/${leagueId}`, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
     });
@@ -45,7 +46,7 @@ export class UsersController {
   }
 
   async logOut(): Promise<boolean> {
-    const response = await fetch(`${this.config.API_BASE_URL}/users/log-out.php`, {
+    const response = await fetchWithAuth(`${this.config.API_BASE_URL}/users/log-out.php`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
     });
@@ -66,7 +67,7 @@ export class UsersController {
   }): Promise<boolean> {
     this.validate(input, 'change-password');
 
-    const response = await fetch(`${this.config.API_BASE_URL}/users/change-password.php`, {
+    const response = await fetchWithAuth(`${this.config.API_BASE_URL}/users/change-password.php`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(input),
@@ -84,7 +85,7 @@ export class UsersController {
   async signIn(input: { email: string; password: string }): Promise<User> {
     this.validate(input, 'sign-in');
 
-    const response = await fetch(`${this.config.API_BASE_URL}/users/sign-in.php`, {
+    const response = await fetchWithAuth(`${this.config.API_BASE_URL}/users/sign-in.php`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(input),
@@ -104,7 +105,8 @@ export class UsersController {
 
   async signUp(input: { name: string; email: string; password: string }): Promise<boolean> {
     this.validate(input, 'sign-up');
-    const response = await fetch(`${this.config.API_BASE_URL}/users/sign-up.php`, {
+
+    const response = await fetchWithAuth(`${this.config.API_BASE_URL}/users/sign-up.php`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(input),

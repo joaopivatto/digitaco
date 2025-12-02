@@ -3,12 +3,13 @@ import { Config } from '../config';
 import { League } from '../entities/league';
 import { Rating } from '../entities/rating';
 import { validateName, validatePassword } from '../utils/validations';
+import { fetchWithAuth } from '../utils/http';
 @Injectable({ providedIn: 'root' })
 export class LeaguesController {
   constructor(private config: Config) {}
 
   async getLeaguePointsWeekly(leagueId: string): Promise<Rating[]> {
-    const response = await fetch(
+    const response = await fetchWithAuth(
       `${this.config.API_BASE_URL}/leagues/points-weekly.php?id=${leagueId}`,
       {
         method: 'GET',
@@ -26,7 +27,7 @@ export class LeaguesController {
   }
 
   async getLeaguePoints(leagueId: string): Promise<Rating[]> {
-    const response = await fetch(`${this.config.API_BASE_URL}/leagues/points.php?id=${leagueId}`, {
+    const response = await fetchWithAuth(`${this.config.API_BASE_URL}/leagues/points.php?id=${leagueId}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
@@ -41,7 +42,7 @@ export class LeaguesController {
   }
 
   async deleteLeague(leagueId: number): Promise<string> {
-    const response = await fetch(`${this.config.API_BASE_URL}/leagues/delete.php?id=${leagueId}`, {
+    const response = await fetchWithAuth(`${this.config.API_BASE_URL}/leagues/delete.php?id=${leagueId}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
@@ -56,7 +57,7 @@ export class LeaguesController {
   }
 
   async getLeaguesUserIsIncluded(): Promise<League[]> {
-    const response = await fetch(`${this.config.API_BASE_URL}/leagues/included.php`, {
+    const response = await fetchWithAuth(`${this.config.API_BASE_URL}/leagues/included.php`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
@@ -71,7 +72,7 @@ export class LeaguesController {
   }
 
   async getLeaguesUserIsCreator(): Promise<League[]> {
-    const response = await fetch(`${this.config.API_BASE_URL}/leagues/creator.php`, {
+    const response = await fetchWithAuth(`${this.config.API_BASE_URL}/leagues/creator.php`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
@@ -86,7 +87,7 @@ export class LeaguesController {
   }
 
   async findById(leagueId: number): Promise<League> {
-    const response = await fetch(
+    const response = await fetchWithAuth(
       `${this.config.API_BASE_URL}/leagues/find-by-id.php?id=${leagueId}`,
       {
         method: 'GET',
@@ -108,7 +109,7 @@ export class LeaguesController {
       ? `${this.config.API_BASE_URL}/leagues/find-all.php?name=${encodeURIComponent(name)}`
       : `${this.config.API_BASE_URL}/leagues/find-all.php`;
 
-    const response = await fetch(url, {
+    const response = await fetchWithAuth(url, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
@@ -129,7 +130,7 @@ export class LeaguesController {
     const nameIsValid = validateName(input.name);
     if (!nameIsValid) throw new Error('Nome inválido!');
 
-    const response = await fetch(`${this.config.API_BASE_URL}/leagues/create.php`, {
+    const response = await fetchWithAuth(`${this.config.API_BASE_URL}/leagues/create.php`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(input),
