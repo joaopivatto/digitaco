@@ -37,7 +37,7 @@ export class NewLeague {
   private formBuilder = inject(FormBuilder);
   newLeagueForm = this.formBuilder.group({
     name: ['', Validators.required],
-    password: ['', [Validators.required, Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)]],
+    password: ['', [Validators.required, Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/)]],
     languages: [[], Validators.required],
   });
   languagesList = ListaIdiomas;
