@@ -103,7 +103,6 @@ export class UsersController {
   }
 
   async signUp(input: { name: string; email: string; password: string }): Promise<boolean> {
-    debugger
     this.validate(input, 'sign-up');
     const response = await fetch(`${this.config.API_BASE_URL}/users/sign-up.php`, {
       method: 'POST',

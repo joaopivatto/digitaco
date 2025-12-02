@@ -32,7 +32,15 @@ type WordType = {
 
 @Component({
   selector: 'app-game',
-  imports: [TagModule, ButtonModule, FormsModule, InputTextModule, ConfirmDialog, DialogModule, RouterLink],
+  imports: [
+    TagModule,
+    ButtonModule,
+    FormsModule,
+    InputTextModule,
+    ConfirmDialog,
+    DialogModule,
+    RouterLink,
+  ],
   templateUrl: './game.html',
   styleUrl: './game.scss',
   providers: [ConfirmationService, MessageService],
@@ -66,13 +74,26 @@ export class Game implements OnInit, OnDestroy, AfterViewInit {
   private gameInterval: any;
   private spawnInterval: any;
   private nextId = 0;
+  languages: string[] = [];
 
   async ngOnInit() {
     this.loading.start();
     const leagueId = Number(this.route.snapshot.paramMap.get('leagueId'));
-    if(leagueId) {
+    const queryLanguages = this.route.snapshot.queryParamMap.get('languages');
+
+    if (leagueId) {
       this.league = await this.leaguesController.findById(leagueId);
+      if (this.league?.languages) {
+        this.languages = this.league.languages;
+      }
+    } else if (queryLanguages) {
+      this.languages = queryLanguages.split(',').filter((l) => l);
     }
+
+    if (this.languages.length === 0) {
+      this.languages = ['pt-br'];
+    }
+
     await this.loadWords();
     this.loading.stop();
     this.startGame();
@@ -139,14 +160,14 @@ export class Game implements OnInit, OnDestroy, AfterViewInit {
     if (this.spawnInterval) {
       clearInterval(this.spawnInterval);
     }
-    if(this.matchEnded) {
-      this.league?.id && this.matchesController.create({
-        leagueId: this.league.id ?? null,
-        points: this.points,
-        words: this.wordsCount,
-      });
+    if (this.matchEnded) {
+      this.matchesController.create({
+          leagueId: this.league?.id ?? null,
+          points: this.points,
+          words: this.wordsCount,
+        });
       this.showMatchStats = true;
-    };
+    }
   }
 
   async spawnWord() {
@@ -252,7 +273,7 @@ export class Game implements OnInit, OnDestroy, AfterViewInit {
   }
 
   async loadWords() {
-    for (const language of this.league?.languages || []) {
+    for (const language of this.languages) {
       const words = await this.wordsController.getRandomWords(language);
       this.wordList.push(...words);
     }

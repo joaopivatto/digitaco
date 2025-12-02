@@ -59,7 +59,7 @@ export class MatchesController {
     return data as UserHistoryOutput;
   }
 
-  async create(input: Match & { leagueId: number }): Promise<string> {
+  async create(input: Match & { leagueId: number | null }): Promise<string> {
     const response = await fetch(`${this.config.API_BASE_URL}/matches/create.php`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

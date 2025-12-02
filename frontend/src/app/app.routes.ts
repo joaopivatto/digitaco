@@ -16,6 +16,7 @@ export const routes: Routes = [
   { path: 'login', component: Login },
   { path: 'sign-up', component: SignUp },
   { path: 'home', component: Home },
+  { path: 'game', component: Game },
   { path: 'game/:leagueId', component: Game },
   { path: 'global-ranking', component: GlobalRanking },
   { path: 'history', component: History },
