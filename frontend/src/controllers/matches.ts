@@ -21,6 +21,9 @@ export interface UserHistoryOutput {
 })
 export class MatchesController {
   private config: Config;
+  private userHistoryCache: { data: UserHistoryOutput; timestamp: number } | null = null;
+  private userHistoryInFlight: Promise<UserHistoryOutput> | null = null;
+  private readonly cacheTTL = 15000;
 
   constructor(config: Config) {
     this.config = config;
@@ -45,19 +48,37 @@ export class MatchesController {
     return data.data as Rating[];
   }
 
-  async getUserHistory(): Promise<UserHistoryOutput> {
-    const response = await fetchWithAuth(`${this.config.API_BASE_URL}/matches/user-history.php`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.message);
+  async getUserHistory(forceRefresh: boolean = false): Promise<UserHistoryOutput> {
+    if (!forceRefresh) {
+      if (this.userHistoryCache && Date.now() - this.userHistoryCache.timestamp < this.cacheTTL) {
+        return this.userHistoryCache.data;
+      }
+      if (this.userHistoryInFlight) {
+        return this.userHistoryInFlight;
+      }
     }
 
-    return data as UserHistoryOutput;
+    const promise = (async () => {
+      const response = await fetch(`${this.config.API_BASE_URL}/matches/user-history.php`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        this.userHistoryInFlight = null;
+        throw new Error(data.message);
+      }
+
+      const result = data as UserHistoryOutput;
+      this.userHistoryCache = { data: result, timestamp: Date.now() };
+      this.userHistoryInFlight = null;
+      return result;
+    })();
+
+    this.userHistoryInFlight = promise;
+    return promise;
   }
 
   async create(input: Match & { leagueId: number | null }): Promise<string> {
