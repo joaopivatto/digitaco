@@ -64,7 +64,7 @@ export class Game implements OnInit, OnDestroy, AfterViewInit {
   wordsCount: number = 0;
   hearts: number = 3;
   words: WordType[] = [];
-  speedFactor = 1;
+  speedFactor = .3;
   league: League | null = null;
   showMatchStats: boolean = false;
   isPlaying: boolean = false;
@@ -73,6 +73,7 @@ export class Game implements OnInit, OnDestroy, AfterViewInit {
   private wordList: string[] = [];
   private gameInterval: any;
   private spawnInterval: any;
+  private spawnFactor: number = 3000;
   private nextId = 0;
   languages: string[] = [];
 
@@ -149,7 +150,7 @@ export class Game implements OnInit, OnDestroy, AfterViewInit {
 
     this.spawnInterval = setInterval(() => {
       this.spawnWord();
-    }, 2000);
+    }, this.spawnFactor);
   }
 
   stopGame() {
@@ -186,6 +187,8 @@ export class Game implements OnInit, OnDestroy, AfterViewInit {
       speed: Math.random() * 1 + this.speedFactor,
     };
     this.speedFactor += 0.1;
+    this.spawnFactor -= 10;
+
 
     this.ngZone.run(() => {
       this.words.push(newWord);

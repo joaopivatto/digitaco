@@ -1,2 +1,74 @@
 <app-header />
-<p>history works!</p>
+<div class="w-[100vw] h-[100vh] pt-[90px] p-8 flex flex-col">
+  <div class="rounded-lg overflow-hidden shadow-lg bg-white p-8 max-w-[1200px] mx-auto w-full">
+    <div class="grid grid-cols-[1fr_auto_1fr] items-center mb-8">
+      <div>
+        <p-button rounded="true" outlined="true" severity="secondary" icon="pi pi-arrow-left" routerLink="/home" />
+      </div>
+      <h2 class="text-2xl font-bold text-gray-900 digitaco text-center">
+        HISTORICO DE PARTIDAS
+      </h2>
+    </div>
+    <div class="grid grid-cols-12 gap-4">
+      <div class="rounded-lg overflow-hidden shadow-lg bg-white p-6 cor-1 col-span-3 hover:scale-105 transition-all duration-300">
+        <i class="pi pi-calendar" style="font-size: 1.2rem;"></i>
+        <span class="pl-2 text-[1.2rem]">Total de Partidas</span>
+        <div class="flex justify-end items-center mt-4">
+          <span class="text-[1.5rem] font-bold digitaco">{{matches.userPerformance.totalMatches}}</span>
+        </div>
+      </div>
+      <div class="rounded-lg overflow-hidden shadow-lg bg-white p-6 cor-2 col-span-3 hover:scale-105 transition-all duration-300">
+        <i class="pi pi-bullseye" style="font-size: 1.2rem;"></i>
+        <span class="pl-2 text-[1.2rem]">Pontuação Total</span>
+        <div class="flex justify-end items-center mt-4">
+          <span class="text-[1.5rem] font-bold digitaco">{{matches.userPerformance.totalPoints}}</span>
+        </div>
+      </div>
+      <div class="rounded-lg overflow-hidden shadow-lg bg-white p-6 cor-3 col-span-3 hover:scale-105 transition-all duration-300">
+        <i class="pi pi-bolt" style="font-size: 1.2rem;"></i>
+        <span class="pl-2 text-[1.2rem]">Melhor Pontuação</span>
+        <div class="flex justify-end items-center mt-4">
+          <span class="text-[1.5rem] font-bold digitaco">{{matches.userPerformance.bestScore}}</span>
+        </div>
+      </div>
+      <div class="rounded-lg overflow-hidden shadow-lg bg-white p-6 cor-4 col-span-3 hover:scale-105 transition-all duration-300">
+        <i class="pi pi-bolt" style="font-size: 1.2rem;"></i>
+        <span class="pl-2 text-[1.2rem]">Palavras Digitadas</span>
+        <div class="flex justify-end items-center mt-4">
+          <span class="text-[1.5rem] font-bold digitaco">{{matches.userPerformance.totalWords}}</span>
+        </div>
+      </div>
+      <div class="rounded-lg overflow-hidden shadow-lg bg-white p-6 cor-5 col-span-6 flex flex-col items-center gap-4 hover:scale-105 transition-all duration-300">
+        <span class="pl-2 text-[1.2rem]">Pontuação Média</span>
+        <span class="text-[1.5rem] font-bold digitaco">{{averagePoints.toFixed(2)}}</span>
+      </div>
+      <div class="rounded-lg overflow-hidden shadow-lg bg-white p-6 cor-5 col-span-6 flex flex-col items-center gap-4 hover:scale-105 transition-all duration-300">
+        <span class="pl-2 text-[1.2rem]">Palavras por Partida</span>
+        <span class="text-[1.5rem] font-bold digitaco">{{wordsPerMatch.toFixed(2)}}</span>
+      </div>
+    </div>
+  </div>
+  <div class="rounded-lg overflow-hidden shadow-lg bg-white p-8 max-w-[1200px] mx-auto mt-8 flex-1 w-full flex flex-col">
+    <h2 class="text-xl font-bold text-gray-900 digitaco text-center mb-4">
+      TODAS AS PARTIDAS
+    </h2>
+    <div class="flex-1 min-h-0">
+      <p-table [value]="matches.userPerformance.matches" [paginator]="true" [rows]="10" [tableStyle]="{ 'min-width': '100%' }" [scrollable]="true" scrollHeight="flex">
+        <ng-template #header>
+          <tr>
+            <th pSortableColumn="date">Data <p-sortIcon field="date" /></th>
+            <th pSortableColumn="points">Pontuação <p-sortIcon field="points" /></th>
+            <th pSortableColumn="words">Palavras <p-sortIcon field="words" /></th>
+          </tr>
+        </ng-template>
+        <ng-template #body let-match>
+          <tr>
+            <td>{{ match.date }}</td>
+            <td><p-tag severity="info" [value]="match.points" /></td>
+            <td>{{ match.words }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>

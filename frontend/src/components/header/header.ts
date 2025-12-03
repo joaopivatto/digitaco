@@ -11,22 +11,44 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { Router, RouterLink } from '@angular/router';
 import { UsersController } from '../../controllers/users';
 import { LoadingService } from '../../services/loading.service';
-
-
+import { MatchesController, UserHistoryOutput } from '../../controllers/matches';
 
 @Component({
   selector: 'app-header',
-  imports: [ButtonModule, RouterModule, TooltipModule, AsyncPipe, ConfirmDialogModule, RouterLink],  
+  imports: [ButtonModule, RouterModule, TooltipModule, AsyncPipe, ConfirmDialogModule, RouterLink],
   providers: [ConfirmationService],
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })
 export class Header {
   public user$: Observable<User | null>;
-  constructor(private userService: UserService, private confirmationService: ConfirmationService, private messageService: MessageService, private router: Router, private userController: UsersController, private loading: LoadingService) {
+  constructor(
+    private userService: UserService,
+    private confirmationService: ConfirmationService,
+    private messageService: MessageService,
+    private router: Router,
+    private userController: UsersController,
+    private loading: LoadingService,
+    private matchesController: MatchesController,
+  ) {
     this.user$ = this.userService.currentUser;
   }
   score: number = 2300;
+
+  matches: UserHistoryOutput = {
+    message: '',
+    userPerformance: {
+      totalMatches: 0,
+      totalPoints: 0,
+      totalWords: 0,
+      bestScore: 0,
+      matches: [],
+    },
+  };
+
+  async ngOnInit() {
+    this.matches = await this.matchesController.getUserHistory();
+  }
 
   async confirmLogout(event: Event) {
     this.confirmationService.confirm({
@@ -67,9 +89,7 @@ export class Header {
           this.loading.stop();
         }
       },
-      reject: () => {
-
-      },
+      reject: () => {},
     });
   }
 }

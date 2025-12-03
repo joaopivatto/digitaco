@@ -18,13 +18,25 @@ import { UserService } from '../../services/user.service';
   styleUrl: './login.scss',
 })
 export class Login {
-  constructor(private messageService: MessageService, private router: Router, private usersController: UsersController, private userService: UserService, private loading: LoadingService) {}
+  constructor(
+    private messageService: MessageService,
+    private router: Router,
+    private usersController: UsersController,
+    private userService: UserService,
+    private loading: LoadingService
+  ) {}
   label: string = 'Texto';
 
   private formBuilder = inject(FormBuilder);
   protected loginForm = this.formBuilder.group({
     email: [null, [Validators.required, Validators.email]],
-    password: [null, [Validators.required, Validators.minLength(6)]],
+    password: [
+      null,
+      [
+        Validators.required,
+        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/),
+      ],
+    ],
   });
 
   async onSubmit() {
