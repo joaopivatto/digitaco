@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { Header } from '../../components/header/header'
+import { Header } from '../../components/header/header';
 import { ButtonModule } from 'primeng/button';
 import { RouterModule } from '@angular/router';
 import { UserService } from '../../services/user.service';
@@ -15,26 +15,52 @@ import { ToastModule } from 'primeng/toast';
 import { TooltipModule } from 'primeng/tooltip';
 import { LoadingService } from '../../services/loading.service';
 
-
-
 @Component({
   selector: 'app-user-settings',
   standalone: true,
-  imports: [Header, ButtonModule, RouterModule, AsyncPipe, AvatarModule, InputComponent, FormsModule, ReactiveFormsModule, ToastModule, TooltipModule],
+  imports: [
+    Header,
+    ButtonModule,
+    RouterModule,
+    AsyncPipe,
+    AvatarModule,
+    InputComponent,
+    FormsModule,
+    ReactiveFormsModule,
+    ToastModule,
+    TooltipModule,
+  ],
   providers: [MessageService],
   templateUrl: './user-settings.html',
   styleUrl: './user-settings.scss',
 })
 export class UserSettings {
   public user$: Observable<User | null>;
-  constructor(private userService: UserService, private usersController: UsersController, private messageService: MessageService, private loading: LoadingService) {
+  constructor(
+    private userService: UserService,
+    private usersController: UsersController,
+    private messageService: MessageService,
+    private loading: LoadingService
+  ) {
     this.user$ = this.userService.currentUser;
   }
   private formBuilder = inject(FormBuilder);
 
   changePasswordForm = this.formBuilder.group({
-    newPassword: ['', [Validators.required, Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)]],
-    confirmNewPassword: ['', [Validators.required, Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)]],
+    newPassword: [
+      '',
+      [
+        Validators.required,
+        Validators.pattern(/^(?=.[a-z])(?=.[A-Z])(?=.\d)(?=.[@$!%?&])[A-Za-z\d@$!%?&]{8,}$/),
+      ],
+    ],
+    confirmNewPassword: [
+      '',
+      [
+        Validators.required,
+        Validators.pattern(/^(?=.[a-z])(?=.[A-Z])(?=.\d)(?=.[@$!%?&])[A-Za-z\d@$!%?&]{8,}$/),
+      ],
+    ],
   });
   active: string = 'user-info';
 
@@ -43,7 +69,11 @@ export class UserSettings {
       const newPassword = this.changePasswordForm.value.newPassword as string;
       const confirmNewPassword = this.changePasswordForm.value.confirmNewPassword as string;
       if (newPassword !== confirmNewPassword) {
-        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'As senhas não coincidem' });
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erro',
+          detail: 'As senhas não coincidem',
+        });
         return;
       }
       try {
@@ -53,10 +83,18 @@ export class UserSettings {
           password: newPassword,
           confirmPassword: confirmNewPassword,
         });
-        this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Senha alterada com sucesso' });
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Sucesso',
+          detail: 'Senha alterada com sucesso',
+        });
       } catch (error) {
         console.error('Erro ao alterar senha', error);
-        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao alterar senha' });
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erro',
+          detail: 'Erro ao alterar senha',
+        });
       } finally {
         this.loading.stop();
       }

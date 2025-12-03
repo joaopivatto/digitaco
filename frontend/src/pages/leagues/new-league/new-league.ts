@@ -22,7 +22,6 @@ import { LoadingService } from '../../../services/loading.service';
     RouterModule,
     ToastModule,
     MultiSelectModule,
-
   ],
   templateUrl: './new-league.html',
   styleUrl: './new-league.scss',
@@ -37,7 +36,13 @@ export class NewLeague {
   private formBuilder = inject(FormBuilder);
   newLeagueForm = this.formBuilder.group({
     name: ['', Validators.required],
-    password: ['', [Validators.required, Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)]],
+    password: [
+      '',
+      [
+        Validators.required,
+        Validators.pattern(/^(?=.[a-z])(?=.[A-Z])(?=.\d)(?=.[@$!%?&])[A-Za-z\d@$!%?&]{8,}$/),
+      ],
+    ],
     languages: [[], Validators.required],
   });
   languagesList = ListaIdiomas;
@@ -46,7 +51,9 @@ export class NewLeague {
     if (this.newLeagueForm.valid) {
       const name = this.newLeagueForm.value.name as string;
       const password = this.newLeagueForm.value.password as string;
-      const languages = (this.newLeagueForm.value.languages || []).map((language: IIdiomaDetalhe) => language.id);
+      const languages = (this.newLeagueForm.value.languages || []).map(
+        (language: IIdiomaDetalhe) => language.id
+      );
       try {
         this.loading.start();
         await this.leaguesController.create({
@@ -58,7 +65,7 @@ export class NewLeague {
           severity: 'success',
           summary: 'Sucesso',
           detail: 'Liga criada com sucesso',
-        })
+        });
         this.created.emit();
       } catch (error) {
         console.error('Erro ao criar liga', error);

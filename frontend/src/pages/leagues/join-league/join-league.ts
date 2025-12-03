@@ -6,9 +6,8 @@ import { MessageService } from 'primeng/api';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
-import { InputComponent } from '../../../components/input/input'
+import { InputComponent } from '../../../components/input/input';
 import { LoadingService } from '../../../services/loading.service';
-
 
 @Component({
   selector: 'app-join-league',
@@ -18,7 +17,12 @@ import { LoadingService } from '../../../services/loading.service';
   styleUrl: './join-league.scss',
 })
 export class JoinLeague {
-  constructor(private leaguesController: LeaguesController, private usersController: UsersController, private messageService: MessageService, private loading: LoadingService) {}
+  constructor(
+    private leaguesController: LeaguesController,
+    private usersController: UsersController,
+    private messageService: MessageService,
+    private loading: LoadingService
+  ) {}
   @Input() leagueId: number | null = null;
   league: League | null = null;
 
@@ -28,7 +32,7 @@ export class JoinLeague {
       '',
       [
         Validators.required,
-        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/),
+        Validators.pattern(/^(?=.[a-z])(?=.[A-Z])(?=.\d)(?=.[@$!%?&])[A-Za-z\d@$!%?&]{8,}$/),
       ],
     ],
   });
@@ -50,7 +54,10 @@ export class JoinLeague {
     if (this.joinLeagueForm.valid) {
       try {
         this.loading.start();
-        await this.usersController.joinLeague({ password: this.joinLeagueForm.value.password! }, this.leagueId!);
+        await this.usersController.joinLeague(
+          { password: this.joinLeagueForm.value.password! },
+          this.leagueId!
+        );
         this.messageService.add({
           severity: 'success',
           summary: 'Success',

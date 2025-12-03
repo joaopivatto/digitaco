@@ -20,6 +20,17 @@
         @if(loginForm.get('password')?.hasError('required') && loginForm.get('password')?.touched) {
           <small id="password-help" class="text-red-500">Digite sua senha</small>
         }
+        @if(loginForm.get('password')?.hasError('pattern') && loginForm.get('password')?.touched) {
+          <small id="password-help" class="text-red-500">Senha deve ter:
+            <ul>
+              <li>no mínimo 8 caracteres</li>
+              <li>pelo menos uma letra maiúscula</li>
+              <li>pelo menos uma letra minúscula</li>
+              <li>pelo menos um número</li>
+              <li>pelo menos um caractere especial</li>
+            </ul>
+          </small>
+        }
       </div>
       <app-button [label]="'ENTRAR'" [buttonClass]="'w-full text-white bg-[var(--primary)] hover:bg-[var(--primary-hover)]'" [disabled]="loginForm.invalid" />
       <p class="mt-4 text-sm text-gray-500 text-center">Não tem uma conta? <a class="text-[var(--primary)] cursor-pointer font-bold" routerLink="/sign-up">Registre-se</a></p>
