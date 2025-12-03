@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
-import { Header } from '../../components/header/header'
+import { Header } from '../../components/header/header';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { RouterModule } from '@angular/router';
-import { MatchesController, UserHistoryOutput} from '../../controllers/matches';
+import { MatchesController, UserHistoryOutput } from '../../controllers/matches';
 import { LoadingService } from '../../services/loading.service';
-
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-history',
@@ -15,9 +15,14 @@ import { LoadingService } from '../../services/loading.service';
   imports: [Header, CardModule, ButtonModule, RouterModule, TableModule, TagModule],
   templateUrl: './history.html',
   styleUrl: './history.scss',
+  providers: [MessageService],
 })
 export class History {
-  constructor(private matchesController: MatchesController, private loadingService: LoadingService) {}
+  constructor(
+    private matchesController: MatchesController,
+    private loadingService: LoadingService,
+    private messageService: MessageService
+  ) {}
 
   matches: UserHistoryOutput = {
     message: '',
@@ -32,12 +37,22 @@ export class History {
   averagePoints: number = 0;
   wordsPerMatch: number = 0;
 
-
   async ngOnInit() {
-    this.loadingService.start();
-    this.matches = await this.matchesController.getUserHistory();
-    this.averagePoints = this.matches.userPerformance.totalPoints / this.matches.userPerformance.totalMatches || 0;
-    this.wordsPerMatch = this.matches.userPerformance.totalWords / this.matches.userPerformance.totalMatches || 0;
-    this.loadingService.stop();
+    try {
+      this.loadingService.start();
+      this.matches = await this.matchesController.getUserHistory();
+      this.averagePoints =
+        this.matches.userPerformance.totalPoints / this.matches.userPerformance.totalMatches || 0;
+      this.wordsPerMatch =
+        this.matches.userPerformance.totalWords / this.matches.userPerformance.totalMatches || 0;
+    } catch (error: any) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Erro',
+        detail: error.message || 'Erro ao carregar histórico',
+      });
+    } finally {
+      this.loadingService.stop();
+    }
   }
 }

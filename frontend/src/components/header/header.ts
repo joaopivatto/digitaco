@@ -29,7 +29,7 @@ export class Header {
     private router: Router,
     private userController: UsersController,
     private loading: LoadingService,
-    private matchesController: MatchesController,
+    private matchesController: MatchesController
   ) {
     this.user$ = this.userService.currentUser;
   }
@@ -47,7 +47,14 @@ export class Header {
   };
 
   async ngOnInit() {
-    this.matches = await this.matchesController.getUserHistory();
+    try {
+      this.loading.start();
+      this.matches = await this.matchesController.getUserHistory();
+    } catch (error) {
+      console.error('Erro ao carregar dados do header', error);
+    } finally {
+      this.loading.stop();
+    }
   }
 
   async confirmLogout(event: Event) {

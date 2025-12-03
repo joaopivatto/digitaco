@@ -76,6 +76,7 @@ export class Game implements OnInit, OnDestroy, AfterViewInit {
   private spawnFactor: number = 3000;
   private nextId = 0;
   languages: string[] = [];
+  private matchSaved: boolean = false;
 
   async ngOnInit() {
     this.loading.start();
@@ -161,7 +162,8 @@ export class Game implements OnInit, OnDestroy, AfterViewInit {
     if (this.spawnInterval) {
       clearInterval(this.spawnInterval);
     }
-    if (this.matchEnded) {
+    if (this.matchEnded && !this.matchSaved) {
+      this.matchSaved = true;
       this.matchesController.create({
           leagueId: this.league?.id ?? null,
           points: this.points,
@@ -284,6 +286,7 @@ export class Game implements OnInit, OnDestroy, AfterViewInit {
 
   playAgain() {
     this.matchEnded = false;
+    this.matchSaved = false;
     this.points = 0;
     this.wordsCount = 0;
     this.hearts = 3;
