@@ -31,8 +31,8 @@ export class MatchesController {
 
   async getGlobalRating(weekly: boolean): Promise<Rating[]> {
     const url = weekly
-      ? `${this.config.API_BASE_URL}/matches/global-rating.php`
-      : `${this.config.API_BASE_URL}/matches/global-rating-weekly.php`;
+    ? `${this.config.API_BASE_URL}/matches/global-rating-weekly.php`
+    : `${this.config.API_BASE_URL}/matches/global-rating.php`;
 
     const response = await fetchWithAuth(url, {
       method: 'GET',
