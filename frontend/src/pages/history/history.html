@@ -1,5 +1,5 @@
 <app-header />
-<div class="w-[100vw] h-[100vh] pt-[90px] p-8 flex flex-col">
+<div class="w-[100vw] min-h-[100vh] pt-[90px] p-8 flex flex-col container">
   <div class="rounded-lg overflow-hidden shadow-lg bg-white p-8 max-w-[1200px] mx-auto w-full">
     <div class="grid grid-cols-[1fr_auto_1fr] items-center mb-8">
       <div>
@@ -52,7 +52,7 @@
     <h2 class="text-xl font-bold text-gray-900 digitaco text-center mb-4">
       TODAS AS PARTIDAS
     </h2>
-    <div class="flex-1 min-h-0">
+    <div class="flex-1 min-h-[400px]">
       <p-table [value]="matches.userPerformance.matches" [paginator]="true" [rows]="10" [tableStyle]="{ 'min-width': '100%' }" [scrollable]="true" scrollHeight="flex">
         <ng-template #header>
           <tr>

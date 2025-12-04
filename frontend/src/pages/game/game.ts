@@ -124,7 +124,7 @@ export class Game implements OnInit, OnDestroy, AfterViewInit {
         label: 'Sair',
       },
       accept: () => {
-        this.router.navigate(['/']);
+        this.router.navigate(['/home']);
       },
       reject: () => {
         this.startGame();
@@ -223,7 +223,7 @@ export class Game implements OnInit, OnDestroy, AfterViewInit {
           }
         }
 
-        if (this.words[i].word.toLowerCase() === this.inputText.trim().toLowerCase()) {
+        if (this.words[i].word && this.words[i].word.toLowerCase() === this.inputText.trim().toLowerCase()) {
           this.points += this.words[i].word.length;
           this.words.splice(i, 1);
           this.wordsCount++;
