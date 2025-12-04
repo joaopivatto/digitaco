@@ -24,11 +24,26 @@
       </div>
       <div class="rounded-lg overflow-hidden shadow bg-gray-50 p-6">
         <div class="text-sm text-gray-500 mb-2">Idiomas</div>
-        <div class="flex flex-wrap gap-2">
-          @for(lang of league.languages; track lang) {
+        @if(!editingLanguages) {
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex flex-wrap gap-2">
+            @for(lang of league.languages; track lang) {
             <p-tag type="info">{{ getLanguageName(lang) }}</p-tag>
+            }
+          </div>
+          @if(creator) {
+          <p-button rounded="true" icon="pi pi-pencil" size="small" [outlined]="true" (click)="startEditLanguages()" />
           }
         </div>
+        } @else {
+        <div class="flex flex-col gap-3">
+          <p-multiselect [options]="languagesList" [(ngModel)]="selectedLanguages" placeholder="Idiomas" optionLabel="title" display="chip" appendTo="body" />
+          <div class="flex items-center justify-end gap-2">
+            <p-button label="Cancelar" severity="secondary" [outlined]="true" (click)="cancelEditLanguages()" />
+            <p-button label="Confirmar" severity="success" (click)="confirmEditLanguages()" />
+          </div>
+        </div>
+        }
       </div>
     </div>
   </div>

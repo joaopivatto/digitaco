@@ -7,12 +7,14 @@ import { TabsModule } from 'primeng/tabs';
 import { FluidModule } from 'primeng/fluid';
 import { ScrollerModule } from 'primeng/scroller';
 import { TagModule } from 'primeng/tag';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { FormsModule } from '@angular/forms';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { LoadingService } from '../../../services/loading.service';
 import { LeaguesController } from '../../../controllers/leagues';
 import { League as LeagueModel } from '../../../entities/league';
-import { ListaIdiomas } from '../../../entities/languages';
+import { ListaIdiomas, IIdiomaDetalhe } from '../../../entities/languages';
 
 @Component({
   selector: 'app-league',
@@ -24,6 +26,8 @@ import { ListaIdiomas } from '../../../entities/languages';
     FluidModule,
     ScrollerModule,
     TagModule,
+    MultiSelectModule,
+    FormsModule,
     ConfirmDialogModule,
   ],
   templateUrl: './league.html',
@@ -44,6 +48,10 @@ export class League implements OnInit {
   createdLeagues: LeagueModel[] = [];
   creator: boolean = false;
   points: number = 0;
+  editingLanguages: boolean = false;
+  languagesList: IIdiomaDetalhe[] = ListaIdiomas;
+  selectedLanguages: IIdiomaDetalhe[] = [];
+  originalLanguages: string[] = [];
   getLanguageName(language: string) {
     return ListaIdiomas.find((idioma) => idioma.id === language)?.title || language;
   }
@@ -56,6 +64,10 @@ export class League implements OnInit {
     const leaguePoints = this.leagues.find((league) => league.id === this.league.id)?.points || 0;
     this.points = leaguePoints;
     this.creator = this.createdLeagues.some((league) => league.id === this.league.id);
+    this.selectedLanguages = (this.league.languages || [])
+      .map((id) => this.languagesList.find((l) => l.id === id)!)
+      .filter(Boolean);
+    this.originalLanguages = [...(this.league.languages || [])];
     this.loadingService.stop();
   }
 
@@ -95,5 +107,55 @@ export class League implements OnInit {
         }
       },
     });
+  }
+
+  startEditLanguages() {
+    this.editingLanguages = true;
+    this.selectedLanguages = (this.league.languages || [])
+      .map((id) => this.languagesList.find((l) => l.id === id)!)
+      .filter(Boolean);
+    this.originalLanguages = [...(this.league.languages || [])];
+  }
+
+  cancelEditLanguages() {
+    this.editingLanguages = false;
+    this.selectedLanguages = this.originalLanguages
+      .map((id) => this.languagesList.find((l) => l.id === id)!)
+      .filter(Boolean);
+  }
+
+  async confirmEditLanguages() {
+    try {
+      this.loadingService.start();
+      const currentIds: string[] = this.selectedLanguages.map((l) => String(l.id));
+      const toRemove: string[] = this.originalLanguages.filter((id) => !currentIds.includes(id));
+      const toAdd: string[] = currentIds.filter((id) => !this.originalLanguages.includes(id));
+
+      await Promise.all([
+        ...toRemove.map((language) =>
+          this.leaguesController.deleteLanguage({ leagueId: this.league.id, language })
+        ),
+        ...toAdd.map((language) =>
+          this.leaguesController.insertLanguage({ leagueId: this.league.id, language })
+        ),
+      ]);
+
+      this.league = { ...this.league, languages: currentIds };
+      this.originalLanguages = [...currentIds];
+      this.editingLanguages = false;
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Sucesso',
+        detail: 'Idiomas atualizados',
+      });
+    } catch (error: any) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Erro',
+        detail: error?.message || 'Falha ao atualizar idiomas',
+      });
+    } finally {
+      this.loadingService.stop();
+    }
   }
 }
