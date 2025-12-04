@@ -1,14 +1,35 @@
 <app-header />
-
-<div class="rounded-lg overflow-hidden shadow-lg bg-white p-8 min-w-[500px] md:min-w-[700px] lg:min-w-[1000px] mt-[70px]">
-  <div class="grid grid-cols-[auto_1fr_auto] justify-between items-center gap-4">
-    <p-button [rounded]="true" icon="pi pi-arrow-left" severity="secondary" variant="outlined" routerLink="/leagues" />
-    <div class="flex  items-center justify-center gap-4">
-      <h3 class="font-bold text-xl digitaco text-center cursor-pointer">
-        {{league.name}}
-      </h3>
+<div class="w-[100vw] h-[100vh] pt-[90px] p-8 flex flex-col">
+  <div class="rounded-lg overflow-hidden shadow-lg bg-white p-8 min-w-[500px] md:min-w-[700px] lg:min-w-[1000px] max-w-[1200px] mx-auto">
+    <p-confirmdialog />
+    <div class="grid grid-cols-[auto_1fr_auto] justify-between items-center gap-4">
+      <p-button [rounded]="true" icon="pi pi-arrow-left" severity="secondary" variant="outlined" routerLink="/leagues" />
+      <div class="flex  items-center justify-center gap-4">
+        <h3 class="font-bold text-xl digitaco text-center cursor-pointer">
+          {{league.name}}
+        </h3>
+      </div>
+      @if (creator) {
+      <p-button [rounded]="true" icon="pi pi-trash" severity="danger" [outlined]="true" (click)="confirmDelete($event)" />
+      }
     </div>
-  </div>
-  <div class="mt-8">
+    <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="rounded-lg overflow-hidden shadow bg-gray-50 p-6">
+        <div class="text-sm text-gray-500">Membros</div>
+        <div class="text-2xl font-bold digitaco mt-2">{{ league.members }}</div>
+      </div>
+      <div class="rounded-lg overflow-hidden shadow bg-gray-50 p-6">
+        <div class="text-sm text-gray-500">Pontos</div>
+        <div class="text-2xl font-bold digitaco mt-2">{{ points }}</div>
+      </div>
+      <div class="rounded-lg overflow-hidden shadow bg-gray-50 p-6">
+        <div class="text-sm text-gray-500 mb-2">Idiomas</div>
+        <div class="flex flex-wrap gap-2">
+          @for(lang of league.languages; track lang) {
+            <p-tag type="info">{{ getLanguageName(lang) }}</p-tag>
+          }
+        </div>
+      </div>
+    </div>
   </div>
 </div>
