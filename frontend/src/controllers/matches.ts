@@ -4,6 +4,7 @@ import { League } from '../entities/league';
 import { Match } from '../entities/match';
 import { Rating } from '../entities/rating';
 import { User } from '../entities/user';
+import { fetchWithAuth } from '../utils/http';
 
 export interface UserHistoryOutput {
   message: string;
@@ -33,7 +34,7 @@ export class MatchesController {
       ? `${this.config.API_BASE_URL}/matches/global-rating.php`
       : `${this.config.API_BASE_URL}/matches/global-rating-weekly.php`;
 
-    const response = await fetch(url, {
+    const response = await fetchWithAuth(url, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
@@ -81,7 +82,7 @@ export class MatchesController {
   }
 
   async create(input: Match & { leagueId: number | null }): Promise<string> {
-    const response = await fetch(`${this.config.API_BASE_URL}/matches/create.php`, {
+    const response = await fetchWithAuth(`${this.config.API_BASE_URL}/matches/create.php`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(input),

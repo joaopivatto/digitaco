@@ -84,6 +84,7 @@ try {
                 CREATE TABLE `matches` (
                     `id` int(11) NOT NULL AUTO_INCREMENT,
                     `points` int(11) NOT NULL,
+                    `words` int(11) NOT NULL,
                     `league_id` int(11) DEFAULT NULL,
                     `user_id` int(11) NOT NULL,
                     `played_at` timestamp NULL DEFAULT current_timestamp(),
