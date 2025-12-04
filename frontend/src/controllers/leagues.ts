@@ -8,6 +8,45 @@ import { fetchWithAuth } from '../utils/http';
 export class LeaguesController {
   constructor(private config: Config) {}
 
+  async deleteLanguage(input: { leagueId: number; language: string }): Promise<void> {
+    const response = await fetchWithAuth(
+      `${this.config.API_BASE_URL}/leagues/delete-language.php?leagueId=${
+        input.leagueId
+      }&language=${encodeURIComponent(input.language)}`,
+      {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+
+    return;
+  }
+
+  async insertLanguage(input: { leagueId: number; language: string }): Promise<void> {
+    const response = await fetchWithAuth(
+      `${this.config.API_BASE_URL}/leagues/insert-language.php`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(input),
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+
+    return;
+  }
+
   async getLeaguePointsWeekly(leagueId: string): Promise<Rating[]> {
     const response = await fetchWithAuth(
       `${this.config.API_BASE_URL}/leagues/points-weekly.php?id=${leagueId}`,
@@ -27,10 +66,13 @@ export class LeaguesController {
   }
 
   async getLeaguePoints(leagueId: string): Promise<Rating[]> {
-    const response = await fetchWithAuth(`${this.config.API_BASE_URL}/leagues/points.php?id=${leagueId}`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    });
+    const response = await fetchWithAuth(
+      `${this.config.API_BASE_URL}/leagues/points.php?id=${leagueId}`,
+      {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      }
+    );
 
     const data = await response.json();
 
@@ -42,10 +84,13 @@ export class LeaguesController {
   }
 
   async deleteLeague(leagueId: number): Promise<string> {
-    const response = await fetchWithAuth(`${this.config.API_BASE_URL}/leagues/delete.php?id=${leagueId}`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    });
+    const response = await fetchWithAuth(
+      `${this.config.API_BASE_URL}/leagues/delete.php?id=${leagueId}`,
+      {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      }
+    );
 
     const data = await response.json();
 
