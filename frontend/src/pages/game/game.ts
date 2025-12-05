@@ -221,6 +221,7 @@ export class Game implements OnInit, OnDestroy, AfterViewInit {
           if (this.hearts > 0) {
             this.playErrorSound();
           }
+          continue;
         }
 
         if (this.words[i].word && this.words[i].word.toLowerCase() === this.inputText.trim().toLowerCase()) {

@@ -39,18 +39,20 @@
   </div>
 </footer>
 
-<p-dialog header="Estatísticas da Partida" [modal]="true" [(visible)]="showMatchStats" [style]="{ width: '50vw' }">
-  <h2 class="text-2xl font-bold text-center digitaco mb-8">{{ league?.name }}</h2>
-  <div class="grid grid-cols-2 justify-center items-center gap-8 mb-8">
-    <p class="flex items-center justify-between text-lg font-bold text-center">
-      Pontuação: <span class=" digitaco">{{ points }}</span>
-    </p>
-    <p class="flex items-center justify-between text-lg font-bold text-center">
-      Palavras Digitadas: <span class="digitaco">{{ wordsCount }}</span>
-    </p>
-  </div>
-  <ng-template #footer>
-        <p-button label="Voltar ao menu" [text]="true" severity="secondary" routerLink="/home" />
-        <p-button label="Jogar Novamente"  severity="success" (click)="playAgain()" />
-    </ng-template>
+<p-dialog header="Estatísticas da Partida" [modal]="true" [(visible)]="showMatchStats" [style]="{ width: '40vw', padding: '20px' }">
+  <ng-template #headless>
+    <h2 class="text-2xl font-bold text-center digitaco mb-8">{{ league?.name }}</h2>
+    <div class="grid grid-cols-2 justify-center items-center gap-8 mb-8">
+      <p class="flex items-center justify-between text-lg font-bold text-center">
+        Pontuação: <span class=" digitaco">{{ points }}</span>
+      </p>
+      <p class="flex items-center justify-between text-lg font-bold text-center">
+        Palavras Digitadas: <span class="digitaco">{{ wordsCount }}</span>
+      </p>
+    </div>
+    <div class="flex justify-end items-center gap-4">
+      <p-button label="Voltar ao menu" [text]="true" severity="secondary" routerLink="/home" />
+      <p-button label="Jogar Novamente" severity="success" (click)="playAgain()" />
+    </div>
+  </ng-template>
 </p-dialog>
